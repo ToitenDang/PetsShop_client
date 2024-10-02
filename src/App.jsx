@@ -1,16 +1,19 @@
-import { useState } from 'react'
-import Button from '@mui/material/Button'
-import { red } from '@mui/material/colors'
-import ModeSelect from './components/ModeSelect/ModeSelect'
-import Appbar from './components/Appbar/Appbar'
+import Container from '@mui/material/Container'
+import Box from '@mui/material/Box'
+import Header from './components/Header/Header'
+import Content from './pages/Content/Content'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-      <Appbar/>
-    </>
+    <Container disableGutters maxWidth = {false} sx={{ height: '100vh', backgroundColor: 'primary.main'}}>
+      <Box >
+        <Header/>
+      </Box>
+      <Box>
+        <Content/>
+      </Box>
+    </Container>
   )
 }
 
