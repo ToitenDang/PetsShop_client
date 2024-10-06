@@ -1,7 +1,7 @@
 
 import { useState } from 'react'
 import Box from '@mui/material/Box'
-import ModeSelect from '../ModeSelect/ModeSelect'
+import ModeSelect from '../../../ModeSelect/ModeSelect'
 import TextField from '@mui/material/TextField'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
