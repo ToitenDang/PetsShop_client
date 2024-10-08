@@ -1,9 +1,22 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Typography, Paper, Link } from '@mui/material';
+import { TextField, Button, Container, Typography, Paper, Link, Box } from '@mui/material';
+import theme from '../../theme';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [inputValue, setInputValue] = useState({
+    email: '',
+    password: ''
+  })
+
+  const handleChange = (event) => {
+    const { name, value } = event.target
+    setInputValue((prevData) => (
+      {
+        ...prevData,
+        [name]: value
+      }
+    ))
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -13,8 +26,18 @@ const Login = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Paper elevation={3} style={{ padding: '20px' }}>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        bgcolor: '#34495e', // Màu nền chính của trang
+        position: 'relative',
+      }}
+    >
+
+      <Paper elevation={3} sx={{ padding: '20px', width: '100%', maxWidth: 400, bgcolor: '#40739e', boxShadow: '0 5px 5px #2c3e50' }}>
         <Typography component="h1" variant="h5" align="center">
           Đăng Nhập
         </Typography>
@@ -25,10 +48,11 @@ const Login = () => {
             required
             fullWidth
             label="Email"
+            name="email"
             autoComplete="email"
             autoFocus
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={inputValue.email}
+            onChange={handleChange}
           />
           <TextField
             variant="outlined"
@@ -37,27 +61,28 @@ const Login = () => {
             fullWidth
             label="Mật Khẩu"
             type="password"
+            name="password"
             autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={inputValue.password}
+            onChange={handleChange}
           />
-          <Button type="submit" fullWidth variant="contained" color="primary">
+          <Button type="submit" fullWidth variant="contained" color="primary" sx={{ marginTop: 2 }}>
             Đăng Nhập
           </Button>
         </form>
-        <Typography variant="body2" align="center" style={{ marginTop: '10px' }}>
+        <Typography variant="body2" align="center" sx={{ marginTop: 2 }}>
           <Link href="#" variant="body2">
             Quên mật khẩu?
           </Link>
         </Typography>
-        <Typography variant="body2" align="center" style={{ marginTop: '10px' }}>
+        <Typography variant="body2" align="center" sx={{ marginTop: 2 }}>
           Chưa có tài khoản?{' '}
           <Link href="#" variant="body2">
             Đăng ký
           </Link>
         </Typography>
       </Paper>
-    </Container>
+    </Box>
   );
 };
 

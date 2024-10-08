@@ -31,7 +31,7 @@ function ModeSelect() {
         labelId="label-dark-light-mode"
         id="dark-light-mode"
         value={mode}
-        label="Mode"
+        label="Chế độ"
         onChange={handleChange}
         sx={{
           color: 'white',
@@ -43,17 +43,17 @@ function ModeSelect() {
       >
         <MenuItem value="light">
           <Box sx={{ display: 'flex', alignItems:'center', gap:'1' }}>
-            <LightMode fontSize='small' /> Light
+            <LightMode fontSize='small' />  Sáng
           </Box>
         </MenuItem>
         <MenuItem value="dark">
           <Box sx={{ display: 'flex', alignItems:'center', gap:'1' }}>
-            <DarkModeOutlined fontSize='small' /> Dark
+            <DarkModeOutlined fontSize='small' />  Tối
           </Box>
         </MenuItem>
         <MenuItem value="system">
           <Box sx={{ display:'flex', alignItems:'center', gap:'1' }}>
-            <SettingsBrightnessIcon fontSize='small'/> System
+            <SettingsBrightnessIcon fontSize='small'/>  System
           </Box>
         </MenuItem>
       </Select>

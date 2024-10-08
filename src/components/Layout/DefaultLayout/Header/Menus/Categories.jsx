@@ -18,7 +18,14 @@ function Categories() {
   return (
     <Box>
         <Button
-        sx={{ color: 'white' }}
+        sx={{
+          color: 'white',
+          padding:'8px 8px',
+          bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'),
+          '&:hover': {
+            bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2') // Màu nền khi hover
+          },
+      }}
         id="basic-button-categories"
         aria-controls={open ? 'basic-menu-categories' : undefined}
         aria-haspopup="true"

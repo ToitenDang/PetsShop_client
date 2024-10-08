@@ -45,6 +45,9 @@ function Profile() {
         MenuListProps={{
           'aria-labelledby': 'basic-button-profile'
         }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }} // Nơi menu xuất hiện
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        sx={{mt:1}}
       >
         <MenuItem >
           <Avatar sx={{ width:28, height:28, mr:2 }} /> Profile
@@ -63,13 +66,13 @@ function Profile() {
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
-          Settings
+          Cài đặt
         </MenuItem>
         <MenuItem >
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
-          Logout
+          Đăng xuất
         </MenuItem>
       </Menu>
     </Box>

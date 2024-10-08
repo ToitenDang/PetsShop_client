@@ -1,10 +1,12 @@
 
 import { useState } from 'react'
 import Box from '@mui/material/Box'
+import { Link } from 'react-router-dom'
 import ModeSelect from '../../../ModeSelect/ModeSelect'
 import TextField from '@mui/material/TextField'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
 import Badge from '@mui/material/Badge'
 import Tooltip from '@mui/material/Tooltip'
 import SearchIcon from '@mui/icons-material/Search'
@@ -13,14 +15,12 @@ import  InputAdornment  from '@mui/material/InputAdornment'
 
 import Categories from './Menus/Categories'
 import Profile from './Menus/Profiles'
-import Production from './Menus/Production'
-import Contact from './Menus/Contact'
 
 function Header() {
   const [searchValue, setSearchValue] = useState('')
   return (
     <Box sx={{
-      // padding: '0 60px',
+      padding: '0 60px',
       width: '100%',
       height: (theme) => theme.customSize.headerHeight,
       display: 'flex',
@@ -32,16 +32,21 @@ function Header() {
     }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Box>Logo</Box>
-        <Box sx={{display: {xs: 'none', md: 'flex'}, gap: 1}}>
+        <Box sx={{display: {xs: 'none', md: 'flex'}, gap: 2, alignItems:'center'}}>
           <Categories />
-          <Production />
-          <Contact />
+          <Link to="/production" style={{ textDecoration: 'none', color: 'white' }}>
+            <Box sx={{ cursor: 'pointer' }}>Giới thiệu</Box>
+          </Link>
+
+          <Link to="/contact" style={{ textDecoration: 'none', color: 'white' }}>
+            <Box sx={{ cursor: 'pointer' }}>Liên hệ</Box>
+          </Link>
         </Box>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <TextField
           id="outlined-search"
-          label="Search..."
+          label="Tìm kiếm..."
           type="text"
           size='small'
           value={searchValue}
@@ -76,14 +81,18 @@ function Header() {
         
         <ModeSelect />
 
-        <Tooltip title="Notification">
+        <Tooltip title="Thông báo">
           <Badge color="secondary" variant="dot" sx={{ cursor: 'pointer' }}>
             <NotificationsNoneIcon sx={{ color: 'white'}} />
           </Badge>
         </Tooltip>
 
-        <Tooltip title="Help">
+        <Tooltip title="Trợ giúp">
             <HelpOutlineIcon sx={{ cursor: 'pointer', color: 'white' }} />
+        </Tooltip>
+
+        <Tooltip title="Giỏ hàng">
+            <ShoppingCartOutlinedIcon sx={{ cursor: 'pointer', color: 'white' }} />
         </Tooltip>
 
         <Profile/>
