@@ -31,7 +31,7 @@ function ModeSelect() {
         labelId="label-dark-light-mode"
         id="dark-light-mode"
         value={mode}
-        label="Mode"
+        label="Chế độ"
         onChange={handleChange}
         sx={{
           color: (theme) => theme.palette.mode === 'dark' ? '#fff' : '#000',
