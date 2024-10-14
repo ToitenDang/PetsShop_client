@@ -1,0 +1,44 @@
+// @import '../../constants.module.scss';
+@import '~/components/constants.module.scss';
+.container {
+    position: fixed;
+    display: flex;
+    min-height: 60px;
+    justify-content: space-around;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.searchContainer {
+    height: 40px;
+    display: flex;
+    overflow: hidden;
+    border-radius: 20px;
+    flex: 1;
+    width: 70%;
+}
+
+.searchInput {
+    background-color: #fff;
+    border: none;
+    height: 100%;
+    width: 100%;
+    padding: 10px 10px;
+    outline: none;
+    font-size: 1.0rem;
+    // font-family: inherit sans-serif;
+}
+
+.searchInput:focus {
+    border: none
+}
+
+.searchButton {
+    border: none;
+    background-color: $main-context-color;
+    cursor: pointer;
+    flex: 1;
+}
+
+

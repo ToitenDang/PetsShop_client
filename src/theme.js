@@ -7,7 +7,7 @@ const theme = extendTheme({
         light: {
             palette: {
                 primary: {
-                    main: '#ff5252',
+                    main: '#000',
                 }
             }
         },
@@ -19,7 +19,36 @@ const theme = extendTheme({
                 }
             }
         }
-    }
+    },
+    components: {
+        MuiCssBaseline: {
+            styleOverrides: {
+                body: {
+                    '*::-webkit-scrollbar': {
+                        width: '8px',
+                        height: '8px'
+                    },
+                    '*::-webkit-scrollbar-thumb': {
+                        backgroundColor: '#bdc3c7',
+                        borderRadius: '8px'
+                    },
+                    '*::-webkit-scrollbar-thumb:hover': {
+                        backgroundColor: '#666565',
+
+                    }
+                }
+            }
+        },
+    },
+    breakpoints: {
+        values: {
+            xs: 0,
+            sm: 600,
+            md: 1000,
+            lg: 1137,
+            xl: 1536,
+        },
+    },
 })
 
 export default theme
