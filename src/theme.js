@@ -4,6 +4,9 @@ import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
 
 // Create a theme instance.
 const theme = extendTheme({
+    myApp: {
+        mainColor: '#ed6b40'
+    },
     customSize: {
         headerHeight: '74px',
     },
@@ -100,9 +103,11 @@ const theme = extendTheme({
     breakpoints: {
         values: {
             xs: 0,
-            sm: 600,
+            ms: 684,
+            sm: 800,
             md: 1000,
             lg: 1137,
+            ml:1169,
             xl: 1536,
         },
     },

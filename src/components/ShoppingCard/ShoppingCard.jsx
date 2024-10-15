@@ -24,7 +24,7 @@ const ShoppingCart = ({ quantity }) => {
         <Box sx={{ display: 'flex', flexDirection: 'column', width: 450, overflow: 'hidden' }} role="presentation" >
             {/* Heading list cart items */}
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 10px' }}>
-                <Typography sx={{ fontSize: '1.3rem', fontWeight: 'bold' }}>Your cart</Typography>
+                <Typography sx={{ fontSize: '1.3rem', fontWeight: 'bold' }}>Giỏ của bạn</Typography>
                 <Tooltip title="Close shopping cart">
                     <Button onClick={toggleDrawer(false)}>
                         <CloseIcon />
@@ -48,10 +48,10 @@ const ShoppingCart = ({ quantity }) => {
             {/* Pay for cart */}
             <Box sx={{paddingX: '20px', textAlign: 'center',paddingY: '10px'}}>
                 <Box sx={{paddingX: '10px',display: 'flex', justifyContent: 'space-between'}}>
-                    <Typography variant='h5'>Totals: </Typography>
+                    <Typography variant='h5'>Tổng tiền: </Typography>
                     <Typography>5.000.000</Typography>
                 </Box>
-                <Button sx={{backgroundColor: ''}}>Pay cart</Button>
+                <Button sx={{backgroundColor: ''}}>Thanh toán</Button>
             </Box>
         </Box>
     );
