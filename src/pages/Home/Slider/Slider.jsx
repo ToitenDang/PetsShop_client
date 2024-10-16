@@ -78,7 +78,9 @@ const Slider = () => {
                                 onClick={() => moveDot(index + 1)}
                                 className={
                                     slideIndex === index + 1 ? `${myStyle.dot} ${myStyle.active}` : myStyle.dot
-                                }></div>
+                                }>
+                                
+                                </div>
                         )
                     })
                 }

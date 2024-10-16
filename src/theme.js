@@ -1,6 +1,5 @@
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
-// import { teal, deepOrange, cyan, orange } from '@mui/material/colors'
-// import { BorderColor } from '@mui/icons-material'
+
 
 // Create a theme instance.
 const theme = extendTheme({
@@ -11,19 +10,29 @@ const theme = extendTheme({
         headerHeight: '74px',
     },
     colorSchemes: {
-        // light: {
-        //     palette: {
-        //         primary: teal,
-        //         secondary: deepOrange
-        //     }
-        // },
+        light: {
+            palette: {
+                
+                primary: {
+                     main: '#1976d2'
+                   
+                },
+                secondary: {
+                    main: '#ea6c41'
+                }
+            }
+        },
 
-        // dark: {
-        //     palette: {
-        //         primary: cyan,
-        //         secondary: orange
-        //     }
-        // }
+        dark: {
+            palette: {
+                primary: {
+                    main: '#e96c48'
+                },
+                secondary: {
+                    main: '#2866c9'
+                }
+            }
+        }
     },
     components: {
         MuiCssBaseline: {
