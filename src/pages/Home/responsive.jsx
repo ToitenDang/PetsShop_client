@@ -1,6 +1,13 @@
 import { Calculate } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 
+export const ResponsiveSliderAndSale = styled('div')(({ theme }) => ({
+  [theme.breakpoints.down('md')]: {
+    height: 'auto'
+  }
+
+}));
+
 export const ResponsiveSlider = styled('div')(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
     width: '100%'
@@ -41,5 +48,11 @@ export const ResponsiveSaleItem = styled('div')(({ theme }) => ({
     overflowX: 'auto',
     maxWidth: '100%',
     minWidth: 'calc(100% /2)'
+  }
+}));
+
+export const ResonsiveQuickShopContainer = styled('div')(({ theme }) => ({
+  [theme.breakpoints.down('md')]: {
+    width: '50%'
   }
 }));

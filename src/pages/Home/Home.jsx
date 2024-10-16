@@ -5,7 +5,8 @@ import myStyle from './Home.module.scss';
 import Box from '@mui/material/Box';
 import Slider from './Slider/Slider';
 import SaleItem from './SaleItem/SaleItem';
-import { ResponsiveSlider, ResponsiveSaleContainer, ResponsiveGroupSales } from './responsive';
+import { ResponsiveSlider, ResponsiveSaleContainer, ResponsiveGroupSales,ResponsiveSliderAndSale } from './responsive';
+import QuickShop from './QuickShop/QuickShop';
 function Home() {
   // console.log("Re-render: Home")
   return (
@@ -15,7 +16,7 @@ function Home() {
 
         {/* Slider and news*/}
         {/* https://www.youtube.com/watch?v=og3wCO98HkQ */}
-        <Box sx={{ height: '500px', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
+        <ResponsiveSliderAndSale sx={{ height: '500px', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
           {/* slider part */}
           <ResponsiveSlider sx={{ width: '60%' }}>
             <Slider />
@@ -32,7 +33,10 @@ function Home() {
               <SaleItem />
             </ResponsiveGroupSales>
           </ResponsiveSaleContainer>
-        </Box>
+        </ResponsiveSliderAndSale>
+
+        {/* Quick shop part */}
+        <QuickShop />
       </div>
     </>
   );

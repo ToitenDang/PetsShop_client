@@ -127,7 +127,7 @@ const Category = () => {
 
     return (
         <div>
-            <Button variant="contained" onClick={toggleDrawer(true)}
+            <Button sx={{backgroundColor: (theme) => theme.palette.main}} variant="contained" onClick={toggleDrawer(true)}
 
                 startIcon={<SubjectIcon />}
             >Danh mục</Button>
