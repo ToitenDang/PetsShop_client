@@ -8,67 +8,63 @@ import * as React from 'react';
 import ShoppingCart from '~/components/ShoppingCard/ShoppingCard';
 import Profile from '~/components/Profile/Profile';
 import MenuAppbar from '~/components/MenuAppbar/MenuAppbar';
-import { ResonsiveMenu, ResonsiveMenuSum } from './responsive'
+import { ResponsiveContainer, ResponsiveLogo } from '../responsive'
+import Category from '~/components/Category/Category';
 
 import Box from '@mui/material/Box';
 import PetsIcon from '@mui/icons-material/Pets';
-import Typography from '@mui/material/Typography';
-import ModeSelect from '../ModeSelect/ModeSelect';
+import ModeSelect from '~/components/ModeSelect/ModeSelect';
 import SearchIcon from '@mui/icons-material/Search';
-
-import MenuSum from '../MenuSum/MenuSum';
-
-
+import { Divider } from '@mui/material';
 
 function Appbar() {
 
   return (
-
-
-    <Box className={mystyles.container} sx={{
-      backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#062c4f' : '#a0cfe3',
-      gap: 2, paddingY: '5px',
-    }}>
-      {/* Left part */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-
-        {/* MenuSum part */}
-
-        <ResonsiveMenuSum>
-          <MenuSum />
-        </ResonsiveMenuSum>
-        {/* Logo part */}
-        <Box sx={{ textAlign: 'center', color: (theme) => theme.palette.mode === 'dark' ? '#fff' : '#000' }}>
-          <PetsIcon />
-          <Typography sx={{ fontSize: '2rem', fontWeight: 'bold' }}>Bet Shob</Typography>
+    <Box className={mystyles.mainContainer} sx={{ backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#062c4f' : '#fff', zIndex: 1000}}>
+      <ResponsiveContainer className={mystyles.container} sx={{
+        width: '90%',
+        gap: 2, paddingY: '5px'
+      }}>
+        {/* Higher part */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1, justifyContent: 'space-between' }}>
+          {/* Logo part */}
+          <Box sx={{ textAlign: 'center', color: (theme) => theme.palette.mode === 'dark' ? '#fff' : '#000', display: 'flex', alignItems: 'center' }}>
+            <PetsIcon sx={{ fontSize: '2rem', color: '#ed6b40' }} />
+            <ResponsiveLogo sx={{ margin: 0, fontSize: '2rem', fontWeight: 'bold' }}>Bet Shob</ResponsiveLogo>
+          </Box>
+          {/* Search path */}
+          <div className={mystyles.searchContainer}>
+            <input placeholder='Tìm kiếm...' className={mystyles.searchInput} type='text' />
+            <button className={mystyles.searchButton}>
+              <SearchIcon />
+            </button>
+          </div>
+          {/* Right part */}
+          <Box sx={{
+            display: 'flex', alignItems: 'center', gap: 2
+          }}>
+            {/* shopping cart */}
+            <ShoppingCart quantity={5} />
+            {/* Avatar */}
+            < Profile />
+            {/* Select mode */}
+            <ModeSelect sx={{ flex: 1 }} />
+          </Box>
         </Box>
 
-        {/* Menu part*/}
-        <ResonsiveMenu>
-          <MenuAppbar />
-        </ResonsiveMenu>
-        
+        <Divider sx={{ marginY: '5px' }} />
 
-      </Box>
+        {/* Upper part */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, justifyContent: 'center' }}>
+          <Box sx={{flex: 1}}>
+            <Category />
+          </Box>
+          <Box sx= {{flex: 3}}>
+            <MenuAppbar />
+          </Box>
+        </Box>
 
-      {/* Right part */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, justifyContent: 'space-around' }}>
-        {/* Search path */}
-        <div className={mystyles.searchContainer}>
-          <input placeholder='Search...' className={mystyles.searchInput} type='text' />
-          <button className={mystyles.searchButton}>
-            <SearchIcon />
-          </button>
-        </div>
-
-        {/* shopping cart */}
-        <ShoppingCart quantity={5} />
-        {/* Avatar */}
-        < Profile />
-        {/* Select mode */}
-        <ModeSelect sx={{ flex: 1 }} />
-      </Box>
-
+      </ResponsiveContainer>
     </Box>
 
   );

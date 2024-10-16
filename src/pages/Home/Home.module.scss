@@ -1,3 +1,24 @@
-.heading {
-    color: red
+.homeContainer {
+    margin-top: 123.600px;
+    width: 100%;
+    padding: 10px;
+    // background-color: red;
+}
+
+.slider {
+    background-image: url();
+}
+
+.saleContainer {
+    height: calc(100% / 2);
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.contentContainer {
+    background-color: #e3c8a8;
+    border-radius: 6px;
+    height: 100%;
+    width: 100%;
 }

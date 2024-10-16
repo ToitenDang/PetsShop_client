@@ -2,6 +2,11 @@
 
 .service {
     position: relative;
+    display: inline-flex;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+    
 }
 
 .expandService {
@@ -23,6 +28,9 @@
     width: 100%;
     justify-content: center;
     font-weight: bold;
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
 }
 
 .expandServiceItem:hover {
@@ -35,6 +43,11 @@
 
 .page {
     position: relative;
+    display: inline-flex;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+    
 }
 
 .expandPage {
@@ -63,21 +76,4 @@
 
 .expandPageItem:hover * {
     color: #000;
-}
-
-@media (max-width: 1137px) {
-    .expandService {
-        position:  absolute;
-        left: 90%;
-        top: 0;
-        display: none;
-        overflow: hidden;
-    }
-    .expandPage {
-        position:  absolute;
-        left: 100%;
-        top: 0;
-        display: none;
-        overflow: hidden;
-    }
 }

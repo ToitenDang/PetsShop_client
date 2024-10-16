@@ -4,83 +4,92 @@ import Button from '@mui/material/Button';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 
-const MenuAppbar = ({ styleProps }) => {
+const MenuAppbar = ({ styleProps= null}) => {
 
     const serviceExpand = (
         <Paper sx={{ width: '150px' }} className={mystyle.expandService}>
-            <Box className={mystyle.expandServiceItem}>
-                <Typography> Take care</Typography>
-            </Box>
+            <button
+                className={mystyle.expandServiceItem}>
+                <Typography>Chăm sóc</Typography>
+            </button>
 
-            <Box className={mystyle.expandServiceItem}>
-                <Typography> Medicine</Typography>
-            </Box>
+            <button className={mystyle.expandServiceItem}>
+                <Typography>Y tế</Typography>
+            </button>
 
-            <Box className={mystyle.expandServiceItem}>
-                <Typography>Place</Typography>
-            </Box>
+            <button className={mystyle.expandServiceItem}>
+                <Typography>Tạm giữ</Typography>
+            </button>
 
-            <Box className={mystyle.expandServiceItem}>
+            <button className={mystyle.expandServiceItem}>
                 <Typography>Massage</Typography>
-            </Box>
+            </button>
+            <button className={mystyle.expandServiceItem}>
+                <Typography>Thực phẩm</Typography>
+            </button>
         </Paper>
     )
     const pageExpand = (
         <Paper sx={{ width: '150px' }} className={mystyle.expandPage}>
-            <Box className={mystyle.expandPageItem}>
-                <Typography> About us</Typography>
-            </Box>
-
-            <Box className={mystyle.expandServiceItem}>
+            <button className={mystyle.expandServiceItem}>
+                <Typography>Về chúng tôi</Typography>
+            </button>
+            <button className={mystyle.expandServiceItem}>
+                <Typography>Liên hệ</Typography>
+            </button>
+            <button className={mystyle.expandServiceItem}>
                 <Typography> Blog</Typography>
-            </Box>
+            </button>
 
-            <Box className={mystyle.expandServiceItem}>
+            <button className={mystyle.expandServiceItem}>
                 <Typography>Team</Typography>
-            </Box>
+            </button>
 
-            <Box className={mystyle.expandServiceItem}>
-                <Typography>Help center</Typography>
-            </Box>
+            <button className={mystyle.expandServiceItem}>
+                <Typography>Trợ giúp</Typography>
+            </button>
         </Paper>
     )
     return (
-        <Box style={styleProps} sx={{ gap: 3 }}>
+        <Box  sx= {{
+            display: 'flex',
+            gap: 2,
+            justifyContent: 'flex-start'
+        }}>
             <Button sx={{
                 textTransform: 'none', color: (theme) => theme.palette.mode === 'dark' ? '#fff' : '#000',
-                fontSize: '1.1rem'
-            }}>Home</Button>
+                fontSize: '1.1rem',fontWeight: 'bold'
+            }}>Trang chủ</Button>
             <Button
 
                 sx={{
-                    textTransform: 'none', color: (theme) => theme.palette.mode === 'dark' ? '#fff' : '#000', fontSize: '1.1rem'
-                }} >Shop
+                    textTransform: 'none', color: (theme) => theme.palette.mode === 'dark' ? '#fff' : '#000', fontSize: '1.1rem',fontWeight: 'bold'
+                }} >Thú cưng
 
             </Button>
-            <Button
+            <Box
                 className={mystyle.service}
                 sx={{
-                    textTransform: 'none', color: (theme) => theme.palette.mode === 'dark' ? '#fff' : '#000', fontSize: '1.1rem'
-                }} endIcon={<ExpandMoreIcon />}
+                    textTransform: 'none', color: (theme) => theme.palette.mode === 'dark' ? '#fff' : '#000', fontSize: '1.1rem', justifyContent: 'center'
+                }}
 
-            >Services
+            >Dịch vụ <ExpandMoreIcon />
                 {serviceExpand}
 
-            </Button>
+            </Box>
             <Button sx={{
-                textTransform: 'none', color: (theme) => theme.palette.mode === 'dark' ? '#fff' : '#000', fontSize: '1.1rem'
-            }} >Contact us</Button>
-            <Button
+                textTransform: 'none', color: (theme) => theme.palette.mode === 'dark' ? '#fff' : '#000', fontSize: '1.1rem',fontWeight: 'bold'
+            }} >Phụ kiện</Button>
+            <Box
                 className={mystyle.page}
                 sx={{
-                    textTransform: 'none', color: (theme) => theme.palette.mode === 'dark' ? '#fff' : '#000', fontSize: '1.1rem'
-                }} endIcon={<ExpandMoreIcon />}>
-                Pages
+                    textTransform: 'none', color: (theme) => theme.palette.mode === 'dark' ? '#fff' : '#000', fontSize: '1.1rem', justifyContent: 'center'
+                }}>
+                Tham khảo <ExpandMoreIcon />
                 {pageExpand}
-            </Button>
+            </Box>
         </Box>
     )
 }
