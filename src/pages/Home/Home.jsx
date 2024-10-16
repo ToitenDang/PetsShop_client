@@ -5,7 +5,7 @@ import myStyle from './Home.module.scss';
 import Box from '@mui/material/Box';
 import Slider from './Slider/Slider';
 import SaleItem from './SaleItem/SaleItem';
-import { ResponsiveSlider } from './responsive';
+import { ResponsiveSlider, ResponsiveSaleContainer, ResponsiveGroupSales } from './responsive';
 function Home() {
   // console.log("Re-render: Home")
   return (
@@ -22,16 +22,16 @@ function Home() {
           </ResponsiveSlider>
 
           {/* sale part */}
-          <Box sx={{ width: '40%', height: '100%', maxHeight: '100%', padding: '10px' }}>
-            <Box sx={{ width: '100%', height: '100%', maxHeight: '100%', overflowY: 'auto' }}>
+          <ResponsiveSaleContainer sx={{ width: '40%', height: '100%', maxHeight: '100%', padding: '10px' }}>
+            <ResponsiveGroupSales sx={{ width: '100%', height: '100%', maxHeight: '100%', overflowY: 'auto' }}>
               {/* sale 1 */}
               <SaleItem />
               {/* sale 1 */}
               <SaleItem />
               {/* sale 1 */}
               <SaleItem />
-            </Box>
-          </Box>
+            </ResponsiveGroupSales>
+          </ResponsiveSaleContainer>
         </Box>
       </div>
     </>

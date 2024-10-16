@@ -1,8 +1,9 @@
 import Box from '@mui/material/Box';
-import myStyle from '~/pages/Home/Home.module.scss'
+import myStyle from '~/pages/Home/Home.module.scss';
+import {ResponsiveSaleItem} from '~/pages/Home/responsive';
 const SaleItem = () => {
     return (
-        <Box className={myStyle.saleContainer}>
+        <ResponsiveSaleItem className={myStyle.saleContainer}>
             <Box className={myStyle.contentContainer}>
                 <Box sx={{ color: '#fff', padding: '10px', width: '60%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <Box>
@@ -13,7 +14,7 @@ const SaleItem = () => {
                     <p style={{ margin: 0 }}>Chương trình ưu đãi với các sản phẩm phụ kiện đeo cho thú cưng</p>
                 </Box>
             </Box>
-        </Box>
+        </ResponsiveSaleItem>
     )
 }
 
