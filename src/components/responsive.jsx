@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 
 export const ResponsiveContainer = styled('div')(({ theme }) => ({
-  [theme.breakpoints.down('sm')]: {
+  [theme.breakpoints.down('cus_hg_sm')]: {
     width: '100%'
   },
   [theme.breakpoints.down('ml')]: {
@@ -10,7 +10,9 @@ export const ResponsiveContainer = styled('div')(({ theme }) => ({
 }));
 
 export const ResponsiveLogo = styled('p')(({ theme }) => ({
-  [theme.breakpoints.down('ms')]: {
+  [theme.breakpoints.down('md')]: {
     fontSize: '1.1rem'
   }
 }));
+
+ 

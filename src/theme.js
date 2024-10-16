@@ -100,17 +100,28 @@ const theme = extendTheme({
             }
         },
     },
+    // breakpoints: {
+    //     values: {
+    //         xs: 0,
+    //         ms: 684,
+    //         sm: 800,
+    //         md: 1000,
+    //         lg: 1137,
+    //         ml:1169,
+    //         xl: 1536,
+    //     },
+    // },
     breakpoints: {
         values: {
-            xs: 0,
-            ms: 684,
-            sm: 800,
-            md: 1000,
-            lg: 1137,
-            ml:1169,
-            xl: 1536,
+          xs: 0,
+          sm: 600,
+          cus_hg_sm: 650,
+          cus_up_md: 850,
+          md: 900,
+          lg: 1200,
+          xl: 1536,
         },
-    },
+      },
 })
 
 export default theme

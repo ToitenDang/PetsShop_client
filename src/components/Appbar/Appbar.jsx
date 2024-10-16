@@ -8,7 +8,7 @@ import * as React from 'react';
 import ShoppingCart from '~/components/ShoppingCard/ShoppingCard';
 import Profile from '~/components/Profile/Profile';
 import MenuAppbar from '~/components/MenuAppbar/MenuAppbar';
-import { ResponsiveContainer, ResponsiveLogo } from './responsive'
+import { ResponsiveContainer, ResponsiveLogo } from '../responsive'
 import Category from '~/components/Category/Category';
 
 import Box from '@mui/material/Box';
@@ -17,12 +17,10 @@ import ModeSelect from '~/components/ModeSelect/ModeSelect';
 import SearchIcon from '@mui/icons-material/Search';
 import { Divider } from '@mui/material';
 
-
-
 function Appbar() {
 
   return (
-    <Box className={mystyles.mainContainer} sx={{ backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#062c4f' : '#fff', }}>
+    <Box className={mystyles.mainContainer} sx={{ backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#062c4f' : '#fff', zIndex: 1000}}>
       <ResponsiveContainer className={mystyles.container} sx={{
         width: '90%',
         gap: 2, paddingY: '5px'

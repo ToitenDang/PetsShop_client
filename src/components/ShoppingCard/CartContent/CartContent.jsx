@@ -14,11 +14,11 @@ const CartContent = () => {
                     sx={{ width: 'auto', height: '100px' }}
                     component="img"
                     alt="green iguana"
-                    image="https://gaixinh.photo/wp-content/uploads/2024/10/anh-tran-ha-linh-tiktoker-vong-1-to-tron.jpg"
+                    image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4wCVyGUWHo8v9gC2GoUP2xUdpOH5L25ywupnhIinYT95Le-jG3E-NPyoTcgwIxW4yDM8&usqp=CAU"
                 />
                 <CardContent>
                     <Typography gutterBottom component="div">
-                        Trần Hà Linh
+                        Thức ăn hạt
                     </Typography>
                     <Box sx={{display: 'flex', gap: 1}}>
                         <Typography gutterBottom >
