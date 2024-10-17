@@ -1,6 +1,6 @@
 import BtnSlider from './BtnSlider';
 import myStyle from './Slider.module.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const publicUrl = import.meta.env.VITE_PUBLIC_URL;
 const slideData = [
@@ -30,6 +30,8 @@ const slideData = [
 const Slider = () => {
     // console.log('Re-render: Slider')
     const [slideIndex, setSLideIndex] = useState(1);
+
+    
     const nextSlide = () => {
         const dataLength = slideData.length;
         if (slideIndex != dataLength) {
@@ -51,6 +53,15 @@ const Slider = () => {
     const moveDot = (index) => {
         setSLideIndex(index)
     }
+    // Auto next Slide
+    useEffect(() => {
+        const idTimer = setInterval(() => {
+            nextSlide()
+        },2000);
+        return () => {
+            clearInterval(idTimer)
+        }
+    })
     return (
         <div className={myStyle.containerSlider}>
             {
