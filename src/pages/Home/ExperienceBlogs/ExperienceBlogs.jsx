@@ -9,7 +9,7 @@ import Stack from '@mui/material/Stack';
 const publicUrl = import.meta.env.VITE_PUBLIC_URL;
 const ExperienceBlogs = () => {
     return (
-        <Box sx={{ marginTop: '40px', paddingY: '10px', backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#062c4f' : '#fff' }}>
+        <Box sx={{ marginTop: '40px', paddingY: '10px', backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#2a3b52' : '#fff' }}>
             <Box >
                 <Typography sx={{ textAlign: 'center', marginY: '10px', fontSize: '2rem', fontWeight: 'bold' }}>Chia sẻ kinh nghiệm</Typography>
             </Box>
