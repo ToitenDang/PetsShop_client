@@ -2,11 +2,14 @@
 import React from 'react';
 import Appbar from '~/components/Appbar/Appbar';
 import myStyle from './Home.module.scss';
-import Box from '@mui/material/Box';
+
 import Slider from './Slider/Slider';
 import SaleItem from './SaleItem/SaleItem';
 import { ResponsiveSlider, ResponsiveSaleContainer, ResponsiveGroupSales,ResponsiveSliderAndSale } from './responsive';
 import QuickShop from './QuickShop/QuickShop';
+import TopSaleProducts from './TopSaleProducts/TopSaleProducts';
+import ExperienceBlogs from './ExperienceBlogs/ExperienceBlogs';
+
 function Home() {
   // console.log("Re-render: Home")
   return (
@@ -35,8 +38,18 @@ function Home() {
           </ResponsiveSaleContainer>
         </ResponsiveSliderAndSale>
 
+        {/* <Divider sx={{marginTop: '20px'}}/> */}
         {/* Quick shop part */}
         <QuickShop />
+
+        {/* Sản phẩm bán chạy */}
+        <TopSaleProducts />
+
+        {/* Blog chia sẻ kinh nghiệm */}
+        <ExperienceBlogs />
+
+        {/* Footer */}
+        
       </div>
     </>
   );
