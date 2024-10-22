@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 const publicUrl = import.meta.env.VITE_PUBLIC_URL;
-const BlogItem = ({url}) => {
+const BlogItem = ({url = `${publicUrl}/images/blogs/test_4.png`}) => {
     return (
         <Box className={myStyle.detailBlogContainer}
             sx={{ border: '1px solid #fff', padding: '12px', overflow: 'hidden', borderRadius: '5px', boxShadow: 'rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;' }}>

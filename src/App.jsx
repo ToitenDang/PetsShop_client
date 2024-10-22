@@ -7,7 +7,10 @@ import Container from '@mui/material/Container'
 import { publicRoutes } from './routes/route'
 import DefaultLayout from './components/Layout/DefaultLayout/DefaultLayout'
 import Home from './pages/Home/Home'
+import ListProduct from './components/ListProducts/ListProducts'
 
+import Account from './pages/Account'
+import Appbar from './components/Appbar/Appbar'
 
 function App() {
 
@@ -44,7 +47,15 @@ function App() {
     //     </Routes>
     //   </Container>
     // </Router>
-    <Home />
+    // <Home />
+    // <ListProduct />
+    <>
+      <Appbar />
+      <Account />
+      {/* <Home /> */}
+      {/* <ListProduct /> */}
+    </>
+    
   )
 }
 

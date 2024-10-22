@@ -1,0 +1,44 @@
+.listContainer {
+    margin-top: 150px;
+    padding: 0 10px;
+}
+.listRow {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.lisColLeft {
+    flex: 0 0 16.667%;
+    max-width: 16.667%;
+    // background-color: red;
+    
+}
+
+.lisColRight {
+    flex: 1;
+    // background-color: blue;
+    
+}
+.lisCol {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.prodsRow {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.prodCol {
+    flex: 0 0 25%;
+    max-width: 25%;
+    padding: 10px;
+}
+
+@media (max-width: 1000px) {
+    .prodCol {
+        flex: 0 0 50%;
+        max-width: 50%;
+        padding: 10px;
+    }
+}

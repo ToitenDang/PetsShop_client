@@ -1,6 +1,6 @@
 
 import React from 'react';
-import Appbar from '~/components/Appbar/Appbar';
+
 import myStyle from './Home.module.scss';
 
 import Slider from './Slider/Slider';
@@ -10,12 +10,12 @@ import QuickShop from './QuickShop/QuickShop';
 import TopSaleProducts from './TopSaleProducts/TopSaleProducts';
 import ExperienceBlogs from './ExperienceBlogs/ExperienceBlogs';
 import Footer from '~/components/Footer/Footer';
-import Divider from '@mui/material/Divider';
+
 function Home() {
   // console.log("Re-render: Home")
   return (
     <>
-      <Appbar />
+
       <div className={myStyle.homeContainer}>
 
         {/* Slider and news*/}
@@ -49,7 +49,6 @@ function Home() {
         {/* Blog chia sẻ kinh nghiệm */}
         <ExperienceBlogs />
 
-        <Divider sx={{marginTop: '40px'}} />
 
         {/* Footer */}
         <Footer />

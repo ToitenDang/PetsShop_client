@@ -61,7 +61,7 @@ const TopSaleProducts = () => {
             <Box sx={{marginTop: '10px',display: 'flex', justifyContent: 'center'}}>
                 <Stack spacing={2}>
                     {/* Có thuộc tính onchange. nhận vào 2 đối số là event và value, value là số trang hiện tại */}
-                    <Pagination count={10} variant="outlined" color="primary" />
+                    <Pagination count={10} color="primary" />
                 </Stack>
             </Box>
         </Box>
