@@ -40,3 +40,18 @@
     border:none;
     border-bottom:solid 3px #ef6a41
 }
+
+.cateFilterContainer {
+    border-radius: 5px;
+    border: none;
+}
+.cateFilterContainer:hover {
+    color: #ef6a41;
+    cursor: pointer;
+}
+
+.imagePurchase {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

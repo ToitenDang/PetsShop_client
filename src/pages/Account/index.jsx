@@ -11,6 +11,8 @@ import CasesOutlinedIcon from '@mui/icons-material/CasesOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Address from './Address';
 import Footer from '~/components/Footer/Footer';
+import Password from './Password';
+import Purchase from './Purchase';
 const Account = () => {
     return (
         <>
@@ -51,7 +53,13 @@ const Account = () => {
                                 {/* <Profile /> */}
 
                             {/* Address */}
-                            <Address />
+                            {/* <Address /> */}
+
+                            {/* Password */}
+                            {/* <Password /> */}
+
+                            {/* Don mua */}
+                            <Purchase />
                         </Box>
 
                     </Box>
