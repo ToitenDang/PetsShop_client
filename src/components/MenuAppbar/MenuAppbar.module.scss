@@ -1,0 +1,79 @@
+@import '~/components/constants.module.scss';
+
+.service {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+    
+}
+
+.expandService {
+    position:  absolute;
+    top: 100%;
+    left: 0;
+    display: none;
+    overflow: hidden;
+}
+
+.service:hover .expandService {
+    display: block;
+}
+
+.expandServiceItem {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+    font-weight: bold;
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.expandServiceItem:hover {
+    background-color: $main-context-color;
+}
+
+.expandServiceItem:hover * {
+    color: #000;
+}
+
+.page {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+    
+}
+
+.expandPage {
+    position:  absolute;
+    top: 100%;
+    left: 0;
+    display: none;
+    overflow: hidden;
+}
+
+.expandPageItem {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.page:hover .expandPage {
+    display: block;
+}
+.expandPageItem:hover {
+    background-color: $main-context-color;
+}
+
+.expandPageItem:hover * {
+    color: #000;
+}
