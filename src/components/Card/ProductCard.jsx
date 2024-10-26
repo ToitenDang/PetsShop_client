@@ -81,7 +81,7 @@ const ProductCard = ({ title, description, price, image, ratingValue }) => {
           <Typography>Đánh giá</Typography>
             <Rating
               name="read-only"
-              value={ratingValue}  // Dùng ratingValue từ props để hiển thị số sao người dùng đánh giá
+              value={ratingValue}
               readOnly
               precision={0.5}
             />

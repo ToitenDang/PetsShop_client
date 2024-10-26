@@ -1,49 +1,84 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Paper, Link, Box } from '@mui/material';
+import {
+  TextField,
+  Button,
+  Typography,
+  Paper,
+  Box,
+} from '@mui/material';
+import { Link } from 'react-router-dom';
+import { registerSchema } from '../../utils/rules'; // Đường dẫn đến file validate
 
 const Register = () => {
-  const [inputValue, setInputValue] = useState({
-    fullName: '',
+  const [formData, setFormData] = useState({
+    name: '',
     email: '',
     password: '',
     confirmPassword: '',
     address: '',
-    phone: ''
+    phone: '',
   });
+  const [errors, setErrors] = useState({});
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setInputValue((prevData) => ({
+    setFormData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
     }));
+    // Xóa lỗi khi người dùng nhập liệu
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: undefined })); 
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Xử lý đăng ký ở đây
-    console.log('Name:', inputValue.fullName);
-    console.log('Email:', inputValue.email);
-    console.log('Password:', inputValue.password);
-    console.log('Confirm Password:', inputValue.confirmPassword);
-    console.log('Address:', inputValue.address);
-    console.log('Phone:', inputValue.phone);
+    try {
+      await registerSchema.validate(formData, { abortEarly: false });
+      // Nếu tất cả các trường hợp đều hợp lệ
+
+
+      console.log('Form data:', formData);
+      // Xóa dữ liệu trong các textField khi thành công
+      setFormData({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        address: '',
+        phone: '',
+      });
+    } catch (err) {
+      const validationErrors = {};
+      err.inner.forEach((error) => {
+        validationErrors[error.path] = error.message;
+      });
+      setErrors(validationErrors);
+    }
   };
 
   return (
-    <Box 
+    <Box
       sx={{
         minHeight: '100vh',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        bgcolor: '#34495e',
+        bgcolor: '#4b6584',
         position: 'relative',
       }}
     >
-      <Paper elevation={3} sx={{ padding: '20px', width: '100%', maxWidth: 400, bgcolor: '#40739e', boxShadow: '0 5px 5px #2c3e50' }}>
-        <Typography component="h1" variant="h5" align="center">
-          Đăng ký
+      <Paper
+        elevation={3}
+        sx={{
+          padding: '20px',
+          width: '100%',
+          maxWidth: 400,
+          bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#2c3e50' : '#ffffff'),
+          boxShadow: '0 5px 5px #2c3e50',
+        }}
+      >
+        <Typography component="h1" variant="h5" align="center" color={(theme) => (theme.palette.mode === 'dark' ? '#ffffff' : '#333333')}>
+          Đăng Ký
         </Typography>
         <form onSubmit={handleSubmit} noValidate>
           <TextField
@@ -51,11 +86,13 @@ const Register = () => {
             margin="normal"
             required
             fullWidth
-            label="Họ tên"
-            name="fullName"
-            autoFocus
-            value={inputValue.fullName}
+            label="Họ và tên"
+            name="name"
+            autoComplete="name"
+            value={formData.name}
             onChange={handleChange}
+            error={!!errors.name} // Kiểm tra lỗi
+            helperText={errors.name} // Hiển thị thông báo lỗi
           />
           <TextField
             variant="outlined"
@@ -64,8 +101,11 @@ const Register = () => {
             fullWidth
             label="Email"
             name="email"
-            value={inputValue.email}
+            autoComplete="email"
+            value={formData.email}
             onChange={handleChange}
+            error={!!errors.email}
+            helperText={errors.email}
           />
           <TextField
             variant="outlined"
@@ -73,21 +113,26 @@ const Register = () => {
             required
             fullWidth
             label="Mật khẩu"
-            name="password"
             type="password"
-            value={inputValue.password}
+            name="password"
+            autoComplete="current-password"
+            value={formData.password}
             onChange={handleChange}
+            error={!!errors.password}
+            helperText={errors.password}
           />
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            label="Xác nhận lại mật khẩu"
-            name="confirmPassword"
+            label="Xác nhận mật khẩu"
             type="password"
-            value={inputValue.confirmPassword}
+            name="confirmPassword"
+            value={formData.confirmPassword}
             onChange={handleChange}
+            error={!!errors.confirmPassword}
+            helperText={errors.confirmPassword}
           />
           <TextField
             variant="outlined"
@@ -96,8 +141,10 @@ const Register = () => {
             fullWidth
             label="Địa chỉ"
             name="address"
-            value={inputValue.address}
+            value={formData.address}
             onChange={handleChange}
+            error={!!errors.address}
+            helperText={errors.address}
           />
           <TextField
             variant="outlined"
@@ -106,17 +153,18 @@ const Register = () => {
             fullWidth
             label="Số điện thoại"
             name="phone"
-            type="tel" // Sử dụng type "tel"
-            value={inputValue.phone}
+            value={formData.phone}
             onChange={handleChange}
+            error={!!errors.phone}
+            helperText={errors.phone}
           />
           <Button type="submit" fullWidth variant="contained" color="primary" sx={{ marginTop: 2 }}>
             Đăng Ký
           </Button>
         </form>
-        <Typography variant="body2" align="center" sx={{ marginTop: 2 }}>
+        <Typography variant="body2" align="center" sx={{ marginTop: 2 }} color={(theme) => (theme.palette.mode === 'dark' ? '#ffffff' : '#666666')}>
           Đã có tài khoản?{' '}
-          <Link href="#" variant="body2">
+          <Link to="/login" variant="body2" style={{ color: "#2d98da" }}>
             Đăng nhập
           </Link>
         </Typography>
