@@ -1,0 +1,23 @@
+/* CustomTextField.css */
+
+.custom-textfield .MuiOutlinedInput-root {
+    & fieldset {
+        border-color: #007bff;
+        /* Màu border mặc định */
+    }
+
+    &:hover fieldset {
+        border-color: #0056b3;
+        /* Màu border khi hover */
+    }
+
+    &.Mui-focused fieldset {
+        border-color: #0056b3;
+        /* Màu border khi focused */
+    }
+}
+
+.custom-textfield {
+    width: 100%;
+    /* Đảm bảo chiều rộng đầy đủ */
+}
