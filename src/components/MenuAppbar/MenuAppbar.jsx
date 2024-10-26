@@ -6,13 +6,25 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
-const MenuAppbar = ({ styleProps= null}) => {
+import { NavLink } from "react-router-dom"
+
+const navLinkStyle = ({ isActive }) => {
+    return {
+        color: isActive ? '#ef6a41' : '#000',
+        textTransform: 'none',
+        fontSize: '1.1rem',
+        fontWeight: 'bold',
+        textDecoration: 'none'
+    }
+}
+
+const MenuAppbar = () => {
 
     const serviceExpand = (
         <Paper sx={{ width: '150px' }} className={mystyle.expandService}>
             <button
                 className={mystyle.expandServiceItem}>
-                <Typography>Chăm sóc</Typography>
+                <Typography>Cắt tỉa</Typography>
             </button>
 
             <button className={mystyle.expandServiceItem}>
@@ -20,14 +32,11 @@ const MenuAppbar = ({ styleProps= null}) => {
             </button>
 
             <button className={mystyle.expandServiceItem}>
-                <Typography>Tạm giữ</Typography>
+                <Typography>Khách sạn</Typography>
             </button>
 
             <button className={mystyle.expandServiceItem}>
                 <Typography>Massage</Typography>
-            </button>
-            <button className={mystyle.expandServiceItem}>
-                <Typography>Thực phẩm</Typography>
             </button>
         </Paper>
     )
@@ -38,9 +47,6 @@ const MenuAppbar = ({ styleProps= null}) => {
             </button>
             <button className={mystyle.expandServiceItem}>
                 <Typography>Liên hệ</Typography>
-            </button>
-            <button className={mystyle.expandServiceItem}>
-                <Typography> Blog</Typography>
             </button>
 
             <button className={mystyle.expandServiceItem}>
@@ -53,22 +59,19 @@ const MenuAppbar = ({ styleProps= null}) => {
         </Paper>
     )
     return (
-        <Box  sx= {{
+        <Box sx={{
             display: 'flex',
             gap: 2,
             justifyContent: 'flex-start'
         }}>
-            <Button sx={{
-                textTransform: 'none', color: (theme) => theme.palette.mode === 'dark' ? '#fff' : '#000',
-                fontSize: '1.1rem',fontWeight: 'bold'
-            }}>Trang chủ</Button>
-            <Button
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <NavLink to='/' style={navLinkStyle} >Trang chủ</NavLink>
 
-                sx={{
-                    textTransform: 'none', color: (theme) => theme.palette.mode === 'dark' ? '#fff' : '#000', fontSize: '1.1rem',fontWeight: 'bold'
-                }} >Thú cưng
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <NavLink to='/do-thu-cung' style={navLinkStyle}>Thú cưng </NavLink>
+            </Box>
 
-            </Button>
             <Box
                 className={mystyle.service}
                 sx={{
@@ -79,9 +82,10 @@ const MenuAppbar = ({ styleProps= null}) => {
                 {serviceExpand}
 
             </Box>
-            <Button sx={{
-                textTransform: 'none', color: (theme) => theme.palette.mode === 'dark' ? '#fff' : '#000', fontSize: '1.1rem',fontWeight: 'bold'
-            }} >Phụ kiện</Button>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <NavLink to='/tap-chi' style={navLinkStyle}>Tạp chí</NavLink>
+
+            </Box>
             <Box
                 className={mystyle.page}
                 sx={{

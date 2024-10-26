@@ -18,9 +18,12 @@
     margin: 8px 0;
     
 }
-
+.linkNav {
+    text-decoration: none;
+    color: #000;
+}
 .listContainer li:hover {
-    color: #ef6a41;
+    background-color: #f5f5f5;
 }
 
 .avatar {

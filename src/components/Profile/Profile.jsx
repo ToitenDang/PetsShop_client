@@ -9,6 +9,17 @@ import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import Stack from '@mui/material/Stack';
+import { NavLink } from "react-router-dom"
+import { colors } from '@mui/material';
+
+const linkStyle = ({ isActive }) => {
+    return {
+
+        textTransform: 'none',
+        textDecoration: 'none',
+
+    }
+}
 const Profile = () => {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
@@ -38,7 +49,7 @@ const Profile = () => {
             <Stack direction="row" spacing={2}>
                 <div>
                     <Avatar
-                        sx={{cursor: 'pointer'}}
+                        sx={{ cursor: 'pointer' }}
                         ref={anchorRef}
                         id="avatar-control"
                         aria-controls={open ? 'avatar-menu' : undefined}
@@ -70,9 +81,14 @@ const Profile = () => {
                                             aria-labelledby="avatar-control"
                                             onKeyDown={handleListKeyDown}
                                         >
-                                            <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                            <MenuItem onClick={handleClose}>My account</MenuItem>
-                                            <MenuItem onClick={handleClose}>Logout</MenuItem>
+                                            <NavLink to='/tai-khoan' style={linkStyle}>
+                                                <MenuItem sx={{ color: (theme) => theme.palette.mode === 'dark' ? 'white' : 'black' }}
+                                                    onClick={handleClose}>Tài khoản</MenuItem>
+                                            </NavLink>
+                                            <NavLink to='/dang-nhap' style={linkStyle}>
+                                                <MenuItem sx={{ color: (theme) => theme.palette.mode === 'dark' ? 'white' : 'black' }}
+                                                    onClick={handleClose}>Đăng xuất</MenuItem>
+                                            </NavLink>
                                         </MenuList>
                                     </ClickAwayListener>
                                 </Paper>

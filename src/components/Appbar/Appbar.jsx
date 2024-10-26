@@ -17,8 +17,10 @@ import ModeSelect from '~/components/ModeSelect/ModeSelect';
 import SearchIcon from '@mui/icons-material/Search';
 import { Divider } from '@mui/material';
 
-function Appbar() {
 
+
+function Appbar() {
+  console.log('rerender appbar')
   return (
     <Box className={mystyles.mainContainer} sx={{ backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#062c4f' : '#fff', zIndex: 1000}}>
       <ResponsiveContainer className={mystyles.container} sx={{
