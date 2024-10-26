@@ -1,0 +1,26 @@
+.common:hover {
+    cursor: pointer;
+    color: #fff;
+    background-color: #1877d0;
+}
+
+.common {
+    text-decoration: none;
+    font-weight: bold;
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    max-height: 40px;
+    overflow: hidden;
+    color: #000;
+}
+// .common.selected:hover {
+//     cursor: pointer;
+//     color: #fff;
+//     background-color: #1877d0;
+// }
+.common.selected {
+    background-color: #1877d0;
+    color: #fff;
+}
