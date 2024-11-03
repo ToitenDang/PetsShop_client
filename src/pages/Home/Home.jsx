@@ -16,7 +16,7 @@ function Home() {
     // const access_token = localStorage.getItem("access_token");
     // console.log(access_token);
     const getUsers = async () => {
-      console.log("accessToken-Home: ", localStorage.getItem("access_token"))
+      // console.log("accessToken-Home: ", localStorage.getItem("access_token"))
       const users = await UserFetch.get();
       console.log(users);
     }
