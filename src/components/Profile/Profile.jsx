@@ -46,7 +46,7 @@ const Profile = () => {
     }
     return (
         <>
-            <Stack direction="row" spacing={2}>
+            <Stack direction="row" spacing={2} sx={{zIndex:1}}>
                 <div>
                     <Avatar
                         sx={{ cursor: 'pointer' }}

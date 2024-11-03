@@ -59,7 +59,6 @@ const ListProduct = () => {
                     <Outlet />
                 </Box>
             </Box>
-            <Footer />
         </>
     )
 }

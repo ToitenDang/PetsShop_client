@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Paper, Box } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { TextField, Button, Typography, Paper, Box, Dialog,Alert} from '@mui/material';
+import { Link , useNavigate} from 'react-router-dom';
 import { loginSchema } from '../../utils/rules';
+import { LoginFetch } from '~/REST-API-client';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [inputValue, setInputValue] = useState({
     email: '',
     password: '',
   });
   const [errors, setErrors] = useState({});
-
+  const [isSuccess, setIsSuccess] = useState(true);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [errorMessage, setErrorMassage] = useState("Lỗi rồi, :(")
   const handleChange = (event) => {
     const { name, value } = event.target;
     setInputValue((prevData) => ({
@@ -27,6 +31,25 @@ const Login = () => {
       // Nếu validation thành công, thực hiện đăng nhập
       console.log('Email:', inputValue.email);
       console.log('Password:', inputValue.password);
+      try {
+        const data = await LoginFetch.post(inputValue);
+        // console.log(data.data.access_token)
+        localStorage.setItem("access_token", data.data.access_token);
+        setIsSuccess(true);
+        setOpenDialog(true);
+        setInputValue({
+          email: '',
+          password: '',
+        });
+        setTimeout(() => {
+          setOpenDialog(false);
+          navigate("/");
+        }, 3000)
+      } catch(err) {
+        setErrorMassage(err.toString());
+        setIsSuccess(false)
+        setOpenDialog(true);
+      }
     } catch (err) {
       const validationErrors = {};
       err.inner.forEach((error) => {
@@ -91,11 +114,17 @@ const Login = () => {
         </Typography>
         <Typography variant="body2" align="center" sx={{ marginTop: 2 }} color={(theme) => (theme.palette.mode === 'dark' ? '#ffffff' : '#666666')}>
           Chưa có tài khoản?{' '}
-          <Link to="/register" variant="body2" style={{ color: "#2d98da" }}>
+          <Link to="/dang-ky" variant="body2" style={{ color: "#2d98da" }}>
             Đăng ký
           </Link>
         </Typography>
       </Paper>
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+        {
+          isSuccess === true ? <Alert severity='success'>Đăng nhập thành công</Alert>
+            : <Alert severity='error'>{errorMessage}</Alert>
+        }
+      </Dialog>
     </Box>
   );
 };

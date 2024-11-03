@@ -1,0 +1,50 @@
+.detailProdContainer {
+  position: relative;
+}
+
+.buyOrAdd {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  transition: all ease-in 0.2s;
+  height: 0;
+  gap: 16px;
+}
+
+.prodImage {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.prodContent {
+  display: -webkit-box;
+  /* Use a flex container */
+  -webkit-box-orient: vertical;
+  /* Set the box to be vertically oriented */
+  -webkit-line-clamp: 2;
+  /* Clamp to 2 lines */
+  overflow: hidden;
+  /* Hide overflowing content */
+  text-overflow: ellipsis;
+  /* Show ellipsis when content overflows */
+}
+
+.detailProdContainer:hover .buyOrAdd {
+  height: 100%;
+}
+
+.buyOrAdd button {
+  display: none;
+}
+
+.buyOrAdd:hover button {
+  display: block;
+}/*# sourceMappingURL=ProductItem.module.css.map */

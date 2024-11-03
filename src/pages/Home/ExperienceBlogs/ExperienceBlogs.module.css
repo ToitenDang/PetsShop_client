@@ -1,0 +1,29 @@
+.blogsContainer {
+  width: 100%;
+}
+
+.blogsRow {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.blogsCol {
+  flex: 0 0 33.333333333%;
+  max-width: 33.333333333%;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin: 8px 0;
+}
+
+@media (max-width: 950px) {
+  .blogsCol {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+@media (max-width: 650px) {
+  .blogsCol {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}/*# sourceMappingURL=ExperienceBlogs.module.css.map */
