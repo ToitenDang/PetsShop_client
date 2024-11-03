@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import myStyle from './Home.module.scss';
 
@@ -9,10 +9,19 @@ import { ResponsiveSlider, ResponsiveSaleContainer, ResponsiveGroupSales, Respon
 import QuickShop from './QuickShop/QuickShop';
 import TopSaleProducts from './TopSaleProducts/TopSaleProducts';
 import ExperienceBlogs from './ExperienceBlogs/ExperienceBlogs';
-import Footer from '~/components/Footer/Footer';
+import { UserFetch } from '~/REST-API-client';
 
 function Home() {
-  // console.log("Re-render: Home")
+  useEffect(() => {
+    // const access_token = localStorage.getItem("access_token");
+    // console.log(access_token);
+    const getUsers = async () => {
+      console.log("accessToken-Home: ", localStorage.getItem("access_token"))
+      const users = await UserFetch.get();
+      console.log(users);
+    }
+    getUsers();
+  })
   return (
     <>
 
@@ -48,10 +57,6 @@ function Home() {
 
         {/* Blog chia sẻ kinh nghiệm */}
         <ExperienceBlogs />
-
-
-        {/* Footer */}
-        <Footer />
       </div>
     </>
   );
