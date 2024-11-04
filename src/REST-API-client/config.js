@@ -29,11 +29,14 @@ function configAxios(axiosInstance) {
                     localStorage.removeItem("access_token");
 
                     // Điều hướng người dùng đến trang đăng nhập
-                    window.location.href = "/dang-nhap";
-                    return Promise.reject(refreshError);
+                    // window.location.href = "/dang-nhap";
+                    // console.log("eror heae")
+                    return Promise.reject({
+                        message: "Yêu cầu đăng nhập",
+                    });
                 }
             }
-            console.log("Refresh token fail")
+            // console.log("Refresh token fail")
             return Promise.reject(error);
         }
     );

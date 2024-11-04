@@ -10,7 +10,7 @@ const UserAPI = (axiosInstance) => {
                     Authorization: `Bearer ${accessToken}`
                 }
             })
-            
+
             return res.data;
         } catch (error) {
             if (error.response) {
@@ -22,9 +22,30 @@ const UserAPI = (axiosInstance) => {
             }
         }
     }
-    return {
-        get
+    async function getById(id) {
+        const access_token = localStorage.getItem("access_token");
+        try {
+            const res = await axiosInstance.get(`/users/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`
+                }
+            })
+            // console.log(res)
+            return res.data;
+        } catch (error) {
+            if (error.response) {
+                throw new Error(error.response.data.message.message);
+            } else if (error.request) {
+                throw new Error("Server không phản hồi");
+            } else {
+                throw new Error(error.message)
+            }
+        }
+        }
+        return {
+            get,
+            getById
+        }
     }
-}
 
-export default UserAPI
+    export default UserAPI

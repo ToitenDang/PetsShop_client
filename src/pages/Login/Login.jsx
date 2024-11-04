@@ -3,8 +3,10 @@ import { TextField, Button, Typography, Paper, Box, Dialog,Alert} from '@mui/mat
 import { Link , useNavigate} from 'react-router-dom';
 import { loginSchema } from '../../utils/rules';
 import { LoginFetch } from '~/REST-API-client';
-
+import { useAuth } from "~/components/Authentication/Authentication";
 const Login = () => {
+  console.log("render-dangnhap")
+  const auth = useAuth();
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState({
     email: '',
@@ -29,12 +31,13 @@ const Login = () => {
     try {
       await loginSchema.validate(inputValue, { abortEarly: false });
       // Nếu validation thành công, thực hiện đăng nhập
-      console.log('Email:', inputValue.email);
-      console.log('Password:', inputValue.password);
+      // console.log('Email:', inputValue.email);
+      // console.log('Password:', inputValue.password);
       try {
         const data = await LoginFetch.post(inputValue);
         // console.log(data.data.access_token)
         localStorage.setItem("access_token", data.data.access_token);
+        auth.authenUser(data.data.user);
         setIsSuccess(true);
         setOpenDialog(true);
         setInputValue({

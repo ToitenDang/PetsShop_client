@@ -2,7 +2,6 @@
 import React, { useEffect } from 'react';
 
 import myStyle from './Home.module.scss';
-
 import Slider from './Slider/Slider';
 import SaleItem from './SaleItem/SaleItem';
 import { ResponsiveSlider, ResponsiveSaleContainer, ResponsiveGroupSales, ResponsiveSliderAndSale } from './responsive';
@@ -10,17 +9,23 @@ import QuickShop from './QuickShop/QuickShop';
 import TopSaleProducts from './TopSaleProducts/TopSaleProducts';
 import ExperienceBlogs from './ExperienceBlogs/ExperienceBlogs';
 import { UserFetch } from '~/REST-API-client';
-
+import { useAuth } from "~/components/Authentication/Authentication";
+import { useNavigate } from 'react-router-dom';
 function Home() {
+  const navigate = useNavigate();
+  const auth = useAuth();
   useEffect(() => {
-    // const access_token = localStorage.getItem("access_token");
-    // console.log(access_token);
     const getUsers = async () => {
-      // console.log("accessToken-Home: ", localStorage.getItem("access_token"))
-      const users = await UserFetch.get();
-      console.log(users);
+      try {
+        const users = await UserFetch.get();
+        console.log(users);
+
+      } catch(err) {
+        // Xử lý lỗi, chẳng hạn như trả lại trang login
+        // navigate("/dang-nhap")
+      }
     }
-    getUsers();
+    // getUsers();
   })
   return (
     <>
