@@ -8,24 +8,24 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Avatar from '@mui/material/Avatar';
 import myStyle from './index.module.scss';
 
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import CloseIcon from '@mui/icons-material/Close';
-
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
+import { useAuth } from "~/components/Authentication/Authentication";
+import { obfuscateEmail, obfuscatePhone } from '~/utils/hiddenInfo';
+import { UserFetch } from '~/REST-API-client';
 const initialTiming = 30;
 const pinCodeInitial = '123456';
-function ChangPassDialog(props) {
-    const { onClose, open } = props;
+
+
+function ChangEmailDialog(props) {
+    const { onClose, open, resetData } = props;
     const [email, setEmail] = useState("");
     const [pageNumber, setPageNumber] = useState(1);
     const [time, setTime] = useState(initialTiming);
@@ -68,7 +68,7 @@ function ChangPassDialog(props) {
     const handleClose = () => {
         onClose();
         setPageNumber(1);
-    
+
         setEmail('');
         setTime(initialTiming);
         setOpenSnackBar(false);
@@ -89,13 +89,9 @@ function ChangPassDialog(props) {
                     // Nếu có ô trước đó, focus vào nó
                     if (index > 0) {
                         pinInputRefs.current[index - 1].focus();
-
                     }
-                  
                 }
-                
             }
-
         }
     };
 
@@ -109,12 +105,13 @@ function ChangPassDialog(props) {
                 pinInputRefs.current[index + 1].focus();
 
             }
-         
+
         }
     };
     const handleConfirm = () => {
         if (pin.join('') === pinCodeInitial) {
             clearInterval(reCode.current);
+            resetData(email);
             // console.log('success');
             setTimeout(handleClose, 1000)
         } else {
@@ -139,7 +136,7 @@ function ChangPassDialog(props) {
     const handleCloseSnackBar = () => {
         setOpenSnackBar(false)
     }
-    console.log(pin.join(''));
+    // console.log(pin.join(''));
 
     return (
 
@@ -201,7 +198,7 @@ function ChangPassDialog(props) {
                                             sx={{ width: '100%' }}
                                         >
 
-                                            Cập nhật mật khẩu thành công
+                                            Cập nhật email thành công
                                         </Alert>) : (
                                         <Alert
                                             onClose={handleCloseSnackBar}
@@ -211,9 +208,7 @@ function ChangPassDialog(props) {
                                         >
                                             Thất bại, kiểm tra lại mã
                                         </Alert>
-
                                     )
-
                                 }
                             </Snackbar>
                         </Box>
@@ -224,35 +219,131 @@ function ChangPassDialog(props) {
     );
 }
 
-const Profile = () => {
-    const [gender, setGender] = useState('female');
-    const [name, setName] = useState("Pham Huu Tuan");
-    const [birthDay, setBirthDay] = useState(null);
-    const [avatar, setAvatar] = useState(null);
-    const [openChangePassword, setOpenChangePassword] = useState(false);
+function ChangePhoneDialog(props) {
+    const [phone, setPhone] = useState("");
+    const { onClose, open, resetData } = props;
+    const handleClose = () => {
+        setPhone("");
+        onClose();
 
-    useEffect(() => {
-        return () => {
-            if (avatar !== null) {
-                URL.revokeObjectURL(avatar.preview);
-            }
+    }
+    const handleCanle = () => {
+        handleClose()
+    }
+    const handleSubmit = () => {
+        resetData(phone);
+        handleClose();
+    }
+    return (
+        <Dialog onClose={handleClose} open={open}>
+            <Box sx={{ padding: "20px" }}>
+                <Typography sx={{ fontSize: '1.3rem', fontWeight: "bold" }}>Cập nhật số điện thoại</Typography>
+                <Divider sx={{ marginY: "20px" }} />
+                <Box>
+                    <Typography>Nhập số điện thoại mới</Typography>
+                    <input type='text' style={{ padding: "10px" }} value={phone} onChange={(e) => {
+                        setPhone(e.target.value);
+                    }} />
+                </Box>
+                <Box>
+                    <Button onClick={handleCanle}>Hủy</Button>
+                    <Button onClick={handleSubmit}>Hoàn tất</Button>
+                </Box>
+            </Box>
+        </Dialog>
+    )
+}
+
+const Profile = () => {
+    const auth = useAuth();
+    const [gender, setGender] = useState('');
+    const [name, setName] = useState('');
+    const [avatar, setAvatar] = useState({
+        preview: "",
+        file: null
+    });
+    const [address, setAddress] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [openChangeEmail, setOpenChangeEmail] = useState(false);
+    const [openChangePhone, setOpenChangePhone] = useState(false);
+    // console.log(avatar);
+    const cleanUpFunction = () => {
+        if (avatar.preview !== "") {
+            // console.log("clear image")
+            URL.revokeObjectURL(avatar.preview);
         }
+    }
+    useEffect(() => {
+        setGender(auth?.user?.gender);
+        setName(auth?.user?.name);
+        setAvatar({
+            preview: auth?.user?.avatar.preview,
+            file: null
+        });
+        setAddress(auth?.user?.address);
+        setEmail(auth?.user?.email);
+        setPhone(auth?.user?.phone);
+        cleanUpFunction();
+    }, [auth.user])
+    useEffect(() => {
+        return cleanUpFunction;
     }, [avatar])
     const handleChangeName = (e) => {
         setName(e.target.value);
     }
     const handleChangeGender = (event) => {
-        console.log(gender)
+        // console.log(gender)
         setGender(event.target.value);
+    }
+    const handleChangeAddress = (e) => {
+        setAddress(e.target.value);
     }
     const handleUploadImage = (e) => {
         const file = e.target.files[0];
-        file.preview = URL.createObjectURL(file);
-        setAvatar(file);
+        const preview = URL.createObjectURL(file);
+        console.log("preview: ", preview)
+        setAvatar({
+            preview: preview,
+            file: file
+        });
+        e.target.value = null;
     }
     const handleCloseChangePassDialog = () => {
-        setOpenChangePassword(false)
+        setOpenChangeEmail(false)
     }
+    const handleCloseChangePhoneDialog = () => {
+        setOpenChangePhone(false)
+    }
+    const handleSaveChangeInfo = () => {
+        // console.log(auth?.user)
+        console.log("avatar: ", avatar)
+        const formData = new FormData();
+
+        if(avatar.file) {
+            formData.append("avatar", avatar.file);  
+        }
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("phone", phone);
+        formData.append("gender", gender);
+        formData.append("address", address);
+
+        UserFetch.updateInfo(auth?.user?._id, formData)
+            .then(data => {
+                // console.log("Updated: ", data.data.user)
+                localStorage.setItem("access_token", data.data.access_token)
+                auth.authenUser(data.data.user);
+                window.alert("Cập nhật thông tin thành công");
+                // console.log("new User:", auth.user);
+            })
+            .catch(err => {
+                console.log("Err: ", err)
+                window.alert(`Cập nhật thông tin thất bại: \n ${err}`);
+            })
+
+    }
+
     return (
         <>
             <Box sx={{ padding: '10px' }}>
@@ -264,32 +355,42 @@ const Profile = () => {
 
                     <Box sx={{ display: 'flex', flex: 1, flexDirection: 'column', gap: 2 }}>
                         <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
-                            <Typography>Tên đăng nhập: </Typography>
-                            <Typography>tuan24112003</Typography>
-                        </Box>
-                        <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
                             <Typography>Tên: </Typography>
                             <input type="text" value={name} onChange={handleChangeName} />
                         </Box>
                         <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
                             <Typography>Email: </Typography>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                <Typography >pham...@gmail.com</Typography>
+                                <Typography >{obfuscateEmail(email)}</Typography>
                                 <Button sx={{ textTransform: 'none' }}
-                                    onClick={() => setOpenChangePassword(true)}
+                                    onClick={() => {
+
+                                        setOpenChangeEmail(true)
+                                    }
+                                    }
                                 >Thay đổi</Button>
                             </Box>
-                            <ChangPassDialog
-                                open={openChangePassword}
+                            <ChangEmailDialog
+                                resetData={(value) => {
+                                    setEmail(value)
+                                }}
+                                open={openChangeEmail}
                                 onClose={handleCloseChangePassDialog}
                             />
                         </Box>
                         <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
                             <Typography>Số điện thoại: </Typography>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                <Typography >09...17</Typography>
-                                <Button sx={{ textTransform: 'none' }}>Thay đổi</Button>
+                                <Typography >{obfuscatePhone(phone)}</Typography>
+                                <Button onClick={() => {
+                                    setOpenChangePhone(true)
+                                }} sx={{ textTransform: 'none' }}>Thay đổi</Button>
                             </Box>
+                            <ChangePhoneDialog
+                                open={openChangePhone}
+                                onClose={handleCloseChangePhoneDialog}
+                                resetData={(value) => setPhone(value)}
+                            />
                         </Box>
                         <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
                             <Typography>Giới tính: </Typography>
@@ -310,18 +411,12 @@ const Profile = () => {
                                 </FormControl>
                             </Box>
                         </Box>
-                        <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Typography>Ngày sinh </Typography>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoContainer components={['DatePicker']}>
-                                        <DatePicker value={birthDay} onChange={(newValue) => setBirthDay(newValue)} />
-                                    </DemoContainer>
-                                </LocalizationProvider>
-                            </Box>
+                        <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between', gap: 3 }}>
+                            <Typography>Địa chỉ sống: </Typography>
+                            <input type="text" style={{ flex: 1 }} value={address} onChange={handleChangeAddress} />
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            <Button variant='contained'>Lưu</Button>
+                            <Button onClick={handleSaveChangeInfo} variant='contained'>Lưu</Button>
                         </Box>
                     </Box>
 
@@ -329,13 +424,9 @@ const Profile = () => {
                     <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <Box>
                             <Box sx={{ minWidth: '100px', maxWidth: '100px', height: "100px", overflow: 'hidden', borderRadius: '50%' }}>
-                                {
-                                    avatar !== null ? (
-                                        <img className={myStyle.avatar} src={avatar.preview} />
-                                    ) : (
-                                        <img className={myStyle.avatar} src='https://cdn-icons-png.flaticon.com/512/149/149071.png' />
-                                    )
-                                }
+
+                                <Avatar sx={{ width: "100%", height: "100%" }} src={avatar.preview} />
+
                             </Box>
                             <Box>
                                 <Button>
