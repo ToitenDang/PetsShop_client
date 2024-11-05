@@ -7,15 +7,14 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 
-const publicUrl = import.meta.env.VITE_PUBLIC_URL;
+// const PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL;
+//import { PUBLIC_URL } from '~/constants';
 const ProductItem = ({product}) => {
     const navigate = useNavigate();
 
     const handleViewDetails = () => {
         navigate(`/product/${product?._id}`); 
     };
-
-
     return (
         <Box className={myStyle.detailProdContainer}
             sx={{ border: '1px solid #fff', padding: '8px', overflow: 'hidden', borderRadius: '5px', boxShadow: 'rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;' }}>

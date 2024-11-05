@@ -15,7 +15,6 @@ import { useState } from 'react';
 
 const Account = () => {
     const [pageChoosed, setPageChoosed] = useState(0)
-
     return (
         <>
             <Box sx={{ marginTop: '150px', width: '100%' }}>
@@ -75,7 +74,6 @@ const Account = () => {
                     </Box>
                 </Box>
             </Box>
-            <Footer />
         </>
     )
 }

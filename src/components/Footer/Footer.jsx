@@ -9,6 +9,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 const Footer = () => {
+    console.log("Render footer")
     return (
         <>
             <Divider sx={{marginTop: '40px'}}/>

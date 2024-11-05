@@ -1,3 +1,4 @@
+
 // api/index.js
 import axios from 'axios';
 import { API_URL } from '~/constants';  // URL API
@@ -10,8 +11,8 @@ import ReviewAPI from './reviews'; // Import Review API
 
 // Tạo một instance của axios
 const axiosInstance = axios.create({
-  baseURL: `${API_URL}`, // URL backend của bạn
-  withCredentials: true, // Gửi cookie cho yêu cầu
+  baseURL: `${API_URL}`, // Thay đổi URL theo backend của bạn
+  withCredentials: true, // Để gửi cookie cho yêu cầu làm mới token
 });
 
 // Cấu hình axios nếu cần thiết
@@ -23,3 +24,4 @@ export const LoginFetch = LoginAPI(axiosInstance);
 export const UserFetch = UserAPI(axiosInstance);
 export const ProductFetch = ProductAPI(axiosInstance);  
 export const ReviewFetch = ReviewAPI(axiosInstance);  
+

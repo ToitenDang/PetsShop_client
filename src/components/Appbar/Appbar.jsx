@@ -28,7 +28,7 @@ function Appbar() {
         gap: 2, paddingY: '5px'
       }}>
         {/* Higher part */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1, justifyContent: 'space-between' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1, justifyContent: 'space-between',zIndex:1 }}>
           {/* Logo part */}
           <Box sx={{ textAlign: 'center', color: (theme) => theme.palette.mode === 'dark' ? '#fff' : '#000', display: 'flex', alignItems: 'center' }}>
             <PetsIcon sx={{ fontSize: '2rem', color: '#ed6b40' }} />
