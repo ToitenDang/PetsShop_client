@@ -4,11 +4,12 @@ import { useState } from 'react';
 import contactImage from '../../assets/contact.png';
 import ZaloIcon from '../../assets/zalo-icon.png';
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
+import theme from '~/theme';
 
 function Contact() {
   const [formData, setFormData] = useState({
+    name: '',
     email: '',
-    phone: '',
     content: ''
   });
 
@@ -42,6 +43,7 @@ function Contact() {
         bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#062c4f' : '#fff'),
         width: '100%',
         height: 'auto',
+        mt: 14
       }}
     >
       <Box
@@ -102,20 +104,20 @@ function Contact() {
           >
 
             <TextField
-              label="Email"
-              type="email"
-              name="email"
-              value={formData.email}
+              label="Name"
+              type="name"
+              name="name"
+              value={formData.name}
               onChange={handleChange}
               required
               sx={{ marginBottom: 2 }}
             />
 
             <TextField
-              label="Phone"
-              type="tel"
-              name="phone"
-              value={formData.phone}
+              label="Email"
+              type="email"
+              name="email"
+              value={formData.email}
               onChange={handleChange}
               required
               sx={{ marginBottom: 2 }}
@@ -155,7 +157,7 @@ function Contact() {
           </Box>
         </Box>
         {/* Nút liên hệ qua Zalo và hotline */}
-        <Box sx={{ display: 'flex',  alignItems: 'center', mt: 4 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mt: 4 }}>
           <Typography variant="h5" >
             Phương thức liên hệ khác
           </Typography>
@@ -165,7 +167,7 @@ function Contact() {
               height: '50px',
               padding: '0',
               borderRadius: '4px',
-              ml:2
+              ml: 2
             }}
             variant="contained" color="primary" onClick={handleZaloClick}>
             <img

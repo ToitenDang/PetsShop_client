@@ -46,7 +46,8 @@ const MenuAppbar = () => {
                 <Typography>Về chúng tôi</Typography>
             </button>
             <button className={mystyle.expandServiceItem}>
-                <Typography>Liên hệ</Typography>
+                
+                <NavLink to='/lien-he' style={navLinkStyle}><Typography>Liên hệ</Typography></NavLink>
             </button>
 
             <button className={mystyle.expandServiceItem}>

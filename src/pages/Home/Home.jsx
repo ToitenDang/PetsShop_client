@@ -12,16 +12,16 @@ import ExperienceBlogs from './ExperienceBlogs/ExperienceBlogs';
 import { UserFetch } from '~/REST-API-client';
 
 function Home() {
-  useEffect(() => {
-    // const access_token = localStorage.getItem("access_token");
-    // console.log(access_token);
-    const getUsers = async () => {
-      // console.log("accessToken-Home: ", localStorage.getItem("access_token"))
-      const users = await UserFetch.get();
-      console.log(users);
-    }
-    getUsers();
-  })
+  // useEffect(() => {
+  //   // const access_token = localStorage.getItem("access_token");
+  //   // console.log(access_token);
+  //   const getUsers = async () => {
+  //     // console.log("accessToken-Home: ", localStorage.getItem("access_token"))
+  //     const users = await UserFetch.get();
+  //     console.log(users);
+  //   }
+  //   getUsers();
+  // })
   return (
     <>
 

@@ -1,27 +1,38 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Typography, Box, RadioGroup, FormControlLabel, Radio, IconButton, Rating, TextField } from '@mui/material';
 import { Add, Remove } from '@mui/icons-material';
+import Review from '~/components/Review/Review';
+import {ProductFetch} from '~/REST-API-client/index'
+
+
+//import { feachProductDetailsAPI } from "~/apis"
 
 export default function Product() {
+    const {id} = useParams();
+    const [product, setProduct] = useState(null)
     const navigate = useNavigate();
     const [quantity, setQuantity] = useState(1);
     const [size, setSize] = useState('');
-    const [rating, setRating] = useState(0);
-    const [comment, setComment] = useState('');
 
-    const product = {
-        id: '1',
-        name: 'Máng ăn cho chó Dang02 2in1',
-        description: 'Máng ăn cho chó Dang02 2in1 là một sản phẩm mang tính đột phá.',
-        img: 'https://via.placeholder.com/300',
-        price_before_discount: '1.000.000 đ',
-        price: '800.000 ₫',
-        reviews: [
-            { id: 1, userId: '123', username: 'Nguyễn Văn A', rating: 5, comment: "Sản phẩm tuyệt vời!", date: "2024-10-20" },
-            { id: 2, userId: '124', username: 'Trần Thị B', rating: 4, comment: "Chó của tôi rất thích!", date: "2024-10-21" },
-        ]
-    };
+    useEffect(() => {
+        
+        window.scrollTo(0, 0);
+        const fetchProductDetails = async () => {
+            try {
+                
+                const product = await ProductFetch.getById(id);
+                console.log(product);
+                setProduct(product.data); 
+            } catch (error) {
+                
+                console.error('Error fetching product details:', error);
+            }
+        };
+    
+        fetchProductDetails();
+    }, [id]); 
+
 
     const increaseQuantity = () => setQuantity(prev => Math.min(prev + 1, 99));
     const decreaseQuantity = () => setQuantity(prev => Math.max(prev - 1, 1));
@@ -30,30 +41,16 @@ export default function Product() {
         navigate('/cart');
     };
 
-    const handleSubmitReview = (e) => {
-        e.preventDefault();
-        const newReview = {
-            id: product.reviews.length + 1,
-            userId: 'user_id',
-            username: 'ten_tk', // Tên tài khoản sẽ được lấy từ thông tin người dùng đã đăng nhập
-            rating,
-            comment,
-            date: new Date().toISOString()
-        };
-        product.reviews.push(newReview);  // Thêm đánh giá mới vào sản phẩm
-        setRating(0);
-        setComment('');
-    };
-
     return (
         <Box
             sx={{
                 bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#062c4f' : '#fff'),
                 width: '100%',
-                height: 'auto',
+                minHeight: '100vh',
             }}>
             <Box
                 sx={{
+                    mt: '120px',
                     maxWidth: '1240px',
                     padding: '32px 16px 32px',
                     position: 'relative',
@@ -61,7 +58,7 @@ export default function Product() {
                     transform: 'TranslateX(-50%)',
                 }}
             >
-                <Box 
+                <Box
                     sx={{
                         width: '100%',
                         display: "flex",
@@ -69,20 +66,23 @@ export default function Product() {
                         color: (theme) => (theme.palette.mode === 'dark' ? '#fff' : '#000')
                     }}
                 >
-                    <Box display="flex"  sx={{width: {xs: '100%', md: '45%'}, height: 'auto', flexDirection: 'column', alignItems: 'center' }}>
+                    <Box display="flex" sx={{ width: { xs: '100%', md: '45%' }, height: 'auto', flexDirection: 'column', alignItems: 'center' }}>
                         <Box>
-                            <img src={product.img} alt={product.name} style={{ maxWidth: '100%', height: 'auto', cursor: 'zoom-in' }} />
+                            <img
+                            src= 'https://th.bing.com/th/id/OIP.Y9MaxiVxV-8HnzG7MuNC3wHaE8?w=302&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7'
+                            //src={product?.img}
+                            alt={product?.name} style={{ maxWidth: '100%', height: 'auto', cursor: 'zoom-in' }} />
                         </Box>
 
                         <Box display="flex" justifyContent="center" sx={{ marginTop: 2 }}>
                             <img
                                 //key={index}
-                                src={product.img}
-                                alt={product.name}
+                                src={product?.img}
+                                //alt={product?.name}
                                 style={{ width: '60px', height: '60px', margin: '0 5px', cursor: 'pointer' }}
                             //onClick={() => handleImageClick(thumb.url)} // Hàm để hiển thị ảnh lớn
                             />
-                            {/* {product.thumbnail.map((thumb, index) => (
+                            {/* {product?.thumbnail.map((thumb, index) => (
                                 <img
                                     key={index}
                                     src={thumb.url}
@@ -95,34 +95,38 @@ export default function Product() {
                     </Box>
 
 
-                    <Box 
+                    <Box
                         sx={{
-                            width: {xs: '100%', md: '55%'},
-                            
+                            width: { xs: '100%', md: '55%' },
+
                         }}
                     >
-                        <Typography variant="h4">{product.name}</Typography>
+
+
+                        <Typography>
+                            {product?.name}
+                        </Typography>
                         <hr />
-                        <Typography variant="body2">{product.description}</Typography>
+                        <Typography variant="body2">{product?.desc}</Typography>
                         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                            {product.price_before_discount && (
+                            {product?.price_before_discount && (
                                 <>
                                     <Typography variant="h6" sx={{ textDecoration: 'line-through' }}>
-                                        {product.price_before_discount}
+                                        {product?.price_before_discount.toLocaleString('vi-VN')}đ
                                     </Typography>
-                                    <Typography variant="h4" sx={{ color: '#e84118' }}>{product.price}</Typography>
+                                    <Typography variant="h4" sx={{ color: '#e84118' }}>{product?.price.toLocaleString('vi-VN')}đ</Typography>
                                 </>
                             )}
-                            {!product.price_before_discount && (
+                            {!product?.price_before_discount && (
                                 <Typography variant="h5" sx={{ color: '#e84118' }}>
-                                    {product.price}
+                                    {product?.price.toLocaleString('vi-VN')}đ
                                 </Typography>
                             )}
                         </Box>
 
                         <Typography variant="body1">Kích thước:</Typography>
                         <RadioGroup row value={size} sx={{ gap: 1.5 }} onChange={(e) => setSize(e.target.value)}>
-                            {['S', 'M', 'L', 'XL'].map((s) => (
+                            {product?.size?.map((s) => (
                                 <FormControlLabel
                                     key={s}
                                     value={s}
@@ -132,7 +136,7 @@ export default function Product() {
                             ))}
                         </RadioGroup>
 
-                        <Box sx={{ display: 'flex', alignItems: 'center'}}>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <IconButton onClick={decreaseQuantity}><Remove /></IconButton>
                             <Typography variant="body1">{quantity}</Typography>
                             <IconButton onClick={increaseQuantity}><Add /></IconButton>
@@ -148,73 +152,8 @@ export default function Product() {
                 </Box>
 
                 {/* Phần Đánh giá */}
-                <Box 
-                sx={{
-                    marginTop: 4,
-                    width: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap:2}}>
-                    <Box 
-                        sx={{
-                            width: {xs: '100%', md: '80%'},
-                            border: (theme) => (theme.palette.mode ==='dark' ? '1px solid #fff' : '1px solid #000'),
-                            borderRadius: '4px',
-                            padding: 2
-                        }}
-                    >
-                        <Typography variant="h5">Đánh giá sản phẩm</Typography>
-                        <form onSubmit={handleSubmitReview}>
-                            <Rating
-                                name="rating"
-                                value={rating}
-                                precision={0.5}
-                                onChange={(event, newValue) => setRating(newValue)}
-                                size="large"
-                            />
-                            <TextField
-                                label="Nhận xét của bạn"
-                                multiline
-                                rows={4}
-                                value={comment}
-                                onChange={(e) => setComment(e.target.value)}
-                                variant="outlined"
-                                fullWidth
-                                sx={{ marginTop: 2 }}
-                            />
-                            <Button type="submit" variant="contained" sx={{ marginTop: 2 }}>Gửi đánh giá</Button>
-                        </form>
-                    </Box>
-
-                    {/* Danh sách đánh giá */}
-                    <Box
-                        sx={{
-                            width: {xs: '100%', md: '80%'},
-                            border: (theme) => (theme.palette.mode ==='dark' ? '1px solid #fff' : '1px solid #000'),
-                            borderRadius: '4px',
-                            padding: 2,
-                            mt: 2
-                        }}
-                    >
-                        <Typography variant="h5">Đánh giá của người tiêu dùng</Typography>
-                        {product.reviews.map(review => (
-                            <Box key={review.id} sx={{  padding: 2, marginTop: 1 }}>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                                    <Typography variant="body1"><strong>{review.username}</strong></Typography>
-                                    <Rating
-                                        name="rating"
-                                        value={review.rating}
-                                        precision={0.5}
-                                        size="small"
-                                    />
-                                </Box>
-                                <Typography variant="body2"><strong>Bình luận:</strong> {review.comment}</Typography>
-                                <Typography variant="body2" sx={{ fontStyle: 'italic' }}>{new Date(review.date).toLocaleDateString()}</Typography>
-                            </Box>
-                        ))}
-                    </Box>
-                </Box>
+                {product && <Review entityId={product._id} type='product' />}
+                
             </Box>
         </Box>
     );
