@@ -51,7 +51,7 @@ const ShoppingCart = ({ quantity }) => {
                     <Typography variant='h5'>Tổng tiền: </Typography>
                     <Typography>5.000.000</Typography>
                 </Box>
-                <Button sx={{backgroundColor: ''}}>Thanh toán</Button>
+                <Button href='/thanh-toan' sx={{backgroundColor: ''}}>Thanh toán</Button>
             </Box>
         </Box>
     );

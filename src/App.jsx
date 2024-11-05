@@ -19,6 +19,10 @@ import CatProducts from './pages/ListProducts/ForCat/CatProducts'
 import CatFoods from './pages/ListProducts/ForCat/CatFoods'
 import CatHouses from './pages/ListProducts/ForCat/CatHouses'
 import CatAccessory from './pages/ListProducts/ForCat/CatAccesory'
+import Login from './pages/Login/Login'
+import Contact from './pages/Contact/Contact'
+import Payment from './pages/Payment/Payment'
+import Product from './pages/Product/Product'
 function App() {
 
   return (
@@ -26,6 +30,10 @@ function App() {
       <Appbar />
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='log-in' element={<Login />} />
+        <Route path='lien-he' element={<Contact />} />
+        <Route path='product/:id' element={<Product />} />
+
         <Route path='do-thu-cung' element={<ListProduct />}>
           <Route index element={<AllProducts />} />
           <Route path='do-cho-cho' element = {<DogProducts />} /> 
