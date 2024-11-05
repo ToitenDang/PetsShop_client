@@ -1,72 +1,83 @@
-import myStyle from './TopSaleProducts.module.scss'
+import React, { useEffect, useState } from 'react';
+import myStyle from './TopSaleProducts.module.scss';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import ProductItem from '~/components/ProductItem/ProductItem';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
+import {ProductFetch} from '~/REST-API-client/index'
+
 
 const TopSaleProducts = () => {
+    const [products, setProducts] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+          setLoading(true);
+          try {
+            // Gọi API và lấy dữ liệu
+            
+            const data = await ProductFetch.fetchTopSaleProducts(currentPage);
+            setProducts(data.products);
+            setTotalPages(data.totalPages);
+          } catch (error) {
+            console.error("Error fetching products:", error);
+          } finally {
+            setLoading(false);
+          }
+        };
+    
+        // Gọi hàm fetchProducts
+        fetchProducts();
+    
+      }, [currentPage]);
+
+    const handlePageChange = (event, value) => {
+        setCurrentPage(value);
+    };
+
     return (
-        <Box sx={{ marginTop: '40px',paddingY: '10px',backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#2a3b52' : '#fff' }}>
-            <Box >
-                <Typography sx={{ textAlign: 'center', marginY: '10px', fontSize: '2rem', fontWeight: 'bold' }}>Sản phẩm bán chạy</Typography>
+        <Box sx={{ marginTop: '40px', paddingY: '10px', backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#2a3b52' : '#fff' }}>
+            <Box>
+                <Typography sx={{ textAlign: 'center', marginY: '10px', fontSize: '2rem', fontWeight: 'bold' }}>
+                    Sản phẩm bán chạy
+                </Typography>
             </Box>
+
             {/* List products */}
             <Box className={myStyle.productsContainer}>
                 <Box className={myStyle.prodRow}>
-                    {/* List product in 1 row*/}
-                    <Box sx={{}} className={myStyle.prodCol}>
-                        {/* Detail product */}
-                        <ProductItem />
-                    </Box>
-                    {/* List product in 1 row*/}
-                    <Box sx={{}} className={myStyle.prodCol}>
-                        {/* Detail product */}
-                        <ProductItem />
-                    </Box>
-                    {/* List product in 1 row*/}
-                    <Box sx={{}} className={myStyle.prodCol}>
-                        {/* Detail product */}
-                        <ProductItem />
-                    </Box>
-                    {/* List product in 1 row*/}
-                    <Box sx={{}} className={myStyle.prodCol}>
-                        {/* Detail product */}
-                        <ProductItem />
-                    </Box>
-                    {/* List product in 1 row*/}
-                    <Box sx={{}} className={myStyle.prodCol}>
-                        {/* Detail product */}
-                        <ProductItem />
-                    </Box>
-                    {/* List product in 1 row*/}
-                    <Box sx={{}} className={myStyle.prodCol}>
-                        {/* Detail product */}
-                        <ProductItem />
-                    </Box>
-                    {/* List product in 1 row*/}
-                    <Box sx={{}} className={myStyle.prodCol}>
-                        {/* Detail product */}
-                        <ProductItem />
-                    </Box>
-                    {/* List product in 1 row*/}
-                    <Box sx={{}} className={myStyle.prodCol}>
-                        {/* Detail product */}
-                        <ProductItem />
-                    </Box>
+                    {loading ? (
+                        <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                            <CircularProgress />
+                        </Box>
+                    ) : (
+                        products.map((product) => (
+                            <Box key={product._id} className={myStyle.prodCol}>
+                                <ProductItem product={product} />
+                            </Box>
+                        ))
+                    )}
                 </Box>
             </Box>
 
             {/* Paging */}
-            <Box sx={{marginTop: '10px',display: 'flex', justifyContent: 'center'}}>
+            <Box sx={{ marginTop: '10px', display: 'flex', justifyContent: 'center' }}>
                 <Stack spacing={2}>
-                    {/* Có thuộc tính onchange. nhận vào 2 đối số là event và value, value là số trang hiện tại */}
-                    <Pagination count={10} color="primary" />
+                    <Pagination
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={handlePageChange}
+                        color="primary"
+                    />
                 </Stack>
             </Box>
         </Box>
-
-    )
-}
+    );
+};
 
 export default TopSaleProducts;

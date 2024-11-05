@@ -18,6 +18,8 @@ import CatProducts from './pages/ListProducts/ForCat/CatProducts'
 import CatFoods from './pages/ListProducts/ForCat/CatFoods'
 import CatHouses from './pages/ListProducts/ForCat/CatHouses'
 import CatAccessory from './pages/ListProducts/ForCat/CatAccesory'
+import Contact from './pages/Contact/Contact'
+import Product from './pages/Product/Product'
 import Register from './pages/Register/Register'
 import Login from './pages/Login/Login'
 import HeaderLayout from './Layout/HeaderLayout'
@@ -30,6 +32,8 @@ function App() {
       <Routes>
         <Route path='/' element={<HeaderLayout />}>
           <Route index element={<Home />} />
+          <Route path='lien-he' element={<Contact />} />
+        <Route path='product/:id' element={<Product />} />
           <Route path='do-thu-cung' element={<ListProduct />}>
             <Route index element={<AllProducts />} />
             <Route path='do-cho-cho' element={<DogProducts />} />
