@@ -12,6 +12,7 @@ function configAxios(axiosInstance) {
                 originalRequest._retry = true; // Đánh dấu để tránh lặp lại vô hạn
 
                 try {
+                    console.log("refreshing token")
                     // Gửi yêu cầu tới endpoint làm mới token
                     const { data } = await axiosInstance.post('/refresh-token');
                     // console.log("Refresh token valid")

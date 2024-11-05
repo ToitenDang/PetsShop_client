@@ -1,5 +1,5 @@
 import {useState, createContext, useContext, useEffect } from "react";
-import { CheckTokenFetch} from "~/REST-API-client";
+import { CheckTokenFetch, UserFetch} from "~/REST-API-client";
 const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
@@ -8,8 +8,13 @@ export const AuthProvider = ({children}) => {
         if(user == null) {    
             CheckTokenFetch.post()
                 .then(data => {
-                    console.log(data);
-                    setUser(data.data);
+                    // console.log(data);
+                    const userId = data.data.id;
+                    UserFetch.getById(userId)
+                        .then(userInfo => {
+                            // console.log(userInfo.data)
+                            setUser(userInfo.data)
+                        });
                 })
                 .catch(err => {
                     setUser(null);
