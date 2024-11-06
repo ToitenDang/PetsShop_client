@@ -1,6 +1,7 @@
 import Appbar from "~/components/Appbar/Appbar";
 import { Outlet } from 'react-router-dom';
 import Footer from "~/components/Footer/Footer";
+
 function HeaderLayout() {
     return (
         <>

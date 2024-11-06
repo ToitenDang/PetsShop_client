@@ -24,10 +24,11 @@ import Register from './pages/Register/Register'
 import Login from './pages/Login/Login'
 import HeaderLayout from './Layout/HeaderLayout'
 import NoFound from './pages/NoFound/NoFound'
+import { AuthProvider } from './components/Authentication/Authentication'
 function App() {
 
   return (
-    <>
+    <AuthProvider>
       <Routes>
         <Route path='/' element={<HeaderLayout />}>
           <Route index element={<Home />} />
@@ -56,7 +57,7 @@ function App() {
         <Route path="dang-ky" element={<Register />} />
         <Route path="dang-nhap" element={<Login />} />
       </Routes>
-    </>
+    </AuthProvider>
 
   )
 }

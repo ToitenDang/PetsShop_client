@@ -16,19 +16,22 @@ import PetsIcon from '@mui/icons-material/Pets';
 import ModeSelect from '~/components/ModeSelect/ModeSelect';
 import SearchIcon from '@mui/icons-material/Search';
 import { Divider } from '@mui/material';
-
+import { useAuth } from "~/components/Authentication/Authentication";
+import { Link } from 'react-router-dom';
 
 
 function Appbar() {
+  const auth = useAuth();
+  console.log("cart length: ", auth?.user?.cart.length)
   console.log('rerender appbar')
   return (
-    <Box className={mystyles.mainContainer} sx={{ backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#062c4f' : '#fff', zIndex: 1000}}>
+    <Box className={mystyles.mainContainer} sx={{ backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#062c4f' : '#fff', zIndex: 1000 }}>
       <ResponsiveContainer className={mystyles.container} sx={{
         width: '90%',
         gap: 2, paddingY: '5px'
       }}>
         {/* Higher part */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1, justifyContent: 'space-between',zIndex:1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1, justifyContent: 'space-between', zIndex: 1 }}>
           {/* Logo part */}
           <Box sx={{ textAlign: 'center', color: (theme) => theme.palette.mode === 'dark' ? '#fff' : '#000', display: 'flex', alignItems: 'center' }}>
             <PetsIcon sx={{ fontSize: '2rem', color: '#ed6b40' }} />
@@ -46,9 +49,18 @@ function Appbar() {
             display: 'flex', alignItems: 'center', gap: 2
           }}>
             {/* shopping cart */}
-            <ShoppingCart quantity={5} />
+            <ShoppingCart quantity={auth?.user?.cart.length || 0} />
             {/* Avatar */}
-            < Profile />
+            {
+              !auth.user ?
+                <Box sx={{display:'flex', gap:1}}>
+                  <Link to="/dang-nhap" style={{textDecoration:'none'}}>Đăng nhập</Link>
+                  <Divider orientation="vertical" flexItem/>
+                  <Link to="/dang-ky" style={{textDecoration:'none'}}>Đăng ký</Link>
+                </Box> : 
+                < Profile />
+            }
+
             {/* Select mode */}
             <ModeSelect sx={{ flex: 1 }} />
           </Box>
@@ -58,10 +70,10 @@ function Appbar() {
 
         {/* Upper part */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, justifyContent: 'center' }}>
-          <Box sx={{flex: 1}}>
+          <Box sx={{ flex: 1 }}>
             <Category />
           </Box>
-          <Box sx= {{flex: 3}}>
+          <Box sx={{ flex: 3 }}>
             <MenuAppbar />
           </Box>
         </Box>

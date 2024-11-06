@@ -12,6 +12,7 @@ function configAxios(axiosInstance) {
                 originalRequest._retry = true; // Đánh dấu để tránh lặp lại vô hạn
 
                 try {
+                    console.log("refreshing token")
                     // Gửi yêu cầu tới endpoint làm mới token
                     const { data } = await axiosInstance.post('/refresh-token');
                     // console.log("Refresh token valid")
@@ -29,11 +30,14 @@ function configAxios(axiosInstance) {
                     localStorage.removeItem("access_token");
 
                     // Điều hướng người dùng đến trang đăng nhập
-                    window.location.href = "/dang-nhap";
-                    return Promise.reject(refreshError);
+                    // window.location.href = "/dang-nhap";
+                    // console.log("eror heae")
+                    return Promise.reject({
+                        message: "Yêu cầu đăng nhập",
+                    });
                 }
             }
-            console.log("Refresh token fail")
+            // console.log("Refresh token fail")
             return Promise.reject(error);
         }
     );
