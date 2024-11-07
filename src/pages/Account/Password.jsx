@@ -14,10 +14,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import CheckIcon from '@mui/icons-material/Check';
 import Divider from '@mui/material/Divider';
+import { UserFetch } from '~/REST-API-client';
+import { useAuth } from '~/components/Authentication/Authentication';
 
 const pass = '123456'
 
 export default function Password() {
+    const auth = useAuth();
     const [activeStep, setActiveStep] = useState(0);
     const [oldPass, setOldPass] = useState('');
     const [newPass, setNewPass] = useState('');
@@ -26,11 +29,18 @@ export default function Password() {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [openDialog, setOpenDialog] = useState(false)
     const handleNext = () => {
-        if (oldPass === pass) {
-            setActiveStep((prevActiveStep) => prevActiveStep + 1);
-            return;
-        }
-        handleOpenSnackbar();
+        UserFetch.resetPassword(auth?.user._id).checkOldPass(oldPass)
+            .then(data => {
+                setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            })
+            .catch(err => {
+                handleOpenSnackbar();
+            })
+
+        // if (oldPass === pass) {
+        //     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        //     return;
+        // }
     };
 
     const handleBack = () => {

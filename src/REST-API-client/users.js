@@ -88,11 +88,44 @@ const UserAPI = (axiosInstance) => {
         }
     }
     
+    function resetPassword(id) {
+        async function checkOldPass(password) {
+            const access_token = localStorage.getItem("access_token");
+            try {
+                const res = await axiosInstance.post(`/users/check-password/${id}`,{password}, {
+                    headers: {
+                        Authorization: `Bearer ${access_token}`,
+                        "Content-Type": "application/json"
+                    }
+                })
+                // console.log(res)
+                return res.data;
+            } catch (error) {
+                if (error.response) {
+                    throw new Error(error);
+                } else if (error.request) {
+                    throw new Error("Server không phản hồi");
+                } else {
+                    throw new Error(error.message)
+                }
+            }
+        }   
+        
+        async function reset(newPass) {
+
+        }
+
+        return {
+            checkOldPass,
+            reset
+        }
+    }
     return {
         get,
         getById,
         updateInfo,
-        updateShippingAddress
+        updateShippingAddress,
+        resetPassword
     }
 }
 
