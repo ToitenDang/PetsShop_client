@@ -22,6 +22,7 @@ const UserAPI = (axiosInstance) => {
             }
         }
     }
+
     async function getById(id) {
         const access_token = localStorage.getItem("access_token");
         try {
@@ -42,10 +43,11 @@ const UserAPI = (axiosInstance) => {
             }
         }
     }
-    async function updateInfo(id,data) {
+
+    async function updateInfo(id, data) {
         const access_token = localStorage.getItem("access_token");
         try {
-            const res = await axiosInstance.patch(`/users/${id}`,data, {
+            const res = await axiosInstance.patch(`/users/${id}`, data, {
                 headers: {
                     Authorization: `Bearer ${access_token}`,
                     "Content-Type": "multipart/form-data",
@@ -63,10 +65,85 @@ const UserAPI = (axiosInstance) => {
             }
         }
     }
+
+    async function updateShippingAddress(id, data) {
+        const access_token = localStorage.getItem("access_token");
+        try {
+            const res = await axiosInstance.patch(`/users/shipping-address/${id}`, data, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                    "Content-Type": "application/json"
+                }
+            })
+            // console.log(res)
+            return res.data;
+        } catch (error) {
+            if (error.response) {
+                throw new Error(error.response.data.message.message);
+            } else if (error.request) {
+                throw new Error("Server không phản hồi");
+            } else {
+                throw new Error(error.message)
+            }
+        }
+    }
+
+    function resetPassword(id) {
+        async function checkOldPass(password) {
+            const access_token = localStorage.getItem("access_token");
+            try {
+                const res = await axiosInstance.post(`/users/check-password/${id}`, { password }, {
+                    headers: {
+                        Authorization: `Bearer ${access_token}`,
+                        "Content-Type": "application/json"
+                    }
+                })
+                // console.log(res)
+                return res.data;
+            } catch (error) {
+                if (error.response) {
+                    throw new Error(error);
+                } else if (error.request) {
+                    throw new Error("Server không phản hồi");
+                } else {
+                    throw new Error(error.message)
+                }
+            }
+        }
+
+        async function reset(password, confirmPassword) {
+            const access_token = localStorage.getItem("access_token");
+            try {
+                const res = await axiosInstance.patch(`/users/reset-password/${id}`, { password, confirmPassword }, {
+                    headers: {
+                        Authorization: `Bearer ${access_token}`,
+                        "Content-Type": "application/json"
+                    }
+                })
+                // console.log(res)
+                return res.data;
+            } catch (error) {
+                if (error.response) {
+                    throw new Error(error);
+                } else if (error.request) {
+                    throw new Error("Server không phản hồi");
+                } else {
+                    throw new Error(error.message)
+                }
+            }
+        }
+
+        return {
+            checkOldPass,
+            reset
+        }
+    }
     return {
         get,
         getById,
-        updateInfo
+        updateInfo,
+        updateShippingAddress,
+        resetPassword
     }
 }
 

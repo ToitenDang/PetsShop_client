@@ -27,18 +27,18 @@ const SubCategory = ({ subs, details }) => {
             {
                 !!subs.length && subs.map((data) => {
                     return (
-                        <>
-                            <Collapse key={data._id} in={expand} timeout="auto" unmountOnExit>
-                                <List component="div" disablePadding>
-                                    <ListItemButton sx={{ pl: 4 }}>
-                                        <ListItemIcon>
-                                            <StarBorder />
-                                        </ListItemIcon>
-                                        <ListItemText primary={data.name} />
-                                    </ListItemButton>
-                                </List>
-                            </Collapse>
-                        </>
+
+                        <Collapse key={data._id} in={expand} timeout="auto" unmountOnExit>
+                            <List component="div" disablePadding>
+                                <ListItemButton sx={{ pl: 4 }}>
+                                    <ListItemIcon>
+                                        <StarBorder />
+                                    </ListItemIcon>
+                                    <ListItemText primary={data.name} />
+                                </ListItemButton>
+                            </List>
+                        </Collapse>
+
                     )
                 })
 
