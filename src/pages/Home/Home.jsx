@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 function Home() {
   const navigate = useNavigate();
   const auth = useAuth();
+  // console.log("user: ", auth.user);
   useEffect(() => {
     const getUsers = async () => {
       try {

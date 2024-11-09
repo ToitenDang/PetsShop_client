@@ -6,38 +6,45 @@ import ProductItem from '~/components/ProductItem/ProductItem';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
-import {ProductFetch} from '~/REST-API-client/index'
+import { ProductFetch } from '~/REST-API-client/index'
 
 
 const TopSaleProducts = () => {
     const [products, setProducts] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
+    // const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [loading, setLoading] = useState(true);
-
+    console.log("renderrung topprod")
     useEffect(() => {
         const fetchProducts = async () => {
-          setLoading(true);
-          try {
-            // Gọi API và lấy dữ liệu
-            
-            const data = await ProductFetch.fetchTopSaleProducts(currentPage);
-            setProducts(data.products);
-            setTotalPages(data.totalPages);
-          } catch (error) {
-            console.error("Error fetching products:", error);
-          } finally {
-            setLoading(false);
-          }
+            setLoading(true);
+            try {
+                // Gọi API và lấy dữ liệu
+
+                const data = await ProductFetch.fetchTopSaleProducts(1);
+                setProducts(data.products);
+                setTotalPages(data.totalPages);
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            } finally {
+                setLoading(false);
+            }
         };
-    
+
         // Gọi hàm fetchProducts
         fetchProducts();
-    
-      }, [currentPage]);
 
-    const handlePageChange = (event, value) => {
-        setCurrentPage(value);
+    }, []);
+
+    const handlePageChange = async (event, value) => {
+        try {
+            const data = await ProductFetch.fetchTopSaleProducts(value);
+            setProducts(data.products);
+        } catch (err) {
+            console.error("Error fetching products:", err);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -70,7 +77,7 @@ const TopSaleProducts = () => {
                 <Stack spacing={2}>
                     <Pagination
                         count={totalPages}
-                        page={currentPage}
+                        // page={currentPage}
                         onChange={handlePageChange}
                         color="primary"
                     />

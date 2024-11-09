@@ -7,119 +7,96 @@ import Divider from '@mui/material/Divider';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import TextField from '@mui/material/TextField';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
+import { useAuth } from '~/components/Authentication/Authentication';
+import { UserFetch } from '~/REST-API-client';
 
-const listMap = [
-    {
-        _id: '1',
-        name: 'Pham Huu Tuan',
-        phone: '0928895717',
-        numberHome: '437',
-        street: 'Le Van Viet',
-        commune: 'Tang Nhon Phu A',
-        district: 'Quan 9',
-        province: 'Thu Duc',
-        subContent: 'quan tra sua',
-        isDefault: 1,
-    },
-    {
-        _id: '2',
-        name: 'Pham Huu Tinh',
-        phone: '0921234322',
-        numberHome: '58',
-        street: 'Tan Lap',
-        commune: 'Dong Hoa',
-        district: 'Di An',
-        province: 'Binh Duong',
-        subContent: '',
-        isDefault: 0,
-    }
-]
-const DialogDeltailAddress = ({ onClose, open, data = null, handleAdd, handleUpdate }) => {
+const strongText = {
+    fontWeight:"bold",
+    color: ""
+}
 
+const DialogDeltailAddress = ({ onClose, open, data = null, index = null }) => {
+    const auth = useAuth();
+    const [phone, setPhone] = useState("");
+    const [name, setName] = useState("");
+    const [address, setAddress] = useState("");
+    const [note, setNote] = useState("");
     useEffect(() => {
-        if (data) {
-            setName(data.name || ''); // Sử dụng giá trị mặc định là ''
-            setPhone(data.phone || '');
-            setNumberHome(data.numberHome || '');
-            setStreet(data.street || '');
-            setCommune(data.commune || '');
-            setDistrict(data.district || '');
-            setProvince(data.province || '');
-            setSubContent(data.subContent || '');
+        if (open === true && data !== null) {
+            setPhone(data.recipientPhone); setName(data.recipientName); setAddress(data.address); setNote(data.note);
         }
-    }, [data])
-    const [name, setName] = useState(() => {
-        console.log("set demo")
-        return data != null ? data.name : '';
-
-    });
-    const [phone, setPhone] = useState(() => {
-
-        return data !== null ? data.phone : '';
-    });
-    const [numberHome, setNumberHome] = useState(() => {
-        return data !== null ? data.numberHome : '';
-    });
-    const [street, setStreet] = useState(() => {
-        return data !== null ? data.street : '';
-    });
-    const [commune, setCommune] = useState(() => {
-        return data !== null ? data.commune : '';
-    });
-    const [district, setDistrict] = useState(() => {
-        return data !== null ? data.district : '';
-    });
-    const [province, setProvince] = useState(() => {
-        return data !== null ? data.province : '';
-    });
-    const [subContent, setSubContent] = useState(() => {
-        return data !== null ? data.subContent : '';
-    })
+    }, [open])
     const handleClose = () => {
         onClose();
+        if (data === null) {
+            setPhone(""); setAddress(""); setName(""); setNote("");
+        }
     };
     const handleConfirm = () => {
-        const newData = {
-            name,
-            phone,
-            numberHome,
-            street,
-            commune,
-            district,
-            province,
-            subContent,
-            isDefault: data?.isDefault || 0
-        }
-        if (data !== null) {
-            handleUpdate(newData)
+        if (data === null) {
+            if (phone !== "" && name !== "" && address !== "") {
+                const newAddress = [...auth.user.shippingAddress, {
+                    recipientName: name,
+                    recipientPhone: phone,
+                    address,
+                    note,
+                    isDefault: false
+                }];
+                UserFetch.updateShippingAddress(auth?.user?._id, newAddress)
+                    .then((data) => {
+                        window.alert(`Cập nhật địa chỉ thành công`);
+                        console.log("new user: ", data.data.user)
+                        auth.authenUser(data.data.user);
+                        handleClose();
+                    }).catch(err => {
+                        window.alert(`Cập nhật địa chỉ thất bại: \n ${err}`);
+                        console.log("error: ", err)
+                    })
+            } else {
+                window.alert("Bạn không để trống thông tin")
+            }
         } else {
-            handleAdd(newData)
+            if (phone !== "" && name !== "" && address !== "") {
+                const newAddress = [...auth.user.shippingAddress];
+                newAddress[index] = {
+                    recipientName: name,
+                    recipientPhone: phone,
+                    address,
+                    note,
+                    isDefault: auth.user.shippingAddress[index].isDefault
+                }
+                UserFetch.updateShippingAddress(auth?.user?._id, newAddress)
+                    .then((data) => {
+                        window.alert(`Cập nhật địa chỉ thành công`);
+                        // console.log("new user: ", data.data.user)
+                        auth.authenUser(data.data.user);
+                        handleClose();
+                    }).catch(err => {
+                        window.alert(`Cập nhật địa chỉ thất bại: \n ${err}`);
+                        console.log("error: ", err)
+                    })
+            } else {
+                window.alert("Bạn không để trống thông tin")
+            }
         }
     }
     return (
         <Dialog onClose={handleClose} open={open}>
             <Box sx={{ padding: '20px', minWidth: '420px' }}>
                 {
-                    data == null ? <DialogTitle>Thêm địa chỉ mới</DialogTitle> : <DialogTitle>Cập nhật địa chỉ</DialogTitle>
+                    data == null ? <DialogTitle sx={{ display: "flex", justifyContent: "center" }}>Thêm địa chỉ mới</DialogTitle> :
+                        <DialogTitle sx={{ display: "flex", justifyContent: "center" }}>Cập nhật địa chỉ</DialogTitle>
                 }
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <Box sx={{ display: 'flex', gap: 2 }}>
-                        <TextField value={name} onChange={(e) => setName(e.target.value)} label="Họ và tên" variant="standard" />
+                        <TextField value={name} onChange={(e) => setName(e.target.value)} label="Họ và tên nhận" variant="standard" />
                         <TextField value={phone} onChange={(e) => setPhone(e.target.value)} label="Số điện thoại nhận" variant="standard" />
                     </Box>
-                    <Box sx={{ width: '100%', display: 'flex', gap: 2 }}>
-                        <TextField value={province} onChange={(e) => setProvince(e.target.value)} label="Tỉnh/Thành phố" variant="standard" />
-                        <TextField value={district} onChange={(e) => setDistrict(e.target.value)} label="Quận/Huyện" variant="standard" />
-                    </Box>
-                    <Box sx={{ width: '100%', display: 'flex', gap: 2 }}>
-                        <TextField value={commune} onChange={(e) => setCommune(e.target.value)} label="Phường/Xã" variant="standard" />
-                        <TextField value={street} onChange={(e) => setStreet(e.target.value)} label="Đường" variant="standard" />
-                        <TextField value={numberHome} onChange={(e) => setNumberHome(e.target.value)} label="Số nhà" variant="standard" />
+                    <Box sx={{ width: '100%' }}>
+                        <TextField sx={{ width: '100%' }} value={address} onChange={(e) => setAddress(e.target.value)} label="Địa chỉ" variant="standard" />
                     </Box>
                     <Box sx={{ width: '100%' }}>
-                        <TextField value={subContent} onChange={(e) => setSubContent(e.target.value)} sx={{ width: '100%' }} label="Địa chỉ cụ thể" variant="standard" />
+                        <TextField value={note} onChange={(e) => setNote(e.target.value)} sx={{ width: '100%' }} label="Ghi chú" variant="standard" />
                     </Box>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 3, marginTop: '10px' }}>
@@ -132,11 +109,15 @@ const DialogDeltailAddress = ({ onClose, open, data = null, handleAdd, handleUpd
 }
 
 const Address = () => {
+    const auth = useAuth()
     const [openNewAddress, setOpenNewAddress] = useState(false);
     const [openUpdateAddress, setOpenUpdateAddress] = useState(false);
-    const [mapData, setMapData] = useState(listMap);
-    const addressSelected = useRef(0);
-    const [openSnackBar, setOpenSnackBar] = useState(false)
+    const [addressData, setAddressData] = useState()
+    const idAddressSelected = useRef();
+
+    useEffect(() => {
+        setAddressData(auth?.user?.shippingAddress);
+    }, [auth?.user])
     const handleClickOpenNewAddress = () => {
         setOpenNewAddress(true);
     };
@@ -145,36 +126,59 @@ const Address = () => {
         setOpenNewAddress(false);
     };
     const handleClickOpenUpdateAddress = (index) => {
-        addressSelected.current = index;
         setOpenUpdateAddress(true);
-
+        idAddressSelected.current = index
     };
 
     const handleCloseUpdateAddress = () => {
         setOpenUpdateAddress(false);
     };
-    const addNewAddress = (newAddress) => {
-        // console.log(newAddress);
-        const newMaps = [
-            ...mapData,
-            newAddress
-        ]
-        setMapData(newMaps);
-        setOpenSnackBar(true);
-        setTimeout(handleCloseNewAddress,2000)
+
+
+    const handleResetAddress = (index) => {
+        // const coppyAddress = [...auth.user.shippingAddress];
+        const coppyAddress = addressData?.map((data, idx) => {
+            data.isDefault = false
+            if (idx === index) { data.isDefault = true }
+            return data
+        })
+        UserFetch.updateShippingAddress(auth?.user?._id, coppyAddress)
+            .then((data) => {
+                // console.log("get new: ", data);
+                window.alert(`Cập nhật địa chỉ thành công`);
+                auth.authenUser(data.data.user);
+            })
+            .catch((err) => {
+                window.alert(`Cập nhật địa chỉ thất bại: \n ${err}`);
+                console.log("error: ", err)
+            })
     }
-    const updateAddress = (updatedAddress) => {
-        const newMaps = [...mapData];
-        newMaps[addressSelected.current] = updatedAddress;
-        console.log(newMaps);
-        setMapData(newMaps);
-        setOpenSnackBar(true);
-        setTimeout(handleCloseUpdateAddress,2000)
+    const handleRemoveAddress = (index) => {
+        if(auth.user.shippingAddress.length > 1) {
+            const newAddress = [...auth.user.shippingAddress];
+            const deleted = newAddress.splice(index,1);
+            // console.log("deleted: ", deleted);
+            if(deleted[0].isDefault === true) {
+                // console.log("reseted default address");
+                newAddress[0].isDefault = true;
+                
+            }
+            // console.log("new addresses: ", newAddress)
+            UserFetch.updateShippingAddress(auth?.user?._id, newAddress)
+                .then((data) => {
+                    // console.log("get new: ", data);
+                    window.alert(`Cập nhật địa chỉ thành công`);
+                    auth.authenUser(data.data.user);
+                })
+                .catch((err) => {
+                    window.alert(`Cập nhật địa chỉ thất bại: \n ${err}`);
+                    console.log("error: ", err)
+                })
+        } else {
+            window.alert(`Bạn không thể xóa hết địa chỉ giao hàng`);
+        }
     }
-    const handleCloseSnackBar = () => {
-        setOpenSnackBar(false)
-    }
-    // console.log(addressSelected.current);
+    // console.log(idAddressSelected.current);
     return (
         <>
             <Box sx={{ padding: '10px' }}>
@@ -189,21 +193,21 @@ const Address = () => {
                 <Box>
                     {/* 1 thông tin địa chỉ */}
                     {
-                        mapData.map((map, index) => {
+                        addressData?.map((map, index) => {
                             return (
                                 <Box key={index}>
                                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                        <Box>
+                                        <Box sx={{ display: 'flex', flexDirection: "column", gap: 1 }}>
                                             <Box sx={{ display: 'flex' }}>
-                                                <Typography>{map.name}</Typography>
+                                                <Typography><span style={strongText}>Người nhận:</span> {map.recipientName}</Typography>
                                                 <Divider sx={{ margin: '0 10px' }} orientation="vertical" flexItem variant="middle" />
-                                                <Typography>{map.phone}</Typography>
+                                                <Typography><span style={strongText}>SĐT:</span> {map.recipientPhone}</Typography>
                                             </Box>
                                             <Box>
-                                                <Typography>{map.numberHome} {map.street}</Typography>
-                                                <Typography>{map.commune} {map.district} {map.province}</Typography>
+                                                <Typography><span style={strongText}></span>Địa chỉ: {map.address}</Typography>
+                                                <Typography><span style={strongText}>Ghi chú: </span>{map.note || "Không có"}</Typography>
                                                 {
-                                                    map.isDefault === 1 ? (<Box sx={{ border: 'solid 2px #ef6a41', maxWidth: '100px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '4px' }}>
+                                                    map.isDefault === true ? (<Box sx={{ border: 'solid 2px #ef6a41', maxWidth: '100px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '4px' }}>
                                                         <Typography sx={{ color: '#ef6a41' }}>Mặc định</Typography>
                                                     </Box>) : null
                                                 }
@@ -213,10 +217,12 @@ const Address = () => {
                                         <Box>
                                             <Box sx={{ display: 'flex', gap: 1 }}>
                                                 <Button onClick={() => handleClickOpenUpdateAddress(index)} sx={{ textTransform: 'none' }}>Cập nhật</Button>
-                                                <Button sx={{ textTransform: 'none' }}>Xóa</Button>
+                                                <Button onClick={() => {
+                                                    handleRemoveAddress(index)
+                                                }} sx={{ textTransform: 'none' }}>Xóa</Button>
                                             </Box>
                                             <Box>
-                                                <Button disabled={map.isDefault === 1} variant='contained' sx={{ textTransform: 'none' }}>Thiết lập mặc định</Button>
+                                                <Button onClick={() => { handleResetAddress(index) }} disabled={map.isDefault === true} variant='contained' sx={{ textTransform: 'none' }}>Thiết lập mặc định</Button>
                                             </Box>
                                         </Box>
                                     </Box>
@@ -231,35 +237,13 @@ const Address = () => {
             </Box>
 
             <DialogDeltailAddress open={openNewAddress}
-                onClose={handleCloseNewAddress} handleAdd={addNewAddress} />
+                onClose={handleCloseNewAddress} />
             <DialogDeltailAddress open={openUpdateAddress}
-                onClose={handleCloseUpdateAddress} data={mapData[addressSelected.current]} handleUpdate={updateAddress} />
-            <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleCloseSnackBar}>
-                {
+                onClose={handleCloseUpdateAddress}
+                data={addressData ? addressData[idAddressSelected.current] : null}
+                index={idAddressSelected.current}
+            />
 
-                    true ? (
-
-                        <Alert
-                            onClose={handleCloseSnackBar}
-                            severity="success"
-                            variant="filled"
-                            sx={{ width: '100%' }}
-                        >
-
-                            Cập nhật địa chỉ hoàn tất
-                        </Alert>) : (
-                        <Alert
-                            onClose={handleCloseSnackBar}
-                            severity="error"
-                            variant="filled"
-                            sx={{ width: '100%' }}
-                        >
-                            Cập nhật địa chỉ thất bại
-                        </Alert>
-
-                    )
-                }
-            </Snackbar>
         </>
     )
 }
