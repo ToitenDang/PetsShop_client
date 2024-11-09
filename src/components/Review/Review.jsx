@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button, TextField, Rating } from '@mui/material';
 //import { createNewReview, feachReviewByProductId } from "~/apis";
 import { ReviewFetch } from '~/REST-API-client/index'
+import { useAuth } from "~/components/Authentication/Authentication";
 
 
 const Review = ({ entityId, type }) => {
+    const {user} = useAuth();
     const [reviews, setReview] = useState([]);
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
@@ -29,12 +31,7 @@ const Review = ({ entityId, type }) => {
     const handleSubmitReview = async (e) => {
         e.preventDefault();
 
-        // const userId = localStorage.getItem("_id");
-        // const user = localStorage.getItem("name");
-        const userId = "672890544296af5f67384a54"; // Thay thế bằng id thực tế trong localstorage
-        const user = "Dang The Kyy"; // Thay thế bằng tên người dùng thực tế trong localstorage
-
-        if (!userId || !user) {
+        if (!user) {
             console.error("Người dùng chưa đăng nhập");
             return; // Không cho phép gửi đánh giá nếu người dùng chưa đăng nhập
         }
@@ -47,8 +44,8 @@ const Review = ({ entityId, type }) => {
         const newReview = {
             entityId,
             type,
-            userId: userId,
-            user: user,
+            userId: user._id,
+            user: user.name,
             rating,
             comment,
             createdAt: new Date().toISOString()
@@ -135,6 +132,7 @@ const Review = ({ entityId, type }) => {
                                     value={review?.rating}
                                     precision={0.5}
                                     size="small"
+                                    readOnly  
                                 />
                             </Box>
                             <Typography variant="body2"><strong>Bình luận:</strong> {review?.comment}</Typography>

@@ -6,6 +6,8 @@ import Review from '~/components/Review/Review';
 import {ProductFetch} from '~/REST-API-client/index'
 
 
+
+
 //import { feachProductDetailsAPI } from "~/apis"
 
 export default function Product() {

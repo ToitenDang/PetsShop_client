@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from 'react';
+
 import myStyle from './ListProducts.module.scss';
 import Box from '@mui/material/Box';
 import ProductItem from '~/components/ProductItem/ProductItem';
@@ -5,10 +7,48 @@ import SortPart from '~/components/SortPart/SortPart';
 import Pagination from '@mui/material/Pagination';
 import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
+import CircularProgress from '@mui/material/CircularProgress';
+
+
+import { ProductFetch } from '~/REST-API-client/index'
+
 const AllProducts = () => {
+
+    const [products, setProducts] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            setLoading(true);
+            try {
+                // Gọi API và lấy dữ liệu
+
+                const response = await ProductFetch.getAllProduct(currentPage);
+                console.log("--", response);
+                
+                setProducts(response.data.products);
+                setTotalPages(response.data.totalPage);
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        // Gọi hàm fetchProducts
+        fetchProducts();
+
+    }, [currentPage]);
+
+    const handlePageChange = (event, value) => {
+        setCurrentPage(value);
+    };
+
     return (
         <Box className={`${myStyle.lisColRight} ${myStyle.lisCol}`}>
-            <Box sx={{padding:'10px'}}>
+            <Box sx={{ padding: '10px' }}>
                 <Breadcrumbs aria-label="breadcrumb">
                     <Typography underline="hover" color="inherit" href="/do-thu-cung">
                         Đồ thú cưng
@@ -23,25 +63,26 @@ const AllProducts = () => {
                 {/* Danh sach */}
                 <Box sx={{ border: 'solid 2px #fff', width: '100%', padding: '20px', borderRadius: '5px', boxShadow: 'rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px' }}>
                     <Box className={myStyle.prodsRow}>
-                        <Box className={myStyle.prodCol}>
+                        {/* <Box className={myStyle.prodCol}>
                             <ProductItem />
-                        </Box>
-                        <Box className={myStyle.prodCol}>
-                            <ProductItem />
-                        </Box>
-                        <Box className={myStyle.prodCol}>
-                            <ProductItem />
-                        </Box>
-                        <Box className={myStyle.prodCol}>
-                            <ProductItem />
-                        </Box>
-                        <Box className={myStyle.prodCol}>
-                            <ProductItem />
-                        </Box>
+                        </Box> */}
+
+                        {loading ? (
+                            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                                <CircularProgress />
+                            </Box>
+                        ) : (
+                            products?.map((product) => (
+                                <Box key={product._id} className={myStyle.prodCol}>
+                                    <ProductItem product={product} />
+                                </Box>
+                            ))
+                        )}
+
                     </Box>
                     {/* Paging */}
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Pagination count={10} color="primary" />
+                        <Pagination count={totalPages} page={currentPage} onChange={handlePageChange} color="primary" />
                     </Box>
                 </Box>
             </Box>
