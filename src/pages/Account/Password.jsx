@@ -36,25 +36,29 @@ export default function Password() {
             .catch(err => {
                 handleOpenSnackbar();
             })
-
-        // if (oldPass === pass) {
-        //     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        //     return;
-        // }
     };
 
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
     const handleFinish = () => {
-        setOpenDialog(true)
-        setTimeout(() => {
-            handleReset();
-            handleCloseDialog();
-            setOldPass('');
-            setReNewPass('');
-            setNewPass('');
-        }, 2000);
+        UserFetch.resetPassword(auth.user._id).reset(newPass,reNewPass)
+            .then(data => {
+                // console.log("Reset pass: ", data);
+                setOpenDialog(true)
+                setTimeout(() => {
+                    handleReset();
+                    handleCloseDialog();
+                    setOldPass('');
+                    setReNewPass('');
+                    setNewPass('');
+                }, 2000);
+            })
+            .catch(err => {
+                console.log("err resetpass: ", err);
+                window.alert(`Cập nhật mật khẩu thất bại: \n ${err}`)
+            })
+       
     }
     const handleReset = () => {
         setActiveStep(0);

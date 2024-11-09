@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
@@ -7,91 +7,79 @@ import SubjectIcon from '@mui/icons-material/Subject';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import SubCategory from './SubCategory';
+import { CategoryFetch } from '~/REST-API-client';
 
-const testData =[
-    {
-        _id: '1',
-        name: 'Đồ cho chó',
-        subCateGory: [
-            {
-                _id: 'x1',
-                name: 'Nơi ở & Chuồng',
-                subCateGory: []
-            },
-            {
-                _id: '2x1',
-                name: 'Thức ăn $ Dinh dưỡng',
-                subCateGory: []
-            },
-            {
-                _id: '3x1',
-                name: 'Phụ Kiện & Đồ dùng',
-                subCateGory: []
-            }
-        ]
-    },
-    {
-        _id: '2',
-        name: 'Đồ cho mèo',
-        subCateGory: [
-            {
-                _id: 'x2',
-                name: 'Nơi ở & Chuồng',
-                subCateGory: []
-            },
-            {
-                _id: '2x2',
-                name: 'Thức ăn $ Dinh dưỡng',
-                subCateGory: []
-            },
-            {
-                _id: '3x2',
-                name: 'Phụ Kiện & Đồ dùng',
-                subCateGory: []
-            }
-        ]
-    },
-    {
-        _id: '3',
-        name: 'Category 3',
-        subCateGory: [
-            {
-                _id: 'x3',
-                name: 'Sub ne',
-                subCateGory: []
-            }
-        ]
-    },
-    {
-        _id: '4',
-        name: 'Category 4',
-        subCateGory: []
-    },
-    {
-        _id: '4',
-        name: 'Category 4',
-        subCateGory: []
-    },
-    {
-        _id: '4',
-        name: 'Category 4',
-        subCateGory: []
-    },
-    {
-        _id: '4',
-        name: 'Category 4',
-        subCateGory: []
-    },
-    {
-        _id: '4',
-        name: 'Category 4',
-        subCateGory: []
-    },
-] 
+// const data = [
+//     {
+//         _id: '1',
+//         name: 'Đồ cho chó',
+//         subCateGory: [
+//             {
+//                 _id: 'x1',
+//                 name: 'Nơi ở & Chuồng',
+//                 subCateGory: []
+//             },
+//             {
+//                 _id: '2x1',
+//                 name: 'Thức ăn $ Dinh dưỡng',
+//                 subCateGory: []
+//             },
+//             {
+//                 _id: '3x1',
+//                 name: 'Phụ Kiện & Đồ dùng',
+//                 subCateGory: []
+//             }
+//         ]
+//     },
+//     {
+//         _id: '2',
+//         name: 'Đồ cho mèo',
+//         subCateGory: [
+//             {
+//                 _id: 'x2',
+//                 name: 'Nơi ở & Chuồng',
+//                 subCateGory: []
+//             },
+//             {
+//                 _id: '2x2',
+//                 name: 'Thức ăn $ Dinh dưỡng',
+//                 subCateGory: []
+//             },
+//             {
+//                 _id: '3x2',
+//                 name: 'Phụ Kiện & Đồ dùng',
+//                 subCateGory: []
+//             }
+//         ]
+//     },
+//     {
+//         _id: '3',
+//         name: 'Category 3',
+//         subCateGory: [
+//             {
+//                 _id: 'x3',
+//                 name: 'Sub ne',
+//                 subCateGory: []
+//             }
+//         ]
+//     },
+// ]
 
 const Category = () => {
-    const [open, setOpen] = React.useState(false);
-    
+    const [open, setOpen] = useState(false);
+    const [data, setData] = useState([])
+    useEffect(() => {
+        // console.log("getting data")
+        CategoryFetch.get()
+            .then(res => {
+                // console.log("List category: ",res)
+                setData(res.data);
+            })
+            .catch(err => {
+                // console.log("category err: ", err);
+                window.alert("Không thể lấy dữ liệu: ", err);
+            })
+    },[])
 
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
@@ -99,7 +87,7 @@ const Category = () => {
 
     function DrawerList() {
         return (
-            <Box sx={{ padding: '10px',overflow: 'hidden' }}>
+            <Box sx={{ padding: '10px', overflow: 'hidden' }}>
                 {/* Header */}
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Typography variant='h6'>Danh mục sản phẩm </Typography>
@@ -115,8 +103,8 @@ const Category = () => {
                         aria-labelledby="nested-list-subheader"
                     >
                         {
-                            testData.map((data) => {
-                                return <SubCategory key={data._id} subs = {data.subCateGory} details = {data.name}/>
+                            data.map((data) => {
+                                return <SubCategory key={data._id} subs={data.subCategory} details={data.name} />
                             })
                         }
                     </List>
@@ -127,7 +115,7 @@ const Category = () => {
 
     return (
         <div>
-            <Button sx={{backgroundColor: (theme) => theme.palette.main}} variant="contained" onClick={toggleDrawer(true)}
+            <Button sx={{ backgroundColor: (theme) => theme.palette.main }} variant="contained" onClick={toggleDrawer(true)}
 
                 startIcon={<SubjectIcon />}
             >Danh mục</Button>
