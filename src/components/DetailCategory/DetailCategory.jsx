@@ -12,12 +12,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 const DetailCategory = ({ value, onChange }) => {
     const location = useLocation();
     const { tag } = useParams();
-    console.log("tag: ", tag);
+    // console.log("tag: ", tag);
     const navigate = useNavigate();
     const [cateData, setCateData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
-        console.log("reget Data")
+        // console.log("reget Data")
         CategoryFetch.get()
             .then(data => {
                 setCateData(data.data);

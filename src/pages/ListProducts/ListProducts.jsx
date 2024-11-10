@@ -19,24 +19,51 @@ const ListProduct = () => {
     // console.log("tag: ", tag);
     const [value, setValue] = useState();
     const [cateData, setCateData] = useState({});
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
+    const [numberPage, setNumberPage] = useState(0);
+    const [pageValue, setPageValue] = useState(1);
+    const [filters, setFilters] = useState({
+        minPrice: "",
+        maxPrice: "",
+        minStar: 0,
+        maxStar: 5
+    })
+    console.log(filters)
+    const fetchData = (parValue, condition) => {
+        CategoryFetch.getById(parValue, condition)
+            .then(data => {
+                setCateData(data.data);
+                let totalPages = 0;
+                if(data?.data?.total > 0 ) {
+                    totalPages = Math.ceil(data?.data?.total / data?.data.limit);
+                }
+                setNumberPage(totalPages)
+                setIsLoading(true);
+            })
+            .catch(err => {
+                // console.log("err: ", err)
+                window.alert(`Lỗi lấy chi tiết danh mục\n ${err}`);
+            })
+    }
     useEffect(() => {
         if (value) {
             setIsLoading(false);
-            const condition = { page: 1, limit: 9 }
-            CategoryFetch.getById(value, condition)
-                .then(data => {
-                    console.log("data cate: ", data.data);
-                    setCateData(data.data);
-                    setIsLoading(true);
-                })
-                .catch(err => {
-                    window.alert(`Lỗi lấy chi tiết danh mục\n ${err}`);
-                })
+            const condition = { page: 1, limit: 8 }
+            // const condition = { page: 1 }
+            setPageValue(1);
+            fetchData(value, condition);
         }
     }, [value])
     const handleChangeTag = (thing) => {
         setValue(thing);
+    }
+    const handleChangePage = (event, valuePage) => {
+        setPageValue(valuePage);
+        const condition = {page: valuePage, limit: 8};
+        fetchData(value, condition);
+    }
+    const handleChangeFilters = (another) => {
+        setFilters(another);
     }
     // console.log("value list: ", value)
     return (
@@ -62,7 +89,7 @@ const ListProduct = () => {
                             <Divider />
                             {/* Filter */}
                             <Box sx={{ height: '50%', maxHeight: '50%' }}>
-                                <Filter />
+                                <Filter valueFilters={filters} onChange = {handleChangeFilters}/>
                             </Box>
                         </Box>
                         {/* Relative blog */}
@@ -110,32 +137,17 @@ const ListProduct = () => {
                                     <Box className={myStyle.prodsRow}>
                                         {
                                             cateData?.products?.map((prod, index) => {
-                                                return(
-                                                    <Box className={myStyle.prodCol}>
+                                                return (
+                                                    <Box key={index} className={myStyle.prodCol}>
                                                         <ProductItem product={prod} />
                                                     </Box>
                                                 )
                                             })
                                         }
-                                        {/* <Box className={myStyle.prodCol}>
-                                            <ProductItem />
-                                        </Box>
-                                        <Box className={myStyle.prodCol}>
-                                            <ProductItem />
-                                        </Box>
-                                        <Box className={myStyle.prodCol}>
-                                            <ProductItem />
-                                        </Box>
-                                        <Box className={myStyle.prodCol}>
-                                            <ProductItem />
-                                        </Box>
-                                        <Box className={myStyle.prodCol}>
-                                            <ProductItem />
-                                        </Box> */}
                                     </Box>
                                     {/* Paging */}
                                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                        <Pagination count={10} color="primary" />
+                                        <Pagination page={pageValue} count={numberPage} color="primary" onChange={handleChangePage} />
                                     </Box>
                                 </Box>
                             </Box>
@@ -146,11 +158,11 @@ const ListProduct = () => {
                                     {cateData?.description}
                                 </Typography>
                             </Box>
-                        </Box> 
-                        :
-                        <Box className={`${myStyle.lisColRight} ${myStyle.lisCol}`} >
-                            <CircularProgress sx={{marginLeft:"50%", marginTop:"20px"}} />
                         </Box>
+                            :
+                            <Box className={`${myStyle.lisColRight} ${myStyle.lisCol}`} >
+                                <CircularProgress sx={{ marginLeft: "50%", marginTop: "20px" }} />
+                            </Box>
                     }
 
                 </Box>
