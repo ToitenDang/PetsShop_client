@@ -20,13 +20,13 @@ function valuetext(value) {
     return `${value} sao`;
 }
 
-const Filter = () => {
+const Filter = ({ valueFilters, onChange }) => {
     const [valueSlider, setValueSlider] = useState([0, 5]);
     const [priceFrom, setPriceFrom] = useState('');
     const [priceTo, setPriceTo] = useState('');
     const [openDialog, setOpenDialog] = useState(false);
     const [checked, setChecked] = useState([true, false]);
-   
+
     const handleOpenDialog = () => {
         setOpenDialog(true);
     };
@@ -36,6 +36,11 @@ const Filter = () => {
     };
     const handleChangeSlider = (event, newValue) => {
         setValueSlider(newValue);
+        onChange({
+            ...valueFilters,
+            minStar: newValue[0],
+            maxStar: newValue[1]
+        })
     };
     const handlePriceFrom = (e) => {
         if (isNaN(Number(e.target.value))) {
@@ -44,6 +49,10 @@ const Filter = () => {
             return;
         }
         setPriceFrom(e.target.value)
+        onChange({
+            ...valueFilters,
+            minPrice: e.target.value
+        })
     }
     const handlePriceTo = (e) => {
         if (isNaN(Number(e.target.value))) {
@@ -52,6 +61,10 @@ const Filter = () => {
             return
         }
         setPriceTo(e.target.value)
+        onChange({
+            ...valueFilters,
+            maxPrice: e.target.value
+        })
     }
     const handleChange1 = (event) => {
         setChecked([event.target.checked, event.target.checked]);
@@ -77,10 +90,10 @@ const Filter = () => {
         </Box>
     );
     return (
-        <Box sx={{ width: '100%', maxHeight: '100%', height: '100%'  }}>
-            <Box sx={{paddingY:'10px'  }}>
-                <Typography sx={{ fontWeight: 'bold', fontSize: '1.3rem'}}>Bộ lọc</Typography>
-                <Box sx={{display:'flex', justifyContent:'space-around'}}>
+        <Box sx={{ width: '100%', maxHeight: '100%', height: '100%' }}>
+            <Box sx={{ paddingY: '10px' }}>
+                <Typography sx={{ fontWeight: 'bold', fontSize: '1.3rem' }}>Bộ lọc</Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
                     <Tooltip title='Áp dụng bộ lọc'>
                         <Button sx={{ textTransform: 'none' }} variant='contained'><CheckIcon /></Button>
                     </Tooltip>
@@ -90,10 +103,10 @@ const Filter = () => {
                 </Box>
             </Box>
             <Divider />
-            
-            <Box sx={{overflowY: 'auto', overflowX: 'hidden', height:'calc( 100% - 100px )', maxHeight: 'calc( 100% - 100px )'}}>
+
+            <Box sx={{ overflowY: 'auto', overflowX: 'hidden', height: 'calc( 100% - 100px )', maxHeight: 'calc( 100% - 100px )' }}>
                 {/* Filter with Price */}
-                <Box sx={{paddingY:'5px'}}>
+                <Box sx={{ paddingY: '5px' }}>
                     <Typography sx={{ fontWeight: 'bold' }}>Giá (ngàn đồng):</Typography>
                     <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
                         <label >Từ</label>
@@ -108,7 +121,7 @@ const Filter = () => {
                     </Box>
                 </Box>
                 {/* Filter with Rating */}
-                <Box sx={{paddingY:'5px'}}>
+                <Box sx={{ paddingY: '5px' }}>
                     <Typography sx={{ fontWeight: 'bold' }}>Đánh giá:</Typography>
                     <Typography sx={{ marginLeft: '4px', display: 'flex', alignItems: 'center' }}>
                         Từ {valueSlider[0]} {<StarIcon sx={{ color: '#f9d240' }} />} tới {valueSlider[1]} {<StarIcon sx={{ color: '#f9d240' }} />}

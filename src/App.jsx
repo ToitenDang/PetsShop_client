@@ -33,8 +33,8 @@ function App() {
         <Route path='/' element={<HeaderLayout />}>
           <Route index element={<Home />} />
           <Route path='lien-he' element={<Contact />} />
-        <Route path='product/:id' element={<Product />} />
-          <Route path='do-thu-cung' element={<ListProduct />}>
+          <Route path='product/:id' element={<Product />} />
+          {/* <Route path='do-thu-cung' element={<ListProduct />}>
             <Route index element={<AllProducts />} />
             <Route path='do-cho-cho' element={<DogProducts />} />
             <Route path='thuc-an-cho' element={<DogFoods />} />
@@ -44,7 +44,9 @@ function App() {
             <Route path='thuc-an-meo' element={<CatFoods />} />
             <Route path='noi-o-meo' element={<CatHouses />} />
             <Route path='phu-kien-meo' element={<CatAccessory />} />
-          </Route>
+          </Route> */}
+          <Route path='do-thu-cung' element={<ListProduct />} />
+          <Route path='do-thu-cung/:tag' element={<ListProduct />}/>
           <Route path='tai-khoan' element={<Account />}>
             <Route index element={<Navigate to="ho-so" />} />
             <Route path='ho-so' element={<Profile />} />
@@ -52,7 +54,7 @@ function App() {
             <Route path='mat-khau' element={<Password />} />
             <Route path='don-mua' element={<Purchase />} />
           </Route>
-          <Route path='*' element= {<NoFound />}/>
+          <Route path='*' element={<NoFound />} />
         </Route>
         <Route path="dang-ky" element={<Register />} />
         <Route path="dang-nhap" element={<Login />} />
