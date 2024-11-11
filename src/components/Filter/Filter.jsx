@@ -20,12 +20,11 @@ function valuetext(value) {
     return `${value} sao`;
 }
 
-const Filter = ({ valueFilters, onChange }) => {
+const Filter = ({ valueFilters, onChange, getData }) => {
     const [valueSlider, setValueSlider] = useState([0, 5]);
     const [priceFrom, setPriceFrom] = useState('');
     const [priceTo, setPriceTo] = useState('');
     const [openDialog, setOpenDialog] = useState(false);
-    const [checked, setChecked] = useState([true, false]);
 
     const handleOpenDialog = () => {
         setOpenDialog(true);
@@ -66,39 +65,32 @@ const Filter = ({ valueFilters, onChange }) => {
             maxPrice: e.target.value
         })
     }
-    const handleChange1 = (event) => {
-        setChecked([event.target.checked, event.target.checked]);
-    };
 
-    const handleChange2 = (event) => {
-        setChecked([event.target.checked, checked[1]]);
-    };
 
-    const handleChange3 = (event) => {
-        setChecked([checked[0], event.target.checked]);
-    };
-    const childrenCheckBox = (
-        <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
-            <FormControlLabel
-                label="Giảm giá"
-                control={<Checkbox checked={checked[0]} onChange={handleChange2} />}
-            />
-            <FormControlLabel
-                label="Voucher"
-                control={<Checkbox checked={checked[1]} onChange={handleChange3} />}
-            />
-        </Box>
-    );
+    const handleApplyFilters = () => {
+        getData();
+    }
+    const handleClearFilers = () => {
+        onChange({
+            minPrice: "",
+            maxPrice: "",
+            minStar: 0,
+            maxStar: 5
+        })
+        setPriceFrom("");
+        setPriceTo("");
+        setValueSlider([0, 5])
+    }
     return (
         <Box sx={{ width: '100%', maxHeight: '100%', height: '100%' }}>
             <Box sx={{ paddingY: '10px' }}>
                 <Typography sx={{ fontWeight: 'bold', fontSize: '1.3rem' }}>Bộ lọc</Typography>
                 <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
                     <Tooltip title='Áp dụng bộ lọc'>
-                        <Button sx={{ textTransform: 'none' }} variant='contained'><CheckIcon /></Button>
+                        <Button onClick={handleApplyFilters} sx={{ textTransform: 'none' }} variant='contained'><CheckIcon /></Button>
                     </Tooltip>
                     <Tooltip title='Làm sạch bộ lọc'>
-                        <Button sx={{ textTransform: 'none' }} variant='contained'><CleaningServicesIcon /></Button>
+                        <Button onClick={handleClearFilers} sx={{ textTransform: 'none' }} variant='contained'><CleaningServicesIcon /></Button>
                     </Tooltip>
                 </Box>
             </Box>
@@ -140,17 +132,7 @@ const Filter = ({ valueFilters, onChange }) => {
                 </Box>
                 {/* Filter with Sale */}
                 <Box>
-                    <FormControlLabel
-                        label="Khuyến mãi"
-                        control={
-                            <Checkbox
-                                checked={checked[0] && checked[1]}
-                                indeterminate={checked[0] !== checked[1]}
-                                onChange={handleChange1}
-                            />
-                        }
-                    />
-                    {childrenCheckBox}
+                    <FormControlLabel control={<Checkbox defaultChecked />} label="Có khuyến mãi" />
                 </Box>
             </Box>
             <Dialog onClose={handleCloseDialog} open={openDialog}>

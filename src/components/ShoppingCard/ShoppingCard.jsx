@@ -1,7 +1,8 @@
 // Styles
 import styles from './ShoppingCart.module.scss'
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useAuth } from '../Authentication/Authentication';
 // component
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import Box from '@mui/material/Box';
@@ -14,8 +15,16 @@ import CartContent from './CartContent/CartContent';
 import Divider from '@mui/material/Divider';
 
 const ShoppingCart = ({ quantity }) => {
+    const auth = useAuth();
     const [open, setOpen] = useState(false);
+    const [cart, setCart] = useState([]);
+    // console.log("user auth: ", auth.user);
 
+    useEffect(() => {
+        if(auth?.user) {
+            setCart(auth?.user?.cart);
+        }
+    },[auth.user])
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
     };
@@ -35,23 +44,28 @@ const ShoppingCart = ({ quantity }) => {
             {/* Content cart item */}
 
             <Box sx={{ overflowY: 'auto', padding: '5px', flex: 1 }}>
-                <CartContent />
-                <CartContent />
-                <CartContent />
-                <CartContent />
-                <CartContent />
-                <CartContent />
-                <CartContent />
+                {
+                    cart && cart.map((item, index) => {
+                        return <CartContent key={index} data={item} />
+                    })
+                }
+                
             </Box>
 
             <Divider />
             {/* Pay for cart */}
             <Box sx={{paddingX: '20px', textAlign: 'center',paddingY: '10px'}}>
-                <Box sx={{paddingX: '10px',display: 'flex', justifyContent: 'space-between'}}>
-                    <Typography variant='h5'>Tổng tiền: </Typography>
-                    <Typography>5.000.000</Typography>
+                <Box sx={{paddingX: '10px',display: 'flex', justifyContent: 'space-around'}}>
+                    <Typography variant='h5' sx={{fontWeight:"bold"}}>Tổng tiền: </Typography>
+                    <Typography sx={{fontWeight:"bold", color:"#ec6b41"}}>
+                        {
+                            cart.reduce((prev, curr, index) => {
+                                return prev + curr?.quantity * curr?.price
+                            },0).toLocaleString('vi-VN')
+                        } đ
+                    </Typography>
                 </Box>
-                <Button href='/thanh-toan' sx={{backgroundColor: ''}}>Thanh toán</Button>
+                <Button variant='contained' href='/thanh-toan' sx={{backgroundColor: '', width:"100%"}}>Thanh toán</Button>
             </Box>
         </Box>
     );
