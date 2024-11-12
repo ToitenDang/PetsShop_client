@@ -9,21 +9,13 @@ import Profile from './pages/Account/Profile'
 import Address from './pages/Account/Address'
 import Password from './pages/Account/Password'
 import Purchase from './pages/Account/Purchase'
-import DogProducts from './pages/ListProducts/ForDog/DogProducts'
-import AllProducts from './pages/ListProducts/AllProducts'
-import DogFoods from './pages/ListProducts/ForDog/DogFoods'
-import DogHouses from './pages/ListProducts/ForDog/DogHouses'
-import DogAccessory from './pages/ListProducts/ForDog/DogAccessory'
-import CatProducts from './pages/ListProducts/ForCat/CatProducts'
-import CatFoods from './pages/ListProducts/ForCat/CatFoods'
-import CatHouses from './pages/ListProducts/ForCat/CatHouses'
-import CatAccessory from './pages/ListProducts/ForCat/CatAccesory'
 import Contact from './pages/Contact/Contact'
 import Product from './pages/Product/Product'
 import Register from './pages/Register/Register'
 import Login from './pages/Login/Login'
 import HeaderLayout from './Layout/HeaderLayout'
 import NoFound from './pages/NoFound/NoFound'
+import Service from './pages/Service/Service'
 import { AuthProvider } from './components/Authentication/Authentication'
 function App() {
 
@@ -34,17 +26,6 @@ function App() {
           <Route index element={<Home />} />
           <Route path='lien-he' element={<Contact />} />
           <Route path='product/:id' element={<Product />} />
-          {/* <Route path='do-thu-cung' element={<ListProduct />}>
-            <Route index element={<AllProducts />} />
-            <Route path='do-cho-cho' element={<DogProducts />} />
-            <Route path='thuc-an-cho' element={<DogFoods />} />
-            <Route path='noi-o-cho' element={<DogHouses />} />
-            <Route path='phu-kien-cho' element={<DogAccessory />} />
-            <Route path='do-cho-meo' element={<CatProducts />} />
-            <Route path='thuc-an-meo' element={<CatFoods />} />
-            <Route path='noi-o-meo' element={<CatHouses />} />
-            <Route path='phu-kien-meo' element={<CatAccessory />} />
-          </Route> */}
           <Route path='do-thu-cung' element={<ListProduct />} />
           <Route path='do-thu-cung/:tag' element={<ListProduct />}/>
           <Route path='tai-khoan' element={<Account />}>
@@ -54,6 +35,7 @@ function App() {
             <Route path='mat-khau' element={<Password />} />
             <Route path='don-mua' element={<Purchase />} />
           </Route>
+          <Route path='dich-vu' element = {<Service />} />
           <Route path='*' element={<NoFound />} />
         </Route>
         <Route path="dang-ky" element={<Register />} />
