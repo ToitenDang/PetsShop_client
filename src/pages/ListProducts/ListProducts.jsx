@@ -22,23 +22,26 @@ const ListProduct = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [numberPage, setNumberPage] = useState(0);
     const [pageValue, setPageValue] = useState(1);
+    const [sort, setSort] = useState("sold")
     const [filters, setFilters] = useState({
         minPrice: "",
         maxPrice: "",
         minStar: 0,
         maxStar: 5
     })
-    console.log(filters)
-    const fetchData = (parValue, condition) => {
-        CategoryFetch.getById(parValue, condition)
+    // console.log(filters)
+    const fetchData = (parValue, condition, page, sorting) => {
+        CategoryFetch.getById(parValue, condition, filters, sorting)
             .then(data => {
+                // console.log(data.data)
                 setCateData(data.data);
                 let totalPages = 0;
-                if(data?.data?.total > 0 ) {
+                if (data?.data?.total > 0) {
                     totalPages = Math.ceil(data?.data?.total / data?.data.limit);
                 }
                 setNumberPage(totalPages)
                 setIsLoading(true);
+                setPageValue(page);
             })
             .catch(err => {
                 // console.log("err: ", err)
@@ -46,24 +49,41 @@ const ListProduct = () => {
             })
     }
     useEffect(() => {
+        // console.log("useEffect")
         if (value) {
-            setIsLoading(false);
+            // console.log("cahnge")
+
             const condition = { page: 1, limit: 8 }
             // const condition = { page: 1 }
-            setPageValue(1);
-            fetchData(value, condition);
+            fetchData(value, condition, 1, sort);
         }
     }, [value])
     const handleChangeTag = (thing) => {
+        if (thing === value) {
+            return
+        }
         setValue(thing);
+        setIsLoading(false);
     }
     const handleChangePage = (event, valuePage) => {
+        setIsLoading(false);
         setPageValue(valuePage);
-        const condition = {page: valuePage, limit: 8};
-        fetchData(value, condition);
+        const condition = { page: valuePage, limit: 8 };
+        fetchData(value, condition, parseInt(valuePage), sort);
     }
     const handleChangeFilters = (another) => {
         setFilters(another);
+    }
+    const handleRegetData = () => {
+        setIsLoading(false);
+        const condition = { page: 1, limit: 8 };
+        fetchData(value, condition, 1, sort)
+    }
+    const handleChangeSort = (valueSort) => {
+        setIsLoading(false);
+        setSort(valueSort);
+        const condition = { page: 1, limit: 8 };
+        fetchData(value, condition, 1, valueSort)
     }
     // console.log("value list: ", value)
     return (
@@ -89,7 +109,7 @@ const ListProduct = () => {
                             <Divider />
                             {/* Filter */}
                             <Box sx={{ height: '50%', maxHeight: '50%' }}>
-                                <Filter valueFilters={filters} onChange = {handleChangeFilters}/>
+                                <Filter valueFilters={filters} onChange={handleChangeFilters} getData={handleRegetData} />
                             </Box>
                         </Box>
                         {/* Relative blog */}
@@ -118,19 +138,17 @@ const ListProduct = () => {
                                     <Typography >
                                         Đồ thú cưng
                                     </Typography>
-                                    <Link to="/do-thu-cung/do-cho-cho">
-                                        Đồ cho mèo
-                                    </Link>
-                                    <Typography>
-                                        Phụ kiện & đồ dùng
+                                    <Typography >
+                                        {cateData.name}
                                     </Typography>
+
                                 </Breadcrumbs>
                             </Box>
 
                             <Box sx={{ padding: '10px ' }}>
                                 {/* Sap xep */}
                                 <Box sx={{ width: '100%', padding: '10px' }}>
-                                    <SortPart />
+                                    <SortPart value={sort} onChange={handleChangeSort} />
                                 </Box>
                                 {/* Danh sach */}
                                 <Box sx={{ border: 'solid 2px #fff', width: '100%', padding: '20px', borderRadius: '5px', boxShadow: 'rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px' }}>
@@ -138,9 +156,11 @@ const ListProduct = () => {
                                         {
                                             cateData?.products?.map((prod, index) => {
                                                 return (
-                                                    <Box key={index} className={myStyle.prodCol}>
+
+                                                    prod?.name ? (<Box key={index} className={myStyle.prodCol}>
                                                         <ProductItem product={prod} />
-                                                    </Box>
+                                                    </Box>) : null
+
                                                 )
                                             })
                                         }

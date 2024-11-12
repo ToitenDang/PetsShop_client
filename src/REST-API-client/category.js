@@ -16,15 +16,16 @@ const CategoryAPI = (axiosInstance) => {
     }
   }
 
-  async function getById(id,condition, query) {
+  async function getById(id,condition, query, sort) {
     const params = new URLSearchParams({});
     try {
       if(condition?.page !== undefined) params.append("page",condition.page);
       if(condition?.limit !== undefined) params.append("limit", condition.limit);
-      if(query?.minPrice !== undefined && query?.minPrice.trim() !== "" ) params.append("minPrice", query.minPrice);
-      if(query?.maxPrice !== undefined && query?.maxPrice.trim() !== "") params.append("maxPrice", query.maxPrice);
+      if(query?.minPrice !== undefined && query?.minPrice.trim() !== "" ) params.append("minPrice", `${query.minPrice}000`);
+      if(query?.maxPrice !== undefined && query?.maxPrice.trim() !== "") params.append("maxPrice", `${query.maxPrice}000`);
       if(query?.minStar !== undefined) params.append("minStar", query.minStar);
       if(query?.maxStar !== undefined) params.append("maxStar", query.maxStar);
+      if(sort) params.append("sort", sort);
       // const res = await axiosInstance.get(`/categories/${id}?page=${condition?.page}&limit=${condition?.limit}`)
       const res = await axiosInstance.get(`/categories/${id}?${params}`)
       return res.data;
