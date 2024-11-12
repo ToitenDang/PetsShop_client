@@ -25,6 +25,7 @@ const CategoryAPI = (axiosInstance) => {
       if(query?.maxPrice !== undefined && query?.maxPrice.trim() !== "") params.append("maxPrice", `${query.maxPrice}000`);
       if(query?.minStar !== undefined) params.append("minStar", query.minStar);
       if(query?.maxStar !== undefined) params.append("maxStar", query.maxStar);
+      if(query?.onlyPromotion !== undefined) params.append("onlyPromotion", query.onlyPromotion);
       if(sort) params.append("sort", sort);
       // const res = await axiosInstance.get(`/categories/${id}?page=${condition?.page}&limit=${condition?.limit}`)
       const res = await axiosInstance.get(`/categories/${id}?${params}`)

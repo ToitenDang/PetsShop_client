@@ -10,7 +10,6 @@ import Pagination from '@mui/material/Pagination';
 import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { CategoryFetch } from '~/REST-API-client';
 const ListProduct = () => {
@@ -27,8 +26,10 @@ const ListProduct = () => {
         minPrice: "",
         maxPrice: "",
         minStar: 0,
-        maxStar: 5
+        maxStar: 5,
+        onlyPromotion: false
     })
+    console.log("promotion: ", filters.onlyPromotion);
     // console.log(filters)
     const fetchData = (parValue, condition, page, sorting) => {
         CategoryFetch.getById(parValue, condition, filters, sorting)
@@ -48,6 +49,9 @@ const ListProduct = () => {
                 window.alert(`Lỗi lấy chi tiết danh mục\n ${err}`);
             })
     }
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    },[])
     useEffect(() => {
         // console.log("useEffect")
         if (value) {

@@ -25,7 +25,7 @@ const Filter = ({ valueFilters, onChange, getData }) => {
     const [priceFrom, setPriceFrom] = useState('');
     const [priceTo, setPriceTo] = useState('');
     const [openDialog, setOpenDialog] = useState(false);
-
+    const [onlyPromotion, setOnlyPromotion] = useState(false)
     const handleOpenDialog = () => {
         setOpenDialog(true);
     };
@@ -79,7 +79,15 @@ const Filter = ({ valueFilters, onChange, getData }) => {
         })
         setPriceFrom("");
         setPriceTo("");
-        setValueSlider([0, 5])
+        setValueSlider([0, 5]);
+        setOnlyPromotion(false);
+    }
+    const handleChangeOnlyPromotion = (e) => {      
+        setOnlyPromotion(e.target.checked)
+        onChange({
+            ...valueFilters,
+            onlyPromotion: e.target.checked
+        })
     }
     return (
         <Box sx={{ width: '100%', maxHeight: '100%', height: '100%' }}>
@@ -132,7 +140,7 @@ const Filter = ({ valueFilters, onChange, getData }) => {
                 </Box>
                 {/* Filter with Sale */}
                 <Box>
-                    <FormControlLabel control={<Checkbox defaultChecked />} label="Có khuyến mãi" />
+                    <FormControlLabel control={<Checkbox checked={onlyPromotion} onChange={handleChangeOnlyPromotion} />} label="Có khuyến mãi" />
                 </Box>
             </Box>
             <Dialog onClose={handleCloseDialog} open={openDialog}>
