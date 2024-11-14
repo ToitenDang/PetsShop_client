@@ -101,6 +101,10 @@ const Appointment = () => {
                     maxRows={5}
                 />
             </Box>
+            <Box sx={{display:"flex", justifyContent:"flex-end", gap:2}}>
+                <Typography sx={{ fontSize: "1.2rem", fontWeight:"bold" }}>Tổng hóa đơn: </Typography>
+                <Typography sx={{ fontSize: "1.2rem", color:"#e77045", fontWeight:"bold" }}>12.000đ</Typography>
+            </Box>
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 3, marginTop:"10px" }}>
                 <Button variant="contained" color="secondary">
                     Hủy

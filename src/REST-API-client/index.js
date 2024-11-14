@@ -11,6 +11,7 @@ import ReviewAPI from './reviews'; // Import Review API
 import CheckTokenAPI from './checkToken';
 import LogoutAPI from './logout';
 import CategoryAPI from './category';
+import ServiceAPI from './service.js'
 
 // Tạo một instance của axios
 
@@ -33,4 +34,5 @@ export const LogoutFetch = LogoutAPI(axiosInstance);
 export const ProductFetch = ProductAPI(axiosInstance);  
 export const ReviewFetch = ReviewAPI(axiosInstance);  
 export const CategoryFetch = CategoryAPI(axiosInstance);
+export const ServiceFetch = ServiceAPI(axiosInstance);
 

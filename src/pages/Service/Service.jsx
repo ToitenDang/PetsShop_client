@@ -14,28 +14,45 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-
+import CircularProgress from '@mui/material/CircularProgress';
 import Appointment from './Appointment';
+import Avatar from '@mui/material/Avatar';
+import Rating from '@mui/material/Rating';
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { ServiceFetch } from '~/REST-API-client';
 
-function createData(name, calories, fat, carbs) {
-    return { name, calories, fat, carbs };
-}
 
-const rows = [
-    createData('1', 30, 200000, "/Lượt"),
-    createData('2', 20, 150000, "/Lượt"),
-    createData('3', 10, 100000, "/Lượt"),
-    createData('4', 5, 80000, "/Lượt"),
-    createData('5', 2, 50000, "/Lượt"),
-];
 
 const Service = () => {
-    console.log("re-render")
+    const { id } = useParams();
+    console.log("re-render id: ", id)
+    const [loading, setLoading] = useState(true);
+    const [service, setService] = useState();
+    useEffect(() => {
+        setLoading(true);
+        ServiceFetch.getById(id)
+            .then(data => {
+                console.log("service Id: ", data.data);
+                setLoading(false);
+                setService(data.data);
+            })
+            .catch(err => {
+                window.alert(`Lỗi lấy thông tin: \n${err}`);
+            })
+    }, [id])
+    if (loading) {
+        return (
+            <Box sx={{ marginTop: "150px", display: "flex", justifyContent: "center" }}>
+                <CircularProgress />
+            </Box>
+        )
+    }
 
     return (
         <Box sx={{ marginTop: "150px" }}>
             <Box sx={{ display: 'flex', justifyContent: "center" }}>
-                <Typography variant="h4" sx={{ fontWeight: "bold" }}>Dịch vụ cắt tỉa lông chó mèo tại Bet shob</Typography>
+                <Typography variant="h4" sx={{ fontWeight: "bold", textTransform: "uppercase" }}>Dịch vụ {service?.name}</Typography>
 
             </Box>
             <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center", gap: 1 }}>
@@ -44,115 +61,72 @@ const Service = () => {
             </Box>
             {/* List descriptions */}
             <Box sx={{ marginTop: "40px", display: 'flex', flexDirection: "column", gap: 2 }}>
-                {/* description item 1*/}
-                <Box sx={{ paddingX: "20px" }}>
-                    {/* Description content part */}
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                        <Box className={myStyle.descriptionCol} >
-                            <Box sx={{ border: "solid 1.5px #828282", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", padding: "6px" }}>
-                                {/* Header description */}
-                                <Typography variant="h5" sx={{ fontWeight: "bold" }}>🐶😸 Pet Salon hàng đầu cho thú cưng</Typography>
-                                <Divider sx={{ marginY: '20px' }} />
-                                {/* List contents */}
-                                <Box sx={{ display: 'flex', flexDirection: "column", gap: 2 }}>
-                                    <Typography sx={{ fontSize: "1.2rem" }}>Bạn đang tìm kiếm địa chỉ cung cấp dịch vụ cắt tỉa lông chó mèo chuyên nghiệp gần đây? Tại Pet Mart, chúng tôi cung cấp đầy đủ tất cả các loại hình dịch vụ chăm sóc và làm đẹp trọn gói tốt nhất dành cho thú cưng.</Typography>
-                                    <Typography sx={{ fontSize: "1.2rem" }}>Chúng tôi tự hào cung cấp dịch vụ và các sản phẩm chăm sóc thú cưng không chứa paraben, phthalates và thuốc nhuộm hóa học.</Typography>
-                                    <Typography sx={{ fontSize: "1.2rem" }}>Cắt lông cho chó mèo là một vấn đề rất quan trọng. Việc đó đảm bảo sự phát triển về sức khỏe, thể chất và tinh thần cho thú cưng của bạn. Những thú cưng không được chăm sóc, cắt tỉa và làm đẹp thường có nguy cơ gặp phải bọ chét, ve rận, ký sinh trùng và các vấn đề về viêm da khác.</Typography>
-                                    <Typography sx={{ fontSize: "1.2rem" }}>Việc sử dụng dịch vụ cắt tỉa lông chó mèo tại Pet Mart định kỳ và thường xuyên sẽ đem lại nhiều lợi ích thiết thực cho vật nuôi của bạn. Hãy lập kế hoạch đưa thú cưng của bạn đến với chúng tôi mỗi tuần nhé.</Typography>
-                                </Box>
-                            </Box>
-                        </Box>
+                {
+                    service?.description?.map((des, index) => {
+                        return (
+                            <Box key={index}>
+                                <Box sx={{ paddingX: "20px" }}>
+                                    {/* Description content part */}
+                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: index % 2 === 0 ? "row" : "row-reverse" }}>
+                                        <Box className={myStyle.descriptionCol} >
+                                            <Box sx={{ border: "solid 1.5px #828282", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", padding: "6px" }}>
+                                                {/* Header description */}
+                                                <Typography variant="h5" sx={{ fontWeight: "bold" }}>{des.heading}</Typography>
+                                                <Divider sx={{ marginY: '20px' }} />
+                                                {/* List contents */}
+                                                <Box sx={{ display: 'flex', flexDirection: "column", gap: 2 }}>
+                                                    {
+                                                        des?.content?.map((subContent, idx) => {
+                                                            return (
+                                                                <Typography key={idx} sx={{ fontSize: "1.2rem" }}>{subContent}</Typography>
+                                                            )
+                                                        })
+                                                    }
 
-                        {/* Image part */}
-                        <Box className={myStyle.descriptionCol}>
-                            <Box className={myStyle.imageContainer} >
-                                <img className={myStyle.imageStyle} src='https://www.petmart.vn/wp-content/uploads/2023/09/grooming1.jpg' />
+                                                </Box>
+                                            </Box>
+                                        </Box>
+                                        {/* Image part */}
+                                        <Box className={myStyle.descriptionCol}>
+                                            <Box className={myStyle.imageContainer} >
+                                                <img className={myStyle.imageStyle} src='https://www.petmart.vn/wp-content/uploads/2023/09/grooming1.jpg' />
+                                            </Box>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                                {
+                                    index === 0 ?
+                                        (<Box sx={{ marginY: "10px", paddingX: "20px" }}>
+                                            <Box sx={{ border: "solid 1.5px #dbdbdb", padding: "10px" }}>
+                                                <Typography variant="h5" sx={{ fontWeight: "bold" }}>👍 3 ĐIỀU LUÔN CAM KẾT VỚI KHÁCH HÀNG</Typography>
+                                                <Box sx={{ display: 'flex', flexWrap: "wrap" }}>
+                                                    <Box className={myStyle.commitCol}>
+                                                        <Box sx={{ height: "100%", maxWidth: "100%", backgroundColor: "#00205b", color: "#fff", padding: "10px", borderRadius: "8px", display: "flex", flexDirection: 'column', alignItems: "center" }}>
+                                                            <Typography sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>❣️ HẾT MÌNH VÌ CÔNG VIỆC</Typography>
+                                                            <Typography sx={{ marginTop: "8px" }}>Chúng tôi làm việc hết mình với chữ tâm, trách nhiệm và lòng yêu mến nghề. Thú cưng khỏe mạnh là niềm hạnh phúc của chúng tôi.</Typography>
+                                                        </Box>
+                                                    </Box>
+                                                    <Box className={myStyle.commitCol}>
+                                                        <Box sx={{ height: "100%", maxWidth: "100%", backgroundColor: "#00205b", color: "#fff", padding: "10px", borderRadius: "8px", display: "flex", flexDirection: 'column', alignItems: "center" }}>
+                                                            <Typography sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>✅ GIÁ DỊCH VỤ RẺ NHẤT</Typography>
+                                                            <Typography sx={{ marginTop: "8px" }}>Chúng tôi cam kết đưa ra mức giá ưu đãi nhất trên thị trường để tất cả thú cưng đều có cơ hội được trải nghiệm dịch vụ của chúng tôi.</Typography>
+                                                        </Box>
+                                                    </Box>
+                                                    <Box className={myStyle.commitCol}>
+                                                        <Box sx={{ height: "100%", maxWidth: "100%", backgroundColor: "#00205b", color: "#fff", padding: "10px", borderRadius: "8px", display: "flex", flexDirection: 'column', alignItems: "center" }}>
+                                                            <Typography sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>🥇 CHẤT LƯỢNG HÀNG ĐẦU</Typography>
+                                                            <Typography sx={{ marginTop: "8px" }}>Chúng tôi không ngừng nâng cao phát triển trình độ kỹ năng của nhân sự để phục vụ thú cưng đem đến kết quả tốt nhất cho công việc.</Typography>
+                                                        </Box>
+                                                    </Box>
+                                                </Box>
+                                            </Box>
+                                        </Box>) : null
+                                }
                             </Box>
-                        </Box>
-                    </Box>
-                </Box>
+                        )
+                    })
+                }
 
-                {/* Cam kết với khách hàng - Lưu ý phần này khi dùng vòng lặp với dữ liệu từ db */}
-                <Box sx={{ paddingX: "20px" }}>
-                    <Box sx={{ border: "solid 1.5px #dbdbdb", padding: "10px" }}>
-                        <Typography variant="h5" sx={{ fontWeight: "bold" }}>👍 3 ĐIỀU LUÔN CAM KẾT VỚI KHÁCH HÀNG</Typography>
-                        <Box sx={{ display: 'flex', flexWrap: "wrap" }}>
-                            <Box className={myStyle.commitCol}>
-                                <Box sx={{ height: "100%", maxWidth: "100%", backgroundColor: "#00205b", color: "#fff", padding: "10px", borderRadius: "8px", display: "flex", flexDirection: 'column', alignItems: "center" }}>
-                                    <Typography sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>❣️ HẾT MÌNH VÌ CÔNG VIỆC</Typography>
-                                    <Typography sx={{ marginTop: "8px" }}>Chúng tôi làm việc hết mình với chữ tâm, trách nhiệm và lòng yêu mến nghề. Thú cưng khỏe mạnh là niềm hạnh phúc của chúng tôi.</Typography>
-                                </Box>
-                            </Box>
-                            <Box className={myStyle.commitCol}>
-                                <Box sx={{ height: "100%", maxWidth: "100%", backgroundColor: "#00205b", color: "#fff", padding: "10px", borderRadius: "8px", display: "flex", flexDirection: 'column', alignItems: "center" }}>
-                                    <Typography sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>✅ GIÁ DỊCH VỤ RẺ NHẤT</Typography>
-                                    <Typography sx={{ marginTop: "8px" }}>Chúng tôi cam kết đưa ra mức giá ưu đãi nhất trên thị trường để tất cả thú cưng đều có cơ hội được trải nghiệm dịch vụ của chúng tôi.</Typography>
-                                </Box>
-                            </Box>
-                            <Box className={myStyle.commitCol}>
-                                <Box sx={{ height: "100%", maxWidth: "100%", backgroundColor: "#00205b", color: "#fff", padding: "10px", borderRadius: "8px", display: "flex", flexDirection: 'column', alignItems: "center" }}>
-                                    <Typography sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>🥇 CHẤT LƯỢNG HÀNG ĐẦU</Typography>
-                                    <Typography sx={{ marginTop: "8px" }}>Chúng tôi không ngừng nâng cao phát triển trình độ kỹ năng của nhân sự để phục vụ thú cưng đem đến kết quả tốt nhất cho công việc.</Typography>
-                                </Box>
-                            </Box>
-                        </Box>
-                    </Box>
-                </Box>
-
-                {/* description item 2*/}
-                <Box sx={{ paddingX: "20px" }}>
-                    {/* Description content part */}
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: "row-reverse" }}>
-                        <Box className={myStyle.descriptionCol} >
-                            <Box sx={{ border: "solid 1.5px #828282", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", padding: "6px" }}>
-                                {/* Header description */}
-                                <Typography variant="h5" sx={{ fontWeight: "bold" }}>🐶😸 Pet Salon hàng đầu cho thú cưng</Typography>
-                                <Divider sx={{ marginY: '20px' }} />
-                                {/* List contents */}
-                                <Box sx={{ display: 'flex', flexDirection: "column", gap: 2 }}>
-                                    <Typography sx={{ fontSize: "1.2rem" }}>Bạn đang tìm kiếm địa chỉ cung cấp dịch vụ cắt tỉa lông chó mèo chuyên nghiệp gần đây? Tại Pet Mart, chúng tôi cung cấp đầy đủ tất cả các loại hình dịch vụ chăm sóc và làm đẹp trọn gói tốt nhất dành cho thú cưng.</Typography>
-                                    <Typography sx={{ fontSize: "1.2rem" }}>Chúng tôi tự hào cung cấp dịch vụ và các sản phẩm chăm sóc thú cưng không chứa paraben, phthalates và thuốc nhuộm hóa học.</Typography>
-                                    <Typography sx={{ fontSize: "1.2rem" }}>Cắt lông cho chó mèo là một vấn đề rất quan trọng. Việc đó đảm bảo sự phát triển về sức khỏe, thể chất và tinh thần cho thú cưng của bạn. Những thú cưng không được chăm sóc, cắt tỉa và làm đẹp thường có nguy cơ gặp phải bọ chét, ve rận, ký sinh trùng và các vấn đề về viêm da khác.</Typography>
-                                    <Typography sx={{ fontSize: "1.2rem" }}>Việc sử dụng dịch vụ cắt tỉa lông chó mèo tại Pet Mart định kỳ và thường xuyên sẽ đem lại nhiều lợi ích thiết thực cho vật nuôi của bạn. Hãy lập kế hoạch đưa thú cưng của bạn đến với chúng tôi mỗi tuần nhé.</Typography>
-                                </Box>
-                            </Box>
-                        </Box>
-
-                        {/* Image part */}
-                        <Box className={myStyle.descriptionCol}>
-                            <Box className={myStyle.imageContainer}>
-                                <img className={myStyle.imageStyle} src='https://www.petmart.vn/wp-content/uploads/2023/09/grooming1.jpg' />
-                            </Box>
-                        </Box>
-                    </Box>
-                </Box>
-                {/* description item 3*/}
-                <Box sx={{ paddingX: "20px" }}>
-                    {/* Description content part */}
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                        <Box className={myStyle.descriptionCol} >
-                            <Box sx={{ border: "solid 1.5px #828282", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", padding: "6px" }}>
-                                {/* Header description */}
-                                <Typography variant="h5" sx={{ fontWeight: "bold" }}>🐶😸 Pet Salon hàng đầu cho thú cưng</Typography>
-                                <Divider sx={{ marginY: '20px' }} />
-                                {/* List contents */}
-                                <Box sx={{ display: 'flex', flexDirection: "column", gap: 2 }}>
-                                    <Typography sx={{ fontSize: "1.2rem" }}>Bạn đang tìm kiếm địa chỉ cung cấp dịch vụ cắt tỉa lông chó mèo chuyên nghiệp gần đây? Tại Pet Mart, chúng tôi cung cấp đầy đủ tất cả các loại hình dịch vụ chăm sóc và làm đẹp trọn gói tốt nhất dành cho thú cưng.</Typography>
-                                    <Typography sx={{ fontSize: "1.2rem" }}>Chúng tôi tự hào cung cấp dịch vụ và các sản phẩm chăm sóc thú cưng không chứa paraben, phthalates và thuốc nhuộm hóa học.</Typography>
-                                    <Typography sx={{ fontSize: "1.2rem" }}>Cắt lông cho chó mèo là một vấn đề rất quan trọng. Việc đó đảm bảo sự phát triển về sức khỏe, thể chất và tinh thần cho thú cưng của bạn. Những thú cưng không được chăm sóc, cắt tỉa và làm đẹp thường có nguy cơ gặp phải bọ chét, ve rận, ký sinh trùng và các vấn đề về viêm da khác.</Typography>
-                                    <Typography sx={{ fontSize: "1.2rem" }}>Việc sử dụng dịch vụ cắt tỉa lông chó mèo tại Pet Mart định kỳ và thường xuyên sẽ đem lại nhiều lợi ích thiết thực cho vật nuôi của bạn. Hãy lập kế hoạch đưa thú cưng của bạn đến với chúng tôi mỗi tuần nhé.</Typography>
-                                </Box>
-                            </Box>
-                        </Box>
-
-                        {/* Image part */}
-                        <Box className={myStyle.descriptionCol}>
-                            <Box className={myStyle.imageContainer}>
-                                <img className={myStyle.imageStyle} src='https://www.petmart.vn/wp-content/uploads/2023/09/grooming1.jpg' />
-                            </Box>
-                        </Box>
-                    </Box>
-                </Box>
             </Box>
             {/* Quy trình thực hiện + Trinhf độ nhân viên*/}
             <Box sx={{ padding: "20px", display: "flex", flexWrap: "wrap" }}>
@@ -163,37 +137,27 @@ const Service = () => {
                         <Box sx={{ display: 'flex', justifyContent: "center", marginTop: "20px" }}>
                             <Box>
                                 {/* Vòng lặp tại đây */}
-                                <Accordion sx={{ backgroundColor: "#00205b", color: "#fff", border: "solid 1.5px #fff" }}>
-                                    <AccordionSummary
-                                        expandIcon={<ArrowDropDownIcon sx={{ color: "#fff" }} />}
-                                        aria-controls="panel1-content"
-                                        id="panel1-header"
-                                    >
-                                        <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>1. Tiếp nhận tư vấn dịch vụ</Typography>
-                                    </AccordionSummary>
-                                    <AccordionDetails sx={{ border: "solid 1.5px #fff" }}>
-                                        <Typography>
-                                            Giờ làm việc của bộ phận dịch vụ bắt đầu từ 11h sáng hàng ngày. Thú cưng của bạn sẽ được bắt đầu bằng việc:
-                                            Nhân viên của chúng tôi kiểm tra sàng lọcnhanh tình trạng sức khỏe để đảm bảo không có vấn đề gì trông hoặc
-                                            cảm thấy bất thường.
-                                        </Typography>
-                                    </AccordionDetails>
-                                </Accordion>
-                                <Accordion sx={{ backgroundColor: "#00205b", color: "#fff", border: "solid 1.5px #fff" }}>
-                                    <AccordionSummary
-                                        expandIcon={<ArrowDropDownIcon sx={{ color: "#fff" }} />}
-                                        aria-controls="panel2-content"
-                                        id="panel2-header"
-                                    >
-                                        <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>2. Chải chuốt lông, bấm cắt móng</Typography>
-                                    </AccordionSummary>
-                                    <AccordionDetails sx={{ border: "solid 1.5px #fff" }}>
-                                        <Typography>
-                                            Chúng tôi sẽ bắt đầu những quy trình làm dịch vụ đầu tiên cho thú cưng của bạn. Bao gồm việc chải lông rụng,
-                                            gỡ rối lông hoặc cạo lông (theo yêu cầu), cắt dũa và mài móng chân.
-                                        </Typography>
-                                    </AccordionDetails>
-                                </Accordion>
+                                {
+                                    service?.procedures?.map((process, index) => {
+                                        return (
+                                            <Accordion key={index} sx={{ backgroundColor: "#00205b", color: "#fff", border: "solid 1.5px #fff" }}>
+                                                <AccordionSummary
+                                                    expandIcon={<ArrowDropDownIcon sx={{ color: "#fff" }} />}
+                                                    aria-controls="panel1-content"
+                                                    id="panel1-header"
+                                                >
+                                                    <Typography sx={{ fontSize: "1.2rem", fontWeight: "500" }}>{process?.serial}. {process?.summary}</Typography>
+                                                </AccordionSummary>
+                                                <AccordionDetails sx={{ border: "solid 1.5px #fff" }}>
+                                                    <Typography>
+                                                       {process?.detail}
+                                                    </Typography>
+                                                </AccordionDetails>
+                                            </Accordion>
+                                        )
+                                    })
+                                }
+
                             </Box>
                         </Box>
 
@@ -249,7 +213,7 @@ const Service = () => {
                 {/* Bang gia */}
                 <Box className={myStyle.col50}>
                     <Box sx={{ border: "solid 1.5px #dbdbdb", padding: "10px", height: "100%" }}>
-                        <Typography variant="h5" sx={{ fontWeight: "bold" }}>💵Bảng giá cắt tỉa</Typography>
+                        <Typography variant="h5" sx={{ fontWeight: "bold" }}>💵Bảng giá {service?.name}</Typography>
                         <Divider sx={{ marginY: "20px" }} />
                         <Box>
                             <TableContainer component={Paper} sx={{ backgroundColor: "#00205b" }}>
@@ -263,15 +227,15 @@ const Service = () => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {rows.map((row) => (
+                                        {service?.price?.map((sub, index) => (
                                             <TableRow
-                                                key={row.name}
+                                                key={index}
                                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                             >
-                                                <TableCell sx={{ color: "#fff" }} align="center">{row.name}</TableCell>
-                                                <TableCell sx={{ color: "#fff" }} align="center">{row.calories}</TableCell>
-                                                <TableCell sx={{ color: "#fff" }} align="center">{row.fat}</TableCell>
-                                                <TableCell sx={{ color: "#fff" }} align="center">{row.carbs}</TableCell>
+                                                <TableCell sx={{ color: "#fff" }} align="center">{index + 1}</TableCell>
+                                                <TableCell sx={{ color: "#fff" }} align="center">{sub?.maxWeight} kg</TableCell>
+                                                <TableCell sx={{ color: "#fff" }} align="center">{sub?.value.toLocaleString('vi-VN')}đ</TableCell>
+                                                <TableCell sx={{ color: "#fff" }} align="center">/{sub?.billingUnit}</TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
@@ -312,7 +276,76 @@ const Service = () => {
             <Divider sx={{ marginY: "40px" }} />
 
             {/* Đánh giá của khách hàng */}
-            <Typography>Đánh giá của khách hàng</Typography>
+            <Box sx={{ padding: "20px" }}>
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <Typography variant='h4' sx={{ fontWeight: "bold" }}>🌟Đánh giá của khách hàng</Typography>
+                </Box>
+
+                <Box sx={{ border: "solid 1.5px #dbdbdb", padding: "10px", marginTop: "20px" }}>
+                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
+                        {/* Comment 1 */}
+                        <Box sx={{ border: "solid 1.5px #dbdbdb", padding: "10px", width: "100%" }}>
+                            <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-start", padding: "10px" }}>
+                                <Avatar src='https://zent.edu.vn/wp-content/uploads/2024/10/tran-ha-linh-31t6ujJB.png' sx={{ width: 56, height: 56 }} />
+                                <Box>
+                                    <Box>
+                                        <Box sx={{ display: "flex", gap: 1 }}>
+                                            <Typography>Trần Hà Linh</Typography>
+                                            <Divider orientation="vertical" flexItem />
+                                            <Typography>24/11/2023</Typography>
+                                        </Box>
+                                        <Rating defaultValue={2.5} precision={0.5} readOnly />
+                                    </Box>
+                                    <Box sx={{ marginTop: "20px" }}>
+                                        <Typography>Mê quá ạ, đáp ứng chất lượng rất tốt</Typography>
+                                    </Box>
+                                </Box>
+
+                            </Box>
+                        </Box>
+                        {/* Comment 2 */}
+                        <Box sx={{ border: "solid 1.5px #dbdbdb", padding: "10px", width: "100%" }}>
+                            <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-start", padding: "10px" }}>
+                                <Avatar src='https://zent.edu.vn/wp-content/uploads/2024/10/tran-ha-linh-31t6ujJB.png' sx={{ width: 56, height: 56 }} />
+                                <Box>
+                                    <Box>
+                                        <Box sx={{ display: "flex", gap: 1 }}>
+                                            <Typography>Trần Hà Linh</Typography>
+                                            <Divider orientation="vertical" flexItem />
+                                            <Typography>24/11/2023</Typography>
+                                        </Box>
+                                        <Rating defaultValue={2.5} precision={0.5} readOnly />
+                                    </Box>
+                                    <Box sx={{ marginTop: "20px" }}>
+                                        <Typography>Mê quá ạ, đáp ứng chất lượng rất tốt</Typography>
+                                    </Box>
+                                </Box>
+
+                            </Box>
+                        </Box>
+                        {/* Comment 3 */}
+                        <Box sx={{ border: "solid 1.5px #dbdbdb", padding: "10px", width: "100%" }}>
+                            <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-start", padding: "10px" }}>
+                                <Avatar src='https://zent.edu.vn/wp-content/uploads/2024/10/tran-ha-linh-31t6ujJB.png' sx={{ width: 56, height: 56 }} />
+                                <Box>
+                                    <Box>
+                                        <Box sx={{ display: "flex", gap: 1 }}>
+                                            <Typography>Trần Hà Linh</Typography>
+                                            <Divider orientation="vertical" flexItem />
+                                            <Typography>24/11/2023</Typography>
+                                        </Box>
+                                        <Rating defaultValue={2.5} precision={0.5} readOnly />
+                                    </Box>
+                                    <Box sx={{ marginTop: "20px" }}>
+                                        <Typography>Mê quá ạ, đáp ứng chất lượng rất tốt</Typography>
+                                    </Box>
+                                </Box>
+
+                            </Box>
+                        </Box>
+                    </Box>
+                </Box>
+            </Box>
         </Box>
     )
 }

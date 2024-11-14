@@ -35,7 +35,7 @@ function App() {
             <Route path='mat-khau' element={<Password />} />
             <Route path='don-mua' element={<Purchase />} />
           </Route>
-          <Route path='dich-vu' element = {<Service />} />
+          <Route path='dich-vu/:id' element = {<Service />} />
           <Route path='*' element={<NoFound />} />
         </Route>
         <Route path="dang-ky" element={<Register />} />
