@@ -1,0 +1,57 @@
+html {
+    scroll-behavior: smooth;
+}
+
+.descriptionCol {
+    flex: 0 0 50%;
+    max-width: 50%;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.imageContainer {
+    overflow: hidden;
+    border: solid 1.5px #828282;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6px
+}
+
+.imageContainer:hover .imageStyle {
+    transform: scale(1.1);
+    opacity: 0.9;
+}
+
+.imageStyle {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    transition: all ease-in-out 0.3s;
+    opacity: 1;
+}
+
+.commitCol {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+    padding: 10px;
+}
+.col50 {
+    flex: 0 0 50%;
+    max-width: 50%;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+@media (max-width: 950px) {
+    .descriptionCol {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    .col50 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}

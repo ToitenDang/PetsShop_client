@@ -43,13 +43,9 @@ const ProductItem = ({ product }) => {
                 </Box>
             </Box>
             <Box className={myStyle.buyOrAdd}>
-
-                <Button sx={{ minWidth: '65%', maxWidth: '65%' }} variant='contained' >Thêm vào giỏ</Button>
-
-
-                <Button sx={{ minWidth: '65%', maxWidth: '65%' }} variant='contained' onClick={handleViewDetails}>Xem chi tiết</Button>
-
+                <button className={myStyle.detailButton} onClick={handleViewDetails}>Xem chi tiết</button>
             </Box>
+            {/* <Button   variant='contained' >Xem chi tiết</Button> */}
             {
                 product?.promotions && product?.promotions[0]?.type ? (<Box className={myStyle.promotionContainer}>
                     <Typography sx={{ fontWeight: "bold", color: "#fff" }}>Giảm:</Typography>

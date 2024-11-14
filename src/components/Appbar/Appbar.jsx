@@ -25,7 +25,9 @@ function Appbar() {
   console.log("cart length: ", auth?.user?.cart.length)
   console.log('rerender appbar')
   return (
-    <Box className={mystyles.mainContainer} sx={{ backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#062c4f' : '#fff', zIndex: 1000 }}>
+    <Box className={mystyles.mainContainer}
+     sx={{ backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#062c4f' : null  }}
+     >
       <ResponsiveContainer className={mystyles.container} sx={{
         width: '90%',
         gap: 2, paddingY: '5px'
