@@ -20,27 +20,55 @@ import Avatar from '@mui/material/Avatar';
 import Rating from '@mui/material/Rating';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { ServiceFetch } from '~/REST-API-client';
+import { BookingFetch, ServiceFetch } from '~/REST-API-client';
+import { useAuth } from '~/components/Authentication/Authentication';
+import Dialog from '@mui/material/Dialog';
+import Alert from '@mui/material/Alert';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
 
+const DialogAlert = ({ onClose, data, open }) => {
+    const handleClose = () => {
+        onClose();
+    };
+    return (
+        <Dialog onClose={handleClose} open={open}>
+            {
+                data.isSuccess ? <Alert severity="success">Thành công</Alert> :
+                    <Alert severity="error">Thất bại</Alert>
+            }
+            <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                   {data.content}
+                </DialogContentText>
+            </DialogContent>
 
+        </Dialog>
+    )
+}
 
 const Service = () => {
+    const auth = useAuth();
     const { id } = useParams();
-    console.log("re-render id: ", id)
     const [loading, setLoading] = useState(true);
     const [service, setService] = useState();
+    const [open, setOpen] = useState(false);
+    const [contentDialog, setContentDialog] = useState("");
     useEffect(() => {
         setLoading(true);
         ServiceFetch.getById(id)
             .then(data => {
-                console.log("service Id: ", data.data);
                 setLoading(false);
                 setService(data.data);
             })
             .catch(err => {
                 window.alert(`Lỗi lấy thông tin: \n${err}`);
             })
-    }, [id])
+    }, [id]);
+    const handleClose = () => {
+        setOpen(false);
+
+    };
     if (loading) {
         return (
             <Box sx={{ marginTop: "150px", display: "flex", justifyContent: "center" }}>
@@ -48,7 +76,29 @@ const Service = () => {
             </Box>
         )
     }
-
+    const handleChangeValueSubmit = (dataBooking) => {
+        const data = {
+            ...dataBooking,
+            userId: auth?.user._id,
+            serviceId: id
+        }
+        BookingFetch.createNew(data)
+            .then(data => {
+                setContentDialog({
+                    isSuccess: true,
+                    content: "Cảm ơn bạn đã đăng ký lịch dịch vụ của chúng tôi. Đơn của bạn đang được xác nhận, hãy chú ý thông báo nhé"
+                })
+                setOpen(true);
+                
+            })
+            .catch(err => {
+                setContentDialog({
+                    isSuccess: false,
+                    content: `Xin lỗi, đã có sự cố, không thể đăng ký lịch\n${err}`
+                })
+                setOpen(true)
+            });;
+    }
     return (
         <Box sx={{ marginTop: "150px" }}>
             <Box sx={{ display: 'flex', justifyContent: "center" }}>
@@ -150,7 +200,7 @@ const Service = () => {
                                                 </AccordionSummary>
                                                 <AccordionDetails sx={{ border: "solid 1.5px #fff" }}>
                                                     <Typography>
-                                                       {process?.detail}
+                                                        {process?.detail}
                                                     </Typography>
                                                 </AccordionDetails>
                                             </Accordion>
@@ -191,22 +241,18 @@ const Service = () => {
                         <Typography variant="h5" sx={{ fontWeight: "bold" }}>🏢Dịch vụ được đáp ứng tại các chi nhánh sau</Typography>
                         <Divider sx={{ marginY: "20px" }} />
                         <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                            <Typography sx={{ fontSize: "1.2rem" }}>
-                                <span style={{ fontWeight: "bold" }}>1. </span>
-                                437 Lê Văn Việt, Tăng Nhơn Phú A, TP.Thủ Đức
-                            </Typography>
-                            <Typography sx={{ fontSize: "1.2rem" }}>
-                                <span style={{ fontWeight: "bold" }}>2. </span>
-                                437 Lê Văn Việt, Tăng Nhơn Phú A, TP.Thủ Đức
-                            </Typography>
-                            <Typography sx={{ fontSize: "1.2rem" }}>
-                                <span style={{ fontWeight: "bold" }}>3. </span>
-                                437 Lê Văn Việt, Tăng Nhơn Phú A, TP.Thủ Đức
-                            </Typography>
-                            <Typography sx={{ fontSize: "1.2rem" }}>
-                                <span style={{ fontWeight: "bold" }}>4. </span>
-                                437 Lê Văn Việt, Tăng Nhơn Phú A, TP.Thủ Đức
-                            </Typography>
+                            {
+                                service?.applicableBranches?.map((branch, index) => {
+                                    return (
+                                        <Typography key={branch?._id} sx={{ fontSize: "1.2rem" }}>
+                                            <span style={{ fontWeight: "bold" }}>- Cơ sở {branch?.nameBranch}: </span>
+                                            <br />
+                                            &nbsp;* Địa chỉ: {branch?.address}
+                                        </Typography>
+
+                                    )
+                                })
+                            }
                         </Box>
                     </Box>
                 </Box>
@@ -260,7 +306,7 @@ const Service = () => {
                             <Box sx={{ border: "solid 1.5px #dbdbdb", padding: "10px", height: "100%" }}>
                                 <Typography variant="h5" sx={{ fontWeight: "bold" }}>📄Đặt trực tiếp tại đây</Typography>
                                 <Divider sx={{ marginY: "10px" }} />
-                                <Appointment />
+                                <Appointment user={auth?.user} addresses={service?.applicableBranches} prices={service?.price} onChange={handleChangeValueSubmit} />
                             </Box>
                         </Box>
                         {/* Dat qua lien he */}
@@ -346,6 +392,8 @@ const Service = () => {
                     </Box>
                 </Box>
             </Box>
+            <DialogAlert open={open}
+                onClose={handleClose} data={contentDialog} />
         </Box>
     )
 }
