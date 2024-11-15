@@ -29,7 +29,6 @@ const ListProduct = () => {
         maxStar: 5,
         onlyPromotion: false
     })
-    console.log("promotion: ", filters.onlyPromotion);
     // console.log(filters)
     const fetchData = (parValue, condition, page, sorting) => {
         CategoryFetch.getById(parValue, condition, filters, sorting)

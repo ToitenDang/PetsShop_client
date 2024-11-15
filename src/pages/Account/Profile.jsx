@@ -19,17 +19,19 @@ import Alert from '@mui/material/Alert';
 
 import { useAuth } from "~/components/Authentication/Authentication";
 import { obfuscateEmail, obfuscatePhone } from '~/utils/hiddenInfo';
-import { UserFetch } from '~/REST-API-client';
-const initialTiming = 30;
-const pinCodeInitial = '123456';
+import { EmailSenderFetch, UserFetch } from '~/REST-API-client';
+const initialTiming = 60;
+// const pinCodeInitial = '123456';
 
 
 function ChangEmailDialog(props) {
+    const auth = useAuth();
     const { onClose, open, resetData } = props;
     const [email, setEmail] = useState("");
     const [pageNumber, setPageNumber] = useState(1);
     const [time, setTime] = useState(initialTiming);
     const [openSnackBar, setOpenSnackBar] = useState(false)
+    const [isTrue, setIsTrue] = useState(false);
     const [pin, setPin] = useState(['', '', '', '', '', '']);
     const reCode = useRef();
     const pinInputRefs = useRef([]);
@@ -55,6 +57,14 @@ function ChangEmailDialog(props) {
 
     const handleNextStep = () => {
         setPageNumber(2);
+        EmailSenderFetch.sendPIN(auth?.user.email, auth?.user._id)
+            .then(data => {
+
+            })
+            .catch(err => {
+                console.log("Lỗi tạo pin: ", err);
+                window.alert(`Lỗi khi tạo mã PIN: \n${err}`);
+            })
     }
 
     const handlePevStep = () => {
@@ -109,29 +119,44 @@ function ChangEmailDialog(props) {
         }
     };
     const handleConfirm = () => {
-        if (pin.join('') === pinCodeInitial) {
-            clearInterval(reCode.current);
-            resetData(email);
-            // console.log('success');
-            setTimeout(handleClose, 1000)
-        } else {
-            pinInputRefs.current[5].focus()
-        }
-        setOpenSnackBar(true);
+        const inputpin = pin.join('');
+        EmailSenderFetch.checkPIN(auth?.user.email, auth?.user._id, inputpin)
+            .then(data => {
+                clearInterval(reCode.current);
+                resetData(email);
+                // console.log('success');
+                setTimeout(handleClose, 1000);
+                setIsTrue(true);
+                setOpenSnackBar(true);
+            }).catch(err => {
+                pinInputRefs.current[5].focus();
+                setIsTrue(false);
+                setOpenSnackBar(true);
+            })
+
+
     }
     const handleResendCode = () => {
-        setTime(initialTiming)
-        reCode.current = setInterval(() => {
-            setTime((prev) => {
-                if (prev > 0) {
-                    // console.log('running timer');
-                    return prev - 1;
-                } else {
-                    clearInterval(reCode.current);
-                    return 0; // Đảm bảo không trả về giá trị âm
-                }
-            });
-        }, 1000)
+        EmailSenderFetch.sendPIN(auth?.user.email, auth?.user._id)
+            .then(data => {
+                setTime(initialTiming)
+                reCode.current = setInterval(() => {
+                    setTime((prev) => {
+                        if (prev > 0) {
+                            // console.log('running timer');
+                            return prev - 1;
+                        } else {
+                            clearInterval(reCode.current);
+                            return 0; // Đảm bảo không trả về giá trị âm
+                        }
+                    });
+                }, 1000)
+            })
+            .catch(err => {
+                console.log("Lỗi tạo pin: ", err);
+                window.alert(`Lỗi khi tạo mã PIN: \n${err}`);
+            })
+
     }
     const handleCloseSnackBar = () => {
         setOpenSnackBar(false)
@@ -162,7 +187,7 @@ function ChangEmailDialog(props) {
                                 <CloseIcon />
                             </Button>
                         </DialogTitle>
-                        <Typography>Nhập mã pin chúng tôi đã gửi tới email</Typography>
+                        <Typography>Nhập mã pin chúng tôi đã gửi tới {<span style={{ fontWeight: "bold", fontSize: "1.1rem", color: "#e77045" }}>email cũ</span>}</Typography>
                         <Box style={{ display: 'flex', maxWidth: '350px', gap: 4 }}>
                             {pin.map((subpin, index) => (
                                 <input
@@ -189,7 +214,7 @@ function ChangEmailDialog(props) {
                             <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleCloseSnackBar}>
                                 {
 
-                                    pin.join('') === pinCodeInitial ? (
+                                    isTrue ? (
 
                                         <Alert
                                             onClose={handleCloseSnackBar}
@@ -206,7 +231,7 @@ function ChangEmailDialog(props) {
                                             variant="filled"
                                             sx={{ width: '100%' }}
                                         >
-                                            Thất bại, kiểm tra lại mã
+                                            Thất bại, mã pin hết hạn hoặc nhập sai
                                         </Alert>
                                     )
                                 }
@@ -258,6 +283,7 @@ const Profile = () => {
     const auth = useAuth();
     const [gender, setGender] = useState('');
     const [name, setName] = useState('');
+    const [disbleSaveButton, setDisableSaveButton] = useState(false);
     const [avatar, setAvatar] = useState({
         preview: "",
         file: null
@@ -320,21 +346,22 @@ const Profile = () => {
         console.log("avatar: ", avatar)
         const formData = new FormData();
 
-        if(avatar.file) {
-            formData.append("avatar", avatar.file);  
+        if (avatar.file) {
+            formData.append("avatar", avatar.file);
         }
         formData.append("name", name);
         formData.append("email", email);
         formData.append("phone", phone);
         formData.append("gender", gender);
         formData.append("address", address);
-
+        setDisableSaveButton(true);
         UserFetch.updateInfo(auth?.user?._id, formData)
             .then(data => {
                 // console.log("Updated: ", data.data.user)
                 localStorage.setItem("access_token", data.data.access_token)
                 auth.authenUser(data.data.user);
                 window.alert("Cập nhật thông tin thành công");
+                setDisableSaveButton(false)
                 // console.log("new User:", auth.user);
             })
             .catch(err => {
@@ -416,7 +443,7 @@ const Profile = () => {
                             <input type="text" style={{ flex: 1 }} value={address} onChange={handleChangeAddress} />
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            <Button onClick={handleSaveChangeInfo} variant='contained'>Lưu</Button>
+                            <Button disabled={disbleSaveButton} onClick={handleSaveChangeInfo} variant='contained'>Lưu</Button>
                         </Box>
                     </Box>
 
