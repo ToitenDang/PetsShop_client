@@ -12,7 +12,7 @@ import CheckTokenAPI from './checkToken';
 import LogoutAPI from './logout';
 import CategoryAPI from './category';
 import ServiceAPI from './service.js'
-
+import BookingAPI from './booking.js';
 // Tạo một instance của axios
 
 const axiosInstance = axios.create({
@@ -35,4 +35,4 @@ export const ProductFetch = ProductAPI(axiosInstance);
 export const ReviewFetch = ReviewAPI(axiosInstance);  
 export const CategoryFetch = CategoryAPI(axiosInstance);
 export const ServiceFetch = ServiceAPI(axiosInstance);
-
+export const BookingFetch = BookingAPI(axiosInstance);
