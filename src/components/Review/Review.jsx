@@ -128,6 +128,7 @@ const Review = ({ entityId, type }) => {
                                 value={review?.rating}
                                 precision={0.5}
                                 size="small"
+                                readOnly
                             />
                         </Box>
                         <Typography variant="body2"><strong>Bình luận:</strong> {review?.comment}</Typography>

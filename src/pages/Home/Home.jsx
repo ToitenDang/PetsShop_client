@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import myStyle from './Home.module.scss';
 import Slider from './Slider/Slider';
@@ -8,29 +8,31 @@ import { ResponsiveSlider, ResponsiveSaleContainer, ResponsiveGroupSales, Respon
 import QuickShop from './QuickShop/QuickShop';
 import TopSaleProducts from './TopSaleProducts/TopSaleProducts';
 import ExperienceBlogs from './ExperienceBlogs/ExperienceBlogs';
-import { UserFetch } from '~/REST-API-client';
+import { PromotionFetch, UserFetch } from '~/REST-API-client';
 import { useAuth } from "~/components/Authentication/Authentication";
 import { useNavigate } from 'react-router-dom';
+import { Typography } from '@mui/material';
 function Home() {
   const navigate = useNavigate();
   const auth = useAuth();
+  const [promotions, setPromotions] = useState([]);
   // console.log("user: ", auth.user);
   useEffect(() => {
     window.scrollTo(0,0);
   }, [])
   useEffect(() => {
-    const getUsers = async () => {
-      try {
-        const users = await UserFetch.get();
-        console.log(users);
-
-      } catch(err) {
-        // Xử lý lỗi, chẳng hạn như trả lại trang login
-        // navigate("/dang-nhap")
-      }
+    async function  getPromotions() {
+      PromotionFetch.get({outdated: "false"})
+        .then((data) => {
+          console.log("Promotions data: ", data);
+          setPromotions(data.data);
+        })
+        .catch(err => {
+          console.log("Promotions error: ", err);
+        })
     }
-    // getUsers();
-  })
+    getPromotions();
+  },[])
   return (
     <>
 
@@ -47,12 +49,11 @@ function Home() {
           {/* sale part */}
           <ResponsiveSaleContainer sx={{ width: '40%', height: '100%', maxHeight: '100%', padding: '10px' }}>
             <ResponsiveGroupSales sx={{ width: '100%', height: '100%', maxHeight: '100%', overflowY: 'auto' }}>
-              {/* sale 1 */}
-              <SaleItem />
-              {/* sale 1 */}
-              <SaleItem />
-              {/* sale 1 */}
-              <SaleItem />
+              {
+                promotions.length > 0 ? promotions?.map((promotion, index) => {
+                  return <SaleItem key={index} data={promotion}/>
+                }) : <Typography sx={{fontWeight:"bold", fontSize:"1.2rem", textAlign:"center"}}>Không có khuyến mãi nào hôm nay😭</Typography>
+              }
             </ResponsiveGroupSales>
           </ResponsiveSaleContainer>
         </ResponsiveSliderAndSale>
