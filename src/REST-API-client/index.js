@@ -1,5 +1,4 @@
 
-
 // api/index.js
 import axios from 'axios';
 import { API_URL } from '~/constants';  // URL API
@@ -13,6 +12,9 @@ import CheckTokenAPI from './checkToken';
 import LogoutAPI from './logout';
 import CategoryAPI from './category';
 import OrderAPI from './order';
+import ServiceAPI from './service.js'
+import BookingAPI from './booking.js';
+import EmailSenderAPI from './email.js';
 // Tạo một instance của axios
 
 const axiosInstance = axios.create({
@@ -36,3 +38,6 @@ export const ReviewFetch = ReviewAPI(axiosInstance);
 export const CategoryFetch = CategoryAPI(axiosInstance);
 export const OrderFetch = OrderAPI(axiosInstance)
 
+export const ServiceFetch = ServiceAPI(axiosInstance);
+export const BookingFetch = BookingAPI(axiosInstance);
+export const EmailSenderFetch = EmailSenderAPI(axiosInstance);

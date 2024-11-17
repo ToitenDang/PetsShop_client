@@ -16,6 +16,9 @@ function Home() {
   const auth = useAuth();
   // console.log("user: ", auth.user);
   useEffect(() => {
+    window.scrollTo(0,0);
+  }, [])
+  useEffect(() => {
     const getUsers = async () => {
       try {
         const users = await UserFetch.get();

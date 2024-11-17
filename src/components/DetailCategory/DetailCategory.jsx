@@ -3,90 +3,73 @@ import myStyle from './DetailCategory.module.scss'
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
-import { NavLink } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { CategoryFetch } from '~/REST-API-client';
+import CircularProgress from '@mui/material/CircularProgress';
 
-const testData = [
-    {
-        _id: '1',
-        name: 'Đồ cho chó',
-        path: 'do-cho-cho',
-        subCateGory: [
-            {
-                _id: 'x1',
-                name: 'Nơi ở & Chuồng',
-                subCateGory: [],
-                path: 'noi-o-cho'
-            },
-            {
-                _id: '2x1',
-                name: 'Thức ăn $ Dinh dưỡng',
-                subCateGory: [],
-                path: 'thuc-an-cho'
-            },
-            {
-                _id: '3x1',
-                name: 'Phụ Kiện & Đồ dùng',
-                subCateGory: [],
-                path: 'phu-kien-cho'
-            },
-        ]
-    },
-    {
-        _id: '2',
-        name: 'Đồ cho mèo',
-        path: 'do-cho-meo',
-        subCateGory: [
-            {
-                _id: 'x2',
-                name: 'Nơi ở & Chuồng',
-                subCateGory: [],
-                path: 'noi-o-meo'
-            },
-            {
-                _id: '2x2',
-                name: 'Thức ăn $ Dinh dưỡng',
-                subCateGory: [],
-                path: 'thuc-an-meo'
-            },
-            {
-                _id: '3x2',
-                name: 'Phụ Kiện & Đồ dùng',
-                subCateGory: [],
-                path: 'phu-kien-meo'
-            }
-        ]
-    },
-    {
-        _id: '3',
-        name: 'Khác',
-        path: 'khac',
-        subCateGory: [
-           
-        ]
+
+const DetailCategory = ({ value, onChange }) => {
+    const location = useLocation();
+    const { tag } = useParams();
+    // console.log("tag: ", tag);
+    const navigate = useNavigate();
+    const [cateData, setCateData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    useEffect(() => {
+        // console.log("reget Data")
+        CategoryFetch.get()
+            .then(data => {
+                setCateData(data.data);
+                const mainPath = location.pathname.split('/')[1]
+                navigate(`/${mainPath}/${data.data[0].tag}`);
+                onChange(data.data[0]._id)
+                setIsLoading(false);
+            })
+            .catch(err => {
+                window.alert(`Lấy danh sách danh mục thất bại: \n ${err}`)
+            })
+    }, [])
+    if (isLoading) {
+        return (
+            <Box sx={{ width: '100%', maxHeight: '100%', height: '100%', display: 'flex', justifyContent: "center", alignItems: "center" }}>
+                <CircularProgress />
+            </Box>
+        )
     }
-]
-
-const DetailCategory = () => {
-
+    const handleNaviage = (receviedTag, id) => {
+        const mainPath = location.pathname.split('/')[1];
+        navigate(`/${mainPath}/${receviedTag}`);
+        onChange(id);
+    }
     return (
         <Box sx={{ width: '100%', maxHeight: '100%', height: '100%' }}>
             <Typography sx={{ fontWeight: 'bold', fontSize: '1.3rem', textAlign: 'center', paddingY: '10px' }}>Chi tiết danh mục</Typography>
             <Divider />
             <Box sx={{ maxHeight: 'calc( 100% - 50px )', height: 'calc( 100% - 50px )', overflowY: 'auto', overflowX: 'hidden' }}>
                 {
-                    testData.map((data, index) => {
+                    cateData?.map((data, index) => {
                         return (
-                            <Box key={index} >
-                                <NavLink to={data.path} className={({isActive}) =>isActive ? `${myStyle.selected} ${myStyle.common}` : myStyle.common} >
+                            <Box key={index} sx={{ marginTop: '4px' }}>
+                                <Box onClick={() => {
+                                    handleNaviage(data.tag, data._id)
+                                }}
+                                    className={data.tag === tag ? `${myStyle.selected} ${myStyle.common}` : myStyle.common}
+                                >
                                     {data.name}
-                                </NavLink>
+                                </Box>
                                 {
-                                    data.subCateGory.map((subData, subIndex) => {
+                                    data.subCategory.map((subData, subIndex) => {
                                         return (
-                                            <Box key={subIndex} sx={{paddingLeft:'10px'}}>
-                                                <NavLink to={subData.path} className={({isActive}) =>isActive ? `${myStyle.selected} ${myStyle.common}` : myStyle.common} >
+                                            <Box key={subIndex} sx={{ paddingLeft: '10px', marginTop: '4px' }} >
+                                                <Box
+                                                    onClick={() => {
+                                                        handleNaviage(subData.tag, subData._id)
+                                                    }}
+                                                    className={subData.tag === tag ? `${myStyle.selected} ${myStyle.common}` : myStyle.common}
+                                                >
                                                     <Typography sx={{ minWidth: '100%', maxWidth: '100%' }}>{subData.name}</Typography>
-                                                </NavLink>
+                                                </Box>
                                             </Box>
                                         )
                                     })

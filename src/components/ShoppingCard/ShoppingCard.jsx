@@ -1,4 +1,7 @@
+
 import { useState, useEffect } from 'react';
+// Styles
+import styles from './ShoppingCart.module.scss'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -8,7 +11,7 @@ import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import CartContent from './CartContent/CartContent';
 import Divider from '@mui/material/Divider';
-import styles from './ShoppingCart.module.scss';
+//import styles from './ShoppingCart.module.scss';
 import { useAuth } from "~/components/Authentication/Authentication";
 import { UserFetch } from '~/REST-API-client';
 
@@ -25,6 +28,11 @@ const ShoppingCart = () => {
         }
     }, [user]);
 
+    // useEffect(() => {
+    //     if(auth?.user) {
+    //         setCart(auth?.user?.cart);
+    //     }
+    // },[auth.user])
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
     };
@@ -139,6 +147,7 @@ const ShoppingCart = () => {
                     <Typography>{calculateTotal()}đ</Typography>
                 </Box>
                 <Button href='/thanh-toan'>Thanh toán</Button>
+
             </Box>
         </Box>
     );

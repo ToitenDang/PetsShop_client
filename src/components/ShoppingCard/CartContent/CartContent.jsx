@@ -12,6 +12,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import Checkbox from '@mui/material/Checkbox';
 
+
 const CartContent = ({ product, onRemove, onQuantityChange, onSelect, isSelected }) => {
     console.log("+++++", product);
 
