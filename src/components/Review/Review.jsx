@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button, TextField, Rating } from '@mui/material';
 //import { createNewReview, feachReviewByProductId } from "~/apis";
-import {ReviewFetch} from '~/REST-API-client/index'
+import { ReviewFetch } from '~/REST-API-client/index'
+import { useAuth } from "~/components/Authentication/Authentication";
 
 
 const Review = ({ entityId, type }) => {
+    const {user} = useAuth();
     const [reviews, setReview] = useState([]);
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
@@ -13,35 +15,38 @@ const Review = ({ entityId, type }) => {
     useEffect(() => {
         const fetchReviews = async () => {
             try {
-                
+
                 const review = await ReviewFetch.fetchReviewByEntityId(entityId, type);
-                setReview(review); 
+                setReview(review);
             } catch (error) {
-                
+
                 console.error('Error fetching review details:', error);
             }
         };
-    
-        
+
+
         fetchReviews();
     }, [entityId, type]);
 
     const handleSubmitReview = async (e) => {
         e.preventDefault();
     
-        const userId = "672890544296af5f67384a54"; // Thay thế bằng id thực tế trong localstorage
-        const user = "Dang The Kyy"; // Thay thế bằng tên người dùng thực tế trong localstorage
-    
-        if (!userId || !user) {
+        if (!user) {
             console.error("Người dùng chưa đăng nhập");
+            alert("Bạn cần đăng nhập để viết đánh giá.");
             return; // Không cho phép gửi đánh giá nếu người dùng chưa đăng nhập
+        }
+    
+        if (!rating || !comment) {
+            alert("Bạn chưa nhập đánh giá!");
+            return;
         }
     
         const newReview = {
             entityId,
             type,
-            userId: userId,
-            user: user,
+            userId: user._id,
+            user: user.name,
             rating,
             comment,
             createdAt: new Date().toISOString()
@@ -51,21 +56,30 @@ const Review = ({ entityId, type }) => {
             // Gọi API để tạo đánh giá mới
             const response = await ReviewFetch.createNewReview(newReview);
     
-            // Cập nhật danh sách đánh giá sau khi tạo thành công, sử dụng dữ liệu trả về từ API
-            setReview((prev) => [...prev, response.data]); 
+            // Kiểm tra nếu server trả về lỗi, hiển thị thông báo lỗi cho người dùng
+            if (response.status === "ERROR") {
+                alert(response.message);  // Hiển thị thông báo lỗi từ server
+                return;
+            }
+    
+            // Cập nhật danh sách đánh giá sau khi tạo thành công
+            alert(response.message); // Hiển thị thông báo thành công
+            setReview((prev) => [...prev, response.data]);
     
             // Đặt lại giá trị rating và comment sau khi tạo đánh giá mới
             setRating(0);
             setComment('');
-
+    
         } catch (error) {
             console.error('Error creating review:', error);
+            alert("Đã xảy ra lỗi khi gửi đánh giá. Vui lòng thử lại.");
         }
-    };    
+    };
     
 
+
     return (
-        <Box 
+        <Box
             sx={{
                 marginTop: 4,
                 width: '100%',
@@ -74,7 +88,7 @@ const Review = ({ entityId, type }) => {
                 alignItems: 'center',
                 gap: 2
             }}>
-            <Box 
+            <Box
                 sx={{
                     width: { xs: '100%', md: '80%' },
                     border: (theme) => (theme.palette.mode === 'dark' ? '1px solid #fff' : '1px solid #000'),
@@ -101,7 +115,7 @@ const Review = ({ entityId, type }) => {
                         fullWidth
                         sx={{ marginTop: 1 }}
                     />
-                    <Button type="submit" variant="contained" onClick={handleSubmitReview} sx={{ marginTop: 2 }}>Gửi đánh giá</Button>
+                    <Button type="submit" variant="contained" sx={{ marginTop: 2 }}>Gửi đánh giá</Button>
                 </form>
             </Box>
 
@@ -116,24 +130,25 @@ const Review = ({ entityId, type }) => {
                 }}
             >
                 <Typography variant="h5">Đánh giá của người tiêu dùng</Typography>
-                {reviews && reviews.length === 0 
-                ? 
+                {reviews && reviews.length === 0
+                    ?
                     <Typography>Sản phẩm hiện chưa có đánh giá nào!</Typography>
-                : reviews.map(review => (
-                    <Box key={review?._id} sx={{ padding: 2, marginTop: 1 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                            <Typography variant="body1"><strong>{review.user}</strong></Typography>
-                            <Rating
-                                name="rating"
-                                value={review?.rating}
-                                precision={0.5}
-                                size="small"
-                            />
+                    : reviews.map(review => (
+                        <Box key={review?._id} sx={{ padding: 2, marginTop: 1 }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                                <Typography variant="body1"><strong>{review.user}</strong></Typography>
+                                <Rating
+                                    name="rating"
+                                    value={review?.rating}
+                                    precision={0.5}
+                                    size="small"
+                                    readOnly  
+                                />
+                            </Box>
+                            <Typography variant="body2"><strong>Bình luận:</strong> {review?.comment}</Typography>
+                            <Typography variant="body2" sx={{ fontStyle: 'italic' }}>{new Date(review.createdAt).toLocaleString()}</Typography>
                         </Box>
-                        <Typography variant="body2"><strong>Bình luận:</strong> {review?.comment}</Typography>
-                        <Typography variant="body2" sx={{ fontStyle: 'italic' }}>{new Date(review.createdAt).toLocaleString()}</Typography>
-                    </Box>
-                ))}
+                    ))}
             </Box>
         </Box>
     );

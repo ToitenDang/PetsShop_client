@@ -22,7 +22,7 @@ import { Link } from 'react-router-dom';
 
 function Appbar() {
   const auth = useAuth();
-  console.log("cart length: ", auth?.user?.cart.length)
+  //console.log("cart length: ", auth?.user?.cart.length)
   console.log('rerender appbar')
   return (
     <Box className={mystyles.mainContainer}
@@ -51,7 +51,7 @@ function Appbar() {
             display: 'flex', alignItems: 'center', gap: 2
           }}>
             {/* shopping cart */}
-            <ShoppingCart quantity={auth?.user?.cart.length || 0} />
+            <ShoppingCart quantity={auth?.user?.cart?.length || 0} />
             {/* Avatar */}
             {
               !auth.user ?

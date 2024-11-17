@@ -17,6 +17,7 @@ import HeaderLayout from './Layout/HeaderLayout'
 import NoFound from './pages/NoFound/NoFound'
 import Service from './pages/Service/Service'
 import { AuthProvider } from './components/Authentication/Authentication'
+import Payment from './pages/Payment/Payment'
 function App() {
 
   return (
@@ -25,6 +26,8 @@ function App() {
         <Route path='/' element={<HeaderLayout />}>
           <Route index element={<Home />} />
           <Route path='lien-he' element={<Contact />} />
+          <Route path='thanh-toan' element={<Payment />} />
+       
           <Route path='product/:id' element={<Product />} />
           <Route path='do-thu-cung' element={<ListProduct />} />
           <Route path='do-thu-cung/:tag' element={<ListProduct />}/>

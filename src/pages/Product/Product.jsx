@@ -3,17 +3,22 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Typography, Box, RadioGroup, FormControlLabel, Radio, IconButton, Rating, TextField } from '@mui/material';
 import { Add, Remove } from '@mui/icons-material';
 import Review from '~/components/Review/Review';
-import {ProductFetch} from '~/REST-API-client/index'
+import {ProductFetch, UserFetch} from '~/REST-API-client/index'
+import { useAuth } from "~/components/Authentication/Authentication";
+
+
+
 
 
 //import { feachProductDetailsAPI } from "~/apis"
 
 export default function Product() {
+    const {user, updateCart} = useAuth();
     const {id} = useParams();
     const [product, setProduct] = useState(null)
     const navigate = useNavigate();
     const [quantity, setQuantity] = useState(1);
-    const [size, setSize] = useState('');
+    //const [size, setSize] = useState('');
 
     useEffect(() => {
         
@@ -37,9 +42,43 @@ export default function Product() {
     const increaseQuantity = () => setQuantity(prev => Math.min(prev + 1, 99));
     const decreaseQuantity = () => setQuantity(prev => Math.max(prev - 1, 1));
 
-    const handleAddToCart = () => {
-        navigate('/cart');
+    const handleAddToCart = async () => {
+        // Kiểm tra xem người dùng đã đăng nhập hay chưa
+        if (!user) {
+            alert("Vui lòng đăng nhập để mua sản phẩm!");
+            navigate('/login'); // Điều hướng người dùng tới trang đăng nhập
+            return;
+        }
+    
+        const productToAdd = {
+            productId: product._id,
+            name: product.name,
+            //size: size,
+            img: 'https://th.bing.com/th/id/OIP.Y9MaxiVxV-8HnzG7MuNC3wHaE8?w=302&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7',
+            quantity: quantity,
+            price: product.price
+        };
+    
+        if(productToAdd.quantity > product.quantity){
+            alert(`Số lượng sản phẩm này chỉ còn số lượng là: ${product.quantity}`);
+            return;
+        }
+    
+        try {
+            console.log("user", user);
+            
+            // Gọi API để thêm sản phẩm vào giỏ hàng trên server
+            const updatedCart = await UserFetch.addToCart(user._id, productToAdd);
+    
+            // Sau khi thêm vào giỏ hàng thành công, cập nhật lại giỏ hàng trong state của ứng dụng
+            updateCart(updatedCart.data);
+    
+            console.log('Giỏ hàng sau khi thêm sản phẩm: ', updatedCart.data);
+        } catch (error) {
+            console.error('Không thể thêm sản phẩm vào giỏ hàng:', error);
+        }
     };
+    
 
     return (
         <Box
@@ -103,11 +142,11 @@ export default function Product() {
                     >
 
 
-                        <Typography>
+                        <Typography variant='h4'>
                             {product?.name}
                         </Typography>
                         <hr />
-                        <Typography variant="body2">{product?.desc}</Typography>
+                        <Typography variant="subtitle1">{product?.desc}</Typography>
                         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
                             {product?.price_before_discount && (
                                 <>
@@ -125,7 +164,7 @@ export default function Product() {
                         </Box>
 
                         <Typography variant="body1">Kích thước:</Typography>
-                        <RadioGroup row value={size} sx={{ gap: 1.5 }} onChange={(e) => setSize(e.target.value)}>
+                        {/* <RadioGroup row value={size} sx={{ gap: 1.5 }} onChange={(e) => setSize(e.target.value)}>
                             {product?.size?.map((s) => (
                                 <FormControlLabel
                                     key={s}
@@ -134,18 +173,18 @@ export default function Product() {
                                     label={<Typography>{s}</Typography>}
                                 />
                             ))}
-                        </RadioGroup>
+                        </RadioGroup> */}
 
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <IconButton onClick={decreaseQuantity}><Remove /></IconButton>
-                            <Typography variant="body1">{quantity}</Typography>
+                            <Typography variant="body1" sx={{padding: '0 16px'}}>{quantity} </Typography>
                             <IconButton onClick={increaseQuantity}><Add /></IconButton>
                         </Box>
 
                         <Button variant="contained" onClick={handleAddToCart} sx={{ marginTop: 2 }}>
                             Thêm vào giỏ hàng
                         </Button>
-                        <Button variant="contained" onClick={handleAddToCart} sx={{ margin: '16px 0 0 16px' }}>
+                        <Button variant="outlined" onClick={handleAddToCart} sx={{ margin: '16px 0 0 16px' }}>
                             Mua ngay
                         </Button>
                     </Box>

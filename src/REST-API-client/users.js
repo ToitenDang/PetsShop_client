@@ -133,17 +133,130 @@ const UserAPI = (axiosInstance) => {
             }
         }
 
+
         return {
             checkOldPass,
             reset
         }
     }
+
+    async function addToCart(id, data) {
+        const access_token = localStorage.getItem("access_token");
+        try {
+            const res = await axiosInstance.patch(`/users/add-to-cart/${id}`, data, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                    "Content-Type": "application/json"
+                }
+            })
+            // console.log(res)
+            return res.data;
+        } catch (error) {
+            if (error.response) {
+                throw new Error(error.response.data.message.message);
+            } else if (error.request) {
+                throw new Error("Server không phản hồi");
+            } else {
+                throw new Error(error.message)
+            }
+        }
+    }
+
+    async function updateCart(id, data) {
+        const access_token = localStorage.getItem("access_token");
+        try {
+            const res = await axiosInstance.patch(`/users/update-cart/${id}`, data, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                    "Content-Type": "application/json"
+                }
+            })
+            // console.log(res)
+            return res.data;
+        } catch (error) {
+            if (error.response) {
+                throw new Error(error.response.data.message.message);
+            } else if (error.request) {
+                throw new Error("Server không phản hồi");
+            } else {
+                throw new Error(error.message)
+            }
+        }
+    }
+
+    // Thêm phương thức removeFromCart
+    async function removeFromCart(id, productId) {
+        const access_token = localStorage.getItem("access_token");
+        try {
+            const res = await axiosInstance.patch(`/users/remove-from-cart/${id}`,  {productId} , {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                    "Content-Type": "application/json"
+                }
+            });
+            return res.data;
+        } catch (error) {
+            if (error.response) {
+                throw new Error(error.response.data.message.message);
+            } else if (error.request) {
+                throw new Error("Server không phản hồi");
+            } else {
+                throw new Error(error.message);
+            }
+        }
+    }
+
+    async function clearCart(id) {
+        const access_token = localStorage.getItem("access_token");
+        try {
+            const res = await axiosInstance.patch(`/users/clear-cart/${id}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                    "Content-Type": "application/json"
+                }
+            });
+            return res.data;
+        } catch (error) {
+            if (error.response) {
+                throw new Error(error.response.data.message.message);
+            } else if (error.request) {
+                throw new Error("Server không phản hồi");
+            } else {
+                throw new Error(error.message);
+            }
+        }
+    }
+
+    async function sendMessage(data) {
+        try{
+            const res = await axiosInstance.post("/users/send-message", data)
+            return res.data
+        }
+        catch(error) {
+            if(error.response){
+                throw new Error(error.response.data.message.message)
+            }else if (error.request) {
+                throw new Error("Server không phản hồi");
+            } else {
+                throw new Error(error.message);
+            }
+        }
+        
+    }
+    
+    
+    
     return {
         get,
         getById,
         updateInfo,
         updateShippingAddress,
-        resetPassword
+        resetPassword,
+        addToCart,
+        updateCart,
+        removeFromCart,
+        clearCart,
+        sendMessage
     }
 }
 
