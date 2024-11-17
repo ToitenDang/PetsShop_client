@@ -6,7 +6,12 @@ import {
   Paper,
   Box,
   Dialog,
-  Alert
+  Alert,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
 } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerSchema } from '../../utils/rules'; // Đường dẫn đến file validate
@@ -23,6 +28,7 @@ const Register = () => {
     confirmPassword: '',
     address: '',
     phone: '',
+    gender: 'male'
   });
   const [errors, setErrors] = useState({});
 
@@ -42,7 +48,7 @@ const Register = () => {
       await registerSchema.validate(formData, { abortEarly: false });
       // Nếu tất cả các trường hợp đều hợp lệ
 
-      // console.log('Form data:', formData);
+      console.log('Form data:', formData);
       try {
         const data = await RegisterFetch.post(formData);
         // console.log("data", data);
@@ -58,6 +64,7 @@ const Register = () => {
           confirmPassword: '',
           address: '',
           phone: '',
+          gender: 'male'
         });
         setTimeout(() => {
           setOpenDialog(false);
@@ -184,6 +191,20 @@ const Register = () => {
               error={!!errors.phone}
               helperText={errors.phone}
             />
+            {/* Gender Radio Buttons */}
+            <FormControl component="fieldset" fullWidth sx={{ marginTop: 2 }}>
+              <FormLabel component="legend">Giới tính</FormLabel>
+              <RadioGroup
+                row
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+              >
+                <FormControlLabel value="male" control={<Radio />} label="Nam" />
+                <FormControlLabel value="female" control={<Radio />} label="Nữ" />
+                <FormControlLabel value="other" control={<Radio />} label="Khác" />
+              </RadioGroup>
+            </FormControl>
             <Button type="submit" fullWidth variant="contained" color="primary" sx={{ marginTop: 2 }}>
               Đăng Ký
             </Button>

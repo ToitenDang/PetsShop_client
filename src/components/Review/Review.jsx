@@ -30,17 +30,18 @@ const Review = ({ entityId, type }) => {
 
     const handleSubmitReview = async (e) => {
         e.preventDefault();
-
+    
         if (!user) {
             console.error("Người dùng chưa đăng nhập");
+            alert("Bạn cần đăng nhập để viết đánh giá.");
             return; // Không cho phép gửi đánh giá nếu người dùng chưa đăng nhập
         }
-
-        if(!rating || !comment){
-            alert("Bạn chưa nhập đánh giá!")
+    
+        if (!rating || !comment) {
+            alert("Bạn chưa nhập đánh giá!");
             return;
         }
-
+    
         const newReview = {
             entityId,
             type,
@@ -50,22 +51,31 @@ const Review = ({ entityId, type }) => {
             comment,
             createdAt: new Date().toISOString()
         };
-
+    
         try {
             // Gọi API để tạo đánh giá mới
             const response = await ReviewFetch.createNewReview(newReview);
-
-            // Cập nhật danh sách đánh giá sau khi tạo thành công, sử dụng dữ liệu trả về từ API
+    
+            // Kiểm tra nếu server trả về lỗi, hiển thị thông báo lỗi cho người dùng
+            if (response.status === "ERROR") {
+                alert(response.message);  // Hiển thị thông báo lỗi từ server
+                return;
+            }
+    
+            // Cập nhật danh sách đánh giá sau khi tạo thành công
+            alert(response.message); // Hiển thị thông báo thành công
             setReview((prev) => [...prev, response.data]);
-
+    
             // Đặt lại giá trị rating và comment sau khi tạo đánh giá mới
             setRating(0);
             setComment('');
-
+    
         } catch (error) {
             console.error('Error creating review:', error);
+            alert("Đã xảy ra lỗi khi gửi đánh giá. Vui lòng thử lại.");
         }
     };
+    
 
 
     return (

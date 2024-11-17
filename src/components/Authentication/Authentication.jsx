@@ -27,9 +27,16 @@ export const AuthProvider = ({children}) => {
     const clearAuthenUser = () => {
         setUser(null)
     }
+    // Method to update the cart in the state
+    const updateCart = (newCart) => {
+        setUser((prevUser) => ({
+            ...prevUser,
+            cart: newCart, // Cập nhật giỏ hàng mới
+        }));
+    };
 
     return (
-    <AuthContext.Provider value={{user, authenUser, clearAuthenUser}}>
+    <AuthContext.Provider value={{user, authenUser, clearAuthenUser, updateCart}}>
         {children}
     </AuthContext.Provider>
     )
