@@ -16,8 +16,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import CircularProgress from '@mui/material/CircularProgress';
 import Appointment from './Appointment';
-import Avatar from '@mui/material/Avatar';
-import Rating from '@mui/material/Rating';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { BookingFetch, ServiceFetch } from '~/REST-API-client';
