@@ -2,9 +2,9 @@
 const ProductAPI = (axiosInstance) => {
 
     // Lấy tất cả sản phẩm
-    async function getAll() {
+    async function getAllProduct(page) {
       try {
-        const res = await axiosInstance.get(`/product`);
+        const res = await axiosInstance.get(`/product?page=${page}&limit=10`);
         return res.data;
       } catch (error) {
         handleApiError(error);
@@ -43,7 +43,7 @@ const ProductAPI = (axiosInstance) => {
     }
   
     return {
-      getAll,
+      getAllProduct,
       getById,
       fetchTopSaleProducts,
     };

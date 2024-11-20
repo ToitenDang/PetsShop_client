@@ -4,28 +4,33 @@ import { useState } from 'react';
 import contactImage from '../../assets/contact.png';
 import ZaloIcon from '../../assets/zalo-icon.png';
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
-import theme from '~/theme';
+import { UserFetch } from '~/REST-API-client';
 
 function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    content: ''
+    message: ''
   });
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value
+        }));
+    };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Xử lý dữ liệu form ở đây
-    console.log(formData);
-  };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await UserFetch.sendMessage(formData);
+            alert(response.message); // Nếu thành công, lưu thông báo thành công
+        } catch (err) {
+            alert(err.message); // Nếu có lỗi, hiển thị thông báo lỗi
+        } 
+    };
 
   const handleZaloClick = () => {
     // Thay link Zalo
@@ -72,6 +77,7 @@ function Contact() {
           }}
         >
           <iframe
+          //src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4255.230312553549!2d106.76933817540052!3d10.850632389302671!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752763f23816ab%3A0x282f711441b6916f!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBTxrAgcGjhuqFtIEvhu7kgdGh14bqtdCBUaMOgbmggcGjhu5EgSOG7kyBDaMOtIE1pbmg!5e1!3m2!1svi!2s!4v1731829227547!5m2!1svi!2s"
             style={{ width: '100%', height: '100%' }}
             allowFullScreen
             loading="lazy"
@@ -124,11 +130,11 @@ function Contact() {
             />
 
             <TextField
-              label="Content"
+              label="Message"
               multiline
               rows={4}
-              name="content"
-              value={formData.content}
+              name="message"
+              value={formData.message}
               onChange={handleChange}
               required
               sx={{ marginBottom: 2 }}
@@ -193,7 +199,6 @@ function Contact() {
           </Button>
         </Box>
       </Box>
-
 
     </Box>
   );
