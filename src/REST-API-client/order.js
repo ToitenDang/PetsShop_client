@@ -13,8 +13,8 @@ const OrderAPI = (axiosInstance) => {
       const res = await axiosInstance.post(`/order/create/`, orderData, {
         headers: {
           Authorization: `Bearer ${access_token}`,
-          "Content-Type": "application/json"
-        }
+          'Content-Type': 'application/json' // Đảm bảo gửi multipart/form-data
+      },
       });
       console.log("Response from server:", res.data);  // Log dữ liệu trả về từ server
       return res.data;

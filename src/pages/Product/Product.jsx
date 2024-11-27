@@ -18,7 +18,7 @@ export default function Product() {
     const [product, setProduct] = useState(null)
     const navigate = useNavigate();
     const [quantity, setQuantity] = useState(1);
-    //const [size, setSize] = useState('');
+    const [image, setImage] = useState('');
 
     useEffect(() => {
         
@@ -39,6 +39,7 @@ export default function Product() {
                 }
 
                 setProduct(product.data); 
+                setImage(product.data.img)
             } catch (error) {
                 
                 console.error('Error fetching product details:', error);
@@ -56,7 +57,7 @@ export default function Product() {
         // Kiểm tra xem người dùng đã đăng nhập hay chưa
         if (!user) {
             alert("Vui lòng đăng nhập để mua sản phẩm!");
-            navigate('/login'); // Điều hướng người dùng tới trang đăng nhập
+            navigate('/'); // Điều hướng người dùng tới trang đăng nhập
             return;
         }
     
@@ -96,7 +97,7 @@ export default function Product() {
         // Kiểm tra nếu người dùng chưa đăng nhập
         if (!user) {
             alert("Vui lòng đăng nhập để mua sản phẩm!");
-            navigate('/login'); // Điều hướng người dùng tới trang đăng nhập
+            navigate('/'); // Điều hướng người dùng tới trang đăng nhập
             return;
         }
     
@@ -104,6 +105,7 @@ export default function Product() {
         const productToBuy = {
             productId: product._id,
             name: product.name,
+            img: image,
             quantity: quantity,
             price: product.price,
         };
@@ -115,6 +117,10 @@ export default function Product() {
         // Điều hướng sang trang thanh toán và truyền thông tin sản phẩm
         navigate('/thanh-toan', { state: { productsToPay: [productToBuy] } });
     };
+
+    const handleImageClick = (thumb) => {
+        setImage(thumb)
+    }
     
 
     return (
@@ -145,20 +151,20 @@ export default function Product() {
                     <Box display="flex" sx={{ width: { xs: '100%', md: '45%' }, height: 'auto', flexDirection: 'column', alignItems: 'center' }}>
                         <Box>
                             <img
-                            src= 'https://th.bing.com/th/id/OIP.Y9MaxiVxV-8HnzG7MuNC3wHaE8?w=302&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7'
+                            src= {image||'https://th.bing.com/th/id/OIP.Y9MaxiVxV-8HnzG7MuNC3wHaE8?w=302&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7'}
                             //src={product?.img}
                             alt={product?.name} style={{ maxWidth: '100%', height: 'auto', cursor: 'zoom-in' }} />
                         </Box>
 
                         <Box display="flex" justifyContent="center" sx={{ marginTop: 2 }}>
-                            <img
+                            {/* <img
                                 //key={index}
                                 src={product?.img}
                                 //alt={product?.name}
                                 style={{ width: '60px', height: '60px', margin: '0 5px', cursor: 'pointer' }}
                             //onClick={() => handleImageClick(thumb.url)} // Hàm để hiển thị ảnh lớn
-                            />
-                            {/* {product?.thumbnail.map((thumb, index) => (
+                            /> */}
+                            {product?.thumbnail.map((thumb, index) => (
                                 <img
                                     key={index}
                                     src={thumb.url}
@@ -166,7 +172,7 @@ export default function Product() {
                                     style={{ width: '50px', height: '50px', margin: '0 5px', cursor: 'pointer' }}
                                     onClick={() => handleImageClick(thumb.url)} // Hàm để hiển thị ảnh lớn
                                 />
-                            ))} */}
+                            ))}
                         </Box>
                     </Box>
 

@@ -83,6 +83,9 @@ const Payment = () => {
             address,
         };
 
+        console.log("data tao order", orderData);
+        
+
         try {
             if (paymentMethod === 'cod') {
                 const response = await OrderFetch.createNewOrder(orderData);
@@ -171,7 +174,7 @@ const Payment = () => {
                                             <CardMedia
                                                 component="img"
                                                 sx={{ width: 100, ml: 1 }}
-                                                image={product.image}
+                                                image={product.img}
                                                 alt="Ảnh sản phẩm"
                                             />
                                             <CardContent sx={{ padding: '8px' }}>

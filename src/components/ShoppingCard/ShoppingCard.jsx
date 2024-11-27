@@ -89,6 +89,7 @@ const ShoppingCart = () => {
 
     // Điều hướng đến trang thanh toán và truyền giỏ hàng
     const handleCheckout = () => {
+        setOpen(false);
         navigate('/thanh-toan', { state: { productsToPay: selectedItems , cartItems: cartItems} }); // Truyền selectedItems và cartItems qua state
     };
 
