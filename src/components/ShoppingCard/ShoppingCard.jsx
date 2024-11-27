@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from 'react';
-// Styles
-import styles from './ShoppingCart.module.scss'
+import { useNavigate } from 'react-router-dom';
+import styles from './ShoppingCart.module.scss';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -11,13 +10,12 @@ import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import CartContent from './CartContent/CartContent';
 import Divider from '@mui/material/Divider';
-//import styles from './ShoppingCart.module.scss';
 import { useAuth } from "~/components/Authentication/Authentication";
 import { UserFetch } from '~/REST-API-client';
 
-
 const ShoppingCart = () => {
-    const {user} = useAuth();
+    const { user } = useAuth();
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [cartItems, setCartItems] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]); // Lưu các sản phẩm được chọn
@@ -28,21 +26,16 @@ const ShoppingCart = () => {
         }
     }, [user]);
 
-    // useEffect(() => {
-    //     if(auth?.user) {
-    //         setCart(auth?.user?.cart);
-    //     }
-    // },[auth.user])
+    // Toggle Drawer (mở hoặc đóng giỏ hàng)
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
     };
 
+    // Cập nhật số lượng sản phẩm trong giỏ hàng
     const handleQuantityChange = async (productId, action) => {
-        
-        
         let updatedCart = [...cartItems];
         const index = updatedCart.findIndex(item => item.productId === productId);
-    
+
         if (index !== -1) {
             // Cập nhật số lượng trong giỏ hàng (tăng hoặc giảm)
             if (action === 'increase') {
@@ -50,79 +43,66 @@ const ShoppingCart = () => {
             } else if (action === 'decrease' && updatedCart[index].quantity > 1) {
                 updatedCart[index].quantity -= 1;
             }
-            const newData = {
-                productId,
-                quantity: updatedCart[index].quantity
 
-            }
-            console.log("productId", newData);
-            // Gọi API để cập nhật giỏ hàng trên server
+            const newData = { productId, quantity: updatedCart[index].quantity };
+
             try {
+                // Gọi API để cập nhật giỏ hàng trên server
                 const updatedCartFromAPI = await UserFetch.updateCart(user._id, newData);
-                // Sau khi API trả về giỏ hàng đã cập nhật, cập nhật giỏ hàng trong state
-                console.log("Quai dan that a: ", updatedCartFromAPI.data);
-                
-                //setCartItems(updatedCartFromAPI.data.data);
-                setCartItems(updatedCartFromAPI.data.data);
+                setCartItems(updatedCartFromAPI.data.data); // Cập nhật giỏ hàng từ API
             } catch (error) {
                 console.error('Lỗi khi cập nhật giỏ hàng:', error);
             }
         }
     };
-    
 
+    // Xóa sản phẩm khỏi giỏ hàng
     const handleRemoveFromCart = async (productId) => {
-        console.log("Quai that", productId);
-        
         try {
             const updatedCart = await UserFetch.removeFromCart(user._id, productId);
-            console.log("Giỏ hàng sau khi xóa sản phẩm: ", updatedCart);
-            // Cập nhật giỏ hàng trong state hoặc context sau khi xóa thành công
-            setCartItems(updatedCart.data)
+            setCartItems(updatedCart.data); // Cập nhật giỏ hàng sau khi xóa sản phẩm
         } catch (error) {
-            console.error("Lỗi khi xóa sản phẩm khỏi giỏ hàng: ", error);
+            console.error('Lỗi khi xóa sản phẩm khỏi giỏ hàng:', error);
         }
     };
 
-    const handleSelectItem = (productId, isSelected) => {
+    const handleSelectItem = (product, isSelected) => {
         let updatedSelectedItems = [...selectedItems];
         if (isSelected) {
-            updatedSelectedItems.push(productId);
+            updatedSelectedItems.push(product); // Thêm đối tượng sản phẩm vào mảng selectedItems
         } else {
-            updatedSelectedItems = updatedSelectedItems.filter(id => id !== productId);
+            updatedSelectedItems = updatedSelectedItems.filter(item => item.productId !== product.productId); // Loại bỏ sản phẩm khi bỏ chọn
         }
         setSelectedItems(updatedSelectedItems);
     };
-
+    
+    // Tính tổng tiền của các sản phẩm được chọn
     const calculateTotal = () => {
-        console.log("cartItem", cartItems);
-        
-        if (selectedItems.length === 0) {
-            // Nếu không có sản phẩm nào được chọn, tính tổng tất cả sản phẩm
-            return cartItems
-                .reduce((total, item) => total + item.price * item.quantity, 0)
-                .toLocaleString('vi-VN');
+        let total = 0;
+        if (selectedItems.length > 0) {
+            total = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
         } else {
-            // Nếu có sản phẩm được chọn, tính tổng của những sản phẩm đó
-            return cartItems
-                .filter(item => selectedItems.includes(item.productId)) // Lọc sản phẩm được chọn
-                .reduce((total, item) => total + item.price * item.quantity, 0)
-                .toLocaleString('vi-VN');
+            total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
         }
+        return total.toLocaleString('vi-VN');
+    };
+
+    // Điều hướng đến trang thanh toán và truyền giỏ hàng
+    const handleCheckout = () => {
+        navigate('/thanh-toan', { state: { productsToPay: selectedItems , cartItems: cartItems} }); // Truyền selectedItems và cartItems qua state
     };
 
     const DrawerList = (
         <Box sx={{ display: 'flex', flexDirection: 'column', width: 450, overflow: 'hidden' }} role="presentation">
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 10px' }}>
                 <Typography sx={{ fontSize: '1.3rem', fontWeight: 'bold' }}>Giỏ hàng của bạn</Typography>
-                <Tooltip title="Close shopping cart">
+                <Tooltip title="Đóng giỏ hàng">
                     <Button onClick={toggleDrawer(false)}>
                         <CloseIcon />
                     </Button>
                 </Tooltip>
             </Box>
             <Divider />
-
             <Box sx={{ overflowY: 'auto', padding: '5px', flex: 1 }}>
                 {cartItems.length > 0 ? (
                     cartItems.map((item) => (
@@ -130,24 +110,22 @@ const ShoppingCart = () => {
                             key={item.productId}
                             product={item}
                             onQuantityChange={handleQuantityChange}
-                            onToggleSelect={handleSelectItem}
                             onRemove={handleRemoveFromCart}
-                            isSelected={selectedItems.includes(item.productId)}
+                            onSelect={handleSelectItem} // Truyền hàm onSelect
+                            isSelected={selectedItems.some(selected => selected.productId === item.productId)} // Kiểm tra nếu sản phẩm đã được chọn
                         />
                     ))
                 ) : (
                     <Typography variant="body1" sx={{ padding: 2 }}>Giỏ hàng của bạn trống</Typography>
                 )}
             </Box>
-
             <Divider />
             <Box sx={{ paddingX: '20px', textAlign: 'center', paddingY: '10px' }}>
                 <Box sx={{ paddingX: '10px', display: 'flex', justifyContent: 'space-between' }}>
                     <Typography variant="h5">Tổng tiền: </Typography>
                     <Typography>{calculateTotal()}đ</Typography>
                 </Box>
-                <Button href='/thanh-toan'>Thanh toán</Button>
-
+                <Button onClick={handleCheckout}>Thanh toán</Button>
             </Box>
         </Box>
     );
@@ -157,9 +135,7 @@ const ShoppingCart = () => {
             <Box onClick={toggleDrawer(true)} className={styles.cartContainer}>
                 <ShoppingCartOutlinedIcon className={styles.cartIcon} />
                 <Box className={styles.cartQuantityContainer}>
-                    <p className={styles.cartQuantity}>
-                        {cartItems.length}
-                    </p>
+                    <p className={styles.cartQuantity}>{cartItems.length}</p>
                 </Box>
             </Box>
 

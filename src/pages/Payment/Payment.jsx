@@ -1,71 +1,119 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from "~/components/Authentication/Authentication";
 import { Box, Typography, TextField, Button, Card, CardContent, CardMedia, List, ListItem, Radio, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
-import { OrderFetch } from '~/REST-API-client';
-import { useNavigate } from 'react-router-dom';
+import { OrderFetch, UserFetch } from '~/REST-API-client';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Payment = () => {
     const { user, updateCart } = useAuth();
-    const [products, setProducts] = useState([]);
-    const [addressShippings, setAddressShippings] = useState([]);
-    const [note, setNote] = useState('');
-    const [address, setAddress] = useState(''); // Mặc định là chuỗi rỗng
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
+    const location = useLocation(); // Dùng để nhận dữ liệu truyền xuống nếu có
 
+    const [products, setProducts] = useState([]); // Danh sách sản phẩm
+    const [addressShippings, setAddressShippings] = useState([]); // Địa chỉ giao hàng
+    const [note, setNote] = useState(''); // Ghi chú
+    const [address, setAddress] = useState(''); // Địa chỉ giao hàng hiện tại
+    const [paymentMethod, setPaymentMethod] = useState('cod'); // Phương thức thanh toán (mặc định là COD)
+    
     useEffect(() => {
-        if (user) {
-            if (user.cart) {
-                setProducts(user.cart);
+        console.log("Location state:", location.state.cartItems);
+        console.log("User cart:", user?.cart);
+    
+        // Kiểm tra nếu có dữ liệu từ location.state
+        if (location.state) {
+            // Nếu có sản phẩm cần thanh toán trong location.state
+            if (Array.isArray(location.state.productsToPay) && location.state.productsToPay.length > 0) {
+                console.log("Setting products from state:", location.state.productsToPay);
+                setProducts(location.state.productsToPay);
+            } else {
+                console.log("No productsToPay in location state, using cart instead.");
+                // Nếu không có sản phẩm cần thanh toán, sử dụng giỏ hàng từ user
+                setProducts(user.cart || []);  // Sử dụng cartItems nếu có, nếu không thì trả về mảng rỗng
             }
-
-            if (user.shippingAddress) {
+    
+            // Kiểm tra và cập nhật địa chỉ giao hàng
+            if (location.state.shippingAddress) {
+                console.log("Setting address from location state:", location.state.shippingAddress);
+                setAddress(location.state.shippingAddress);
+            } else if (user?.shippingAddress) {
+                console.log("Setting address from user shippingAddress:", user.shippingAddress);
                 setAddressShippings(user.shippingAddress);
-                // Chỉ khi nhận được shippingAddress, hãy gán giá trị mặc định cho address
-                setAddress(user.shippingAddress[0]?.address || '');
+                setAddress(user.shippingAddress[0]?.address || ''); // Lấy địa chỉ đầu tiên nếu có
+            }
+        } else {
+            // Nếu không có location.state, lấy dữ liệu từ user
+            console.log("No location state, using cart and address from user.");
+            setProducts(user?.cart || []); // Đảm bảo user.cart là mảng
+            if (user?.shippingAddress) {
+                setAddressShippings(user.shippingAddress);
+                setAddress(user.shippingAddress[0]?.address || ''); // Lấy địa chỉ đầu tiên nếu có
             }
         }
-    }, [user]); // Phụ thuộc vào user, mỗi khi user thay đổi sẽ cập nhật lại
-
+    }, [user, location.state]);  // Lắng nghe sự thay đổi của user.cart và location.state
+    
+    
+    
+    
     const totalAmount = products.reduce((total, item) => total + item.price * item.quantity, 0);
-    const shippingFee = 20000; // Giả sử phí ship
+    const shippingFee = 20000; // Phí ship giả định
     const grandTotal = totalAmount + shippingFee;
-
-    const [paymentMethod, setPaymentMethod] = useState('cod'); // Mặc định chọn COD
 
     const handlePaymentChange = (event) => {
         setPaymentMethod(event.target.value);
     };
 
-    // Cập nhật địa chỉ khi chọn một địa chỉ mới từ danh sách
+    // Cập nhật địa chỉ khi chọn từ danh sách địa chỉ
     const handleAddressChange = (event) => {
-        setAddress(event.target.value); // Cập nhật địa chỉ được chọn
+        setAddress(event.target.value);
     };
 
-    // Hàm gửi yêu cầu tạo đơn hàng khi chọn COD
-    const handleSubmit = async (e) => {
+    // Hàm gửi yêu cầu tạo đơn hàng
+    const handleSubmit = async () => {
         const orderData = {
             customerId: user._id,
             products: products.map(product => ({
                 productId: product.productId,
-                name: product.name,
                 quantity: product.quantity,
                 price: product.price,
-                img: product.img
             })),
             totalAmount,
-            grandTotal,
             shippingFee,
             note,
             paymentMethod,
-            address // Gửi địa chỉ đã chọn từ Select
+            address,
         };
 
         try {
             if (paymentMethod === 'cod') {
                 const response = await OrderFetch.createNewOrder(orderData);
-                updateCart([]); // Clear the cart
+
+                // Xóa từng sản phẩm đã thanh toán trong giỏ hàng
+                for (const product of products) {
+
+                    await UserFetch.removeFromCart(user._id, product.productId);
+                }
+
+                /////////////////////
+
+                //const productIdsToDelete = selectedItems.map(item => item.productId);
+                
+                // Gọi API xóa những sản phẩm đã thanh toán
+                // productIdsToDelete.forEach(async (productId) => {
+                //     try {
+                //         await UserFetch.removeFromCart(user._id, productId); // Xóa sản phẩm khỏi giỏ hàng của người dùng
+                //     } catch (error) {
+                //         console.error('Lỗi khi xóa sản phẩm khỏi giỏ hàng:', error);
+                //     }
+                // });
+
+                console.log("KKKKKKKKKKKKK:", products);
+                // Cập nhật lại giỏ hàng trong context (hoặc local state) sau khi thanh toán
+                updateCart(user.cart.filter(item => !products.some(product => product.productId === item.productId)));
+
+                // const updatedCart = await UserFetch.removeFromCart(user._id, productId);
+                // updateCart([]); // Xóa giỏ hàng sau khi thanh toán thành công
                 alert(response.message || "Đơn hàng của bạn đã được tạo thành công!");
-                navigate('/'); // Chuyển hướng trang
+                navigate('/'); // Chuyển hướng về trang chủ
             } else {
                 alert("Vui lòng chọn phương thức thanh toán đúng!");
             }
@@ -113,7 +161,7 @@ const Payment = () => {
                             height: '400px',
                             overflowY: products.length > 3 ? 'auto' : 'visible', // Hiển thị thanh cuộn khi có > 3 sản phẩm
                         }}>
-                            <List sx={{ height: '500px'}}>
+                            <List sx={{ height: '500px' }}>
                                 {products.map(product => (
                                     <ListItem key={product._id}>
                                         <Card sx={{
@@ -126,9 +174,7 @@ const Payment = () => {
                                                 image={product.image}
                                                 alt="Ảnh sản phẩm"
                                             />
-                                            <CardContent sx={{
-                                                padding: '8px'
-                                            }}>
+                                            <CardContent sx={{ padding: '8px' }}>
                                                 <Typography variant="body1">{product.name}</Typography>
                                                 <Typography variant="body2">Giá: {product.price.toLocaleString()} VNĐ</Typography>
                                                 <Typography variant="body2">Số lượng: {product.quantity}</Typography>
@@ -144,7 +190,7 @@ const Payment = () => {
                         </Box>
                     </Box>
 
-                    {/* Thông tin */}
+                    {/* Thông tin thanh toán */}
                     <Box sx={{
                         width: { xs: '100%', md: '45%' },
                         margin: '8px',
@@ -156,16 +202,15 @@ const Payment = () => {
                         <hr />
                         <Box component="form" noValidate sx={{ mt: 1 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-                                <Typography variant='body1'>Tên người đặt:  </Typography>
+                                <Typography variant='body1'>Tên người đặt: </Typography>
                                 <Typography sx={{ ml: 2 }}>{user?.name}</Typography>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-                                <Typography variant='body1'>Số điện thoại:  </Typography>
+                                <Typography variant='body1'>Số điện thoại: </Typography>
                                 <Typography sx={{ ml: 2 }}>{user?.phone}</Typography>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-                                <Typography variant='body1' sx={{ width: '200px'}}>Địa chỉ giao hàng: </Typography>
-                                
+                                <Typography variant='body1' sx={{ width: '200px' }}>Địa chỉ giao hàng: </Typography>
                                 <FormControl fullWidth sx={{ mt: 1 }}>
                                     <InputLabel>Chọn địa chỉ giao hàng</InputLabel>
                                     <Select

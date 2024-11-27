@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -12,20 +12,19 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import Checkbox from '@mui/material/Checkbox';
 
-
 const CartContent = ({ product, onRemove, onQuantityChange, onSelect, isSelected }) => {
-    console.log("+++++", product);
-
     const [quantity, setQuantity] = useState(product?.quantity);
 
     const handleIncreaseQuantity = () => {
         onQuantityChange(product.productId, 'increase'); // Gọi hàm handleQuantityChange với hành động 'increase'
-        setQuantity(quantity+1)
+        setQuantity(quantity + 1);
     };
 
     const handleDecreaseQuantity = () => {
-        onQuantityChange(product.productId, 'decrease'); // Gọi hàm handleQuantityChange với hành động 'decrease'
-        setQuantity(quantity-1)
+        if (quantity > 1) {
+            onQuantityChange(product.productId, 'decrease'); // Gọi hàm handleQuantityChange với hành động 'decrease'
+            setQuantity(quantity - 1);
+        }
     };
 
     const handleRemove = () => {
@@ -33,7 +32,7 @@ const CartContent = ({ product, onRemove, onQuantityChange, onSelect, isSelected
     };
 
     const handleSelectChange = (event) => {
-        onSelect(product.id, event.target.checked); // Gọi hàm chọn hay bỏ chọn sản phẩm
+        onSelect(product, event.target.checked); // Truyền cả đối tượng sản phẩm vào onSelect
     };
 
     return (
@@ -56,7 +55,7 @@ const CartContent = ({ product, onRemove, onQuantityChange, onSelect, isSelected
                     </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, marginTop: 1 }}>
-                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <IconButton onClick={handleDecreaseQuantity} disabled={quantity <= 1}>
                             <RemoveIcon />
                         </IconButton>
@@ -64,26 +63,27 @@ const CartContent = ({ product, onRemove, onQuantityChange, onSelect, isSelected
                         <IconButton onClick={handleIncreaseQuantity}>
                             <AddIcon />
                         </IconButton>
-                    </Box> 
+                    </Box>
                     <Typography variant="body2" color="textSecondary">
                         Tổng: {(product.price * quantity).toLocaleString('vi-VN')}đ
                     </Typography>
                 </Box>
             </CardContent>
             <Box sx={{ padding: '16px 8px', display: 'flex', flexDirection: 'column' }}>
-                <CardActions >
+                <CardActions>
                     <Button onClick={handleRemove} color="error" size="small">
                         <DeleteIcon />
                     </Button>
                 </CardActions>
                 <Checkbox
                     checked={isSelected}
-                    onChange={handleSelectChange}
+                    onChange={handleSelectChange} // Chuyển đối tượng sản phẩm vào
                     inputProps={{ 'aria-label': 'Select product for checkout' }}
                 />
             </Box>
         </Card>
     );
 };
+
 
 export default CartContent;

@@ -28,6 +28,16 @@ export default function Product() {
                 
                 const product = await ProductFetch.getById(id);
                 console.log(product);
+
+                if(product.data.hasPromotion){
+                    if(product.data.promotions[0].type === "percent"){
+                        const discountAmount = (product.data.price / 100) * product.data.promotions[0].value;
+                        const beforeDiscount = product.data.price  // Tính toán giá gốc từ giá giảm
+                        product.data.price_before_discount = beforeDiscount;  // Gán vào trường beforediscount
+                        product.data.price -= discountAmount;  // Cập nhật giá sau khuyến mãi
+                    }
+                }
+
                 setProduct(product.data); 
             } catch (error) {
                 
@@ -54,7 +64,7 @@ export default function Product() {
             productId: product._id,
             name: product.name,
             //size: size,
-            img: 'https://th.bing.com/th/id/OIP.Y9MaxiVxV-8HnzG7MuNC3wHaE8?w=302&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7',
+            img: product.img ||'https://th.bing.com/th/id/OIP.Y9MaxiVxV-8HnzG7MuNC3wHaE8?w=302&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7',
             quantity: quantity,
             price: product.price
         };
@@ -77,6 +87,33 @@ export default function Product() {
         } catch (error) {
             console.error('Không thể thêm sản phẩm vào giỏ hàng:', error);
         }
+    };
+
+    console.log("Sanr pham xey", product);
+    
+
+    const handleBuyNow = () => {
+        // Kiểm tra nếu người dùng chưa đăng nhập
+        if (!user) {
+            alert("Vui lòng đăng nhập để mua sản phẩm!");
+            navigate('/login'); // Điều hướng người dùng tới trang đăng nhập
+            return;
+        }
+    
+        // Tạo đối tượng sản phẩm cần mua
+        const productToBuy = {
+            productId: product._id,
+            name: product.name,
+            quantity: quantity,
+            price: product.price,
+        };
+        if(productToBuy.quantity > product.quantity){
+            alert(`Số lượng sản phẩm này chỉ còn số lượng là: ${product.quantity}`);
+            return;
+        }
+    
+        // Điều hướng sang trang thanh toán và truyền thông tin sản phẩm
+        navigate('/thanh-toan', { state: { productsToPay: [productToBuy] } });
     };
     
 
@@ -184,7 +221,7 @@ export default function Product() {
                         <Button variant="contained" onClick={handleAddToCart} sx={{ marginTop: 2 }}>
                             Thêm vào giỏ hàng
                         </Button>
-                        <Button variant="outlined" onClick={handleAddToCart} sx={{ margin: '16px 0 0 16px' }}>
+                        <Button variant="outlined" onClick={handleBuyNow} sx={{ margin: '16px 0 0 16px' }}>
                             Mua ngay
                         </Button>
                     </Box>
