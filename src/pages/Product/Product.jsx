@@ -18,7 +18,7 @@ export default function Product() {
     const [product, setProduct] = useState(null)
     const navigate = useNavigate();
     const [quantity, setQuantity] = useState(1);
-    //const [size, setSize] = useState('');
+    const [image, setImage] = useState('');
 
     useEffect(() => {
         
@@ -28,7 +28,18 @@ export default function Product() {
                 
                 const product = await ProductFetch.getById(id);
                 console.log(product);
+
+                if(product.data.hasPromotion){
+                    if(product.data.promotions[0].type === "percent"){
+                        const discountAmount = (product.data.price / 100) * product.data.promotions[0].value;
+                        const beforeDiscount = product.data.price  // Tính toán giá gốc từ giá giảm
+                        product.data.price_before_discount = beforeDiscount;  // Gán vào trường beforediscount
+                        product.data.price -= discountAmount;  // Cập nhật giá sau khuyến mãi
+                    }
+                }
+
                 setProduct(product.data); 
+                setImage(product.data.img)
             } catch (error) {
                 
                 console.error('Error fetching product details:', error);
@@ -46,7 +57,7 @@ export default function Product() {
         // Kiểm tra xem người dùng đã đăng nhập hay chưa
         if (!user) {
             alert("Vui lòng đăng nhập để mua sản phẩm!");
-            navigate('/login'); // Điều hướng người dùng tới trang đăng nhập
+            navigate('/'); // Điều hướng người dùng tới trang đăng nhập
             return;
         }
     
@@ -54,7 +65,7 @@ export default function Product() {
             productId: product._id,
             name: product.name,
             //size: size,
-            img: 'https://th.bing.com/th/id/OIP.Y9MaxiVxV-8HnzG7MuNC3wHaE8?w=302&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7',
+            img: product.img ||'https://th.bing.com/th/id/OIP.Y9MaxiVxV-8HnzG7MuNC3wHaE8?w=302&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7',
             quantity: quantity,
             price: product.price
         };
@@ -78,6 +89,38 @@ export default function Product() {
             console.error('Không thể thêm sản phẩm vào giỏ hàng:', error);
         }
     };
+
+    console.log("Sanr pham xey", product);
+    
+
+    const handleBuyNow = () => {
+        // Kiểm tra nếu người dùng chưa đăng nhập
+        if (!user) {
+            alert("Vui lòng đăng nhập để mua sản phẩm!");
+            navigate('/'); // Điều hướng người dùng tới trang đăng nhập
+            return;
+        }
+    
+        // Tạo đối tượng sản phẩm cần mua
+        const productToBuy = {
+            productId: product._id,
+            name: product.name,
+            img: image,
+            quantity: quantity,
+            price: product.price,
+        };
+        if(productToBuy.quantity > product.quantity){
+            alert(`Số lượng sản phẩm này chỉ còn số lượng là: ${product.quantity}`);
+            return;
+        }
+    
+        // Điều hướng sang trang thanh toán và truyền thông tin sản phẩm
+        navigate('/thanh-toan', { state: { productsToPay: [productToBuy] } });
+    };
+
+    const handleImageClick = (thumb) => {
+        setImage(thumb)
+    }
     
 
     return (
@@ -108,20 +151,20 @@ export default function Product() {
                     <Box display="flex" sx={{ width: { xs: '100%', md: '45%' }, height: 'auto', flexDirection: 'column', alignItems: 'center' }}>
                         <Box>
                             <img
-                            src= 'https://th.bing.com/th/id/OIP.Y9MaxiVxV-8HnzG7MuNC3wHaE8?w=302&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7'
+                            src= {image||'https://th.bing.com/th/id/OIP.Y9MaxiVxV-8HnzG7MuNC3wHaE8?w=302&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7'}
                             //src={product?.img}
                             alt={product?.name} style={{ maxWidth: '100%', height: 'auto', cursor: 'zoom-in' }} />
                         </Box>
 
                         <Box display="flex" justifyContent="center" sx={{ marginTop: 2 }}>
-                            <img
+                            {/* <img
                                 //key={index}
                                 src={product?.img}
                                 //alt={product?.name}
                                 style={{ width: '60px', height: '60px', margin: '0 5px', cursor: 'pointer' }}
                             //onClick={() => handleImageClick(thumb.url)} // Hàm để hiển thị ảnh lớn
-                            />
-                            {/* {product?.thumbnail.map((thumb, index) => (
+                            /> */}
+                            {product?.thumbnail.map((thumb, index) => (
                                 <img
                                     key={index}
                                     src={thumb.url}
@@ -129,7 +172,7 @@ export default function Product() {
                                     style={{ width: '50px', height: '50px', margin: '0 5px', cursor: 'pointer' }}
                                     onClick={() => handleImageClick(thumb.url)} // Hàm để hiển thị ảnh lớn
                                 />
-                            ))} */}
+                            ))}
                         </Box>
                     </Box>
 
@@ -184,7 +227,7 @@ export default function Product() {
                         <Button variant="contained" onClick={handleAddToCart} sx={{ marginTop: 2 }}>
                             Thêm vào giỏ hàng
                         </Button>
-                        <Button variant="outlined" onClick={handleAddToCart} sx={{ margin: '16px 0 0 16px' }}>
+                        <Button variant="outlined" onClick={handleBuyNow} sx={{ margin: '16px 0 0 16px' }}>
                             Mua ngay
                         </Button>
                     </Box>

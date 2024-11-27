@@ -21,7 +21,7 @@ const ProductItem = ({ product }) => {
             {/* Image */}
             <Box sx={{ height: '250px' }}>
                 <img className={myStyle.prodImage}
-                    src='https://th.bing.com/th/id/OIP.Y9MaxiVxV-8HnzG7MuNC3wHaE8?w=302&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7'
+                    src= {product?.img || 'https://th.bing.com/th/id/OIP.Y9MaxiVxV-8HnzG7MuNC3wHaE8?w=302&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7'}
                 //{product?.img} 
                 />
             </Box>
