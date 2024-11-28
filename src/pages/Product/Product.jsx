@@ -149,11 +149,11 @@ export default function Product() {
                     }}
                 >
                     <Box display="flex" sx={{ width: { xs: '100%', md: '45%' }, height: 'auto', flexDirection: 'column', alignItems: 'center' }}>
-                        <Box>
+                        <Box sx={{display: 'flex', justifyContent: 'center', maxWidth: '70%'}}>
                             <img
                             src= {image||'https://th.bing.com/th/id/OIP.Y9MaxiVxV-8HnzG7MuNC3wHaE8?w=302&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7'}
                             //src={product?.img}
-                            alt={product?.name} style={{ maxWidth: '100%', height: 'auto', cursor: 'zoom-in' }} />
+                            alt={product?.name} style={{ maxWidth: '70%', height: 'auto', cursor: 'zoom-in' }} />
                         </Box>
 
                         <Box display="flex" justifyContent="center" sx={{ marginTop: 2 }}>

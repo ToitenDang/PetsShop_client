@@ -68,9 +68,100 @@ const Payment = () => {
     };
 
     // Hàm gửi yêu cầu tạo đơn hàng
+    // const handleSubmit = async () => {
+    //     const orderData = {
+    //         customerId: user._id,
+    //         name: user.name,
+    //         phone: user.phone,
+    //         address: address,
+    //         products: products.map(product => ({
+    //             productId: product.productId,
+    //             quantity: product.quantity,
+    //             price: product.price,
+    //         })),
+    //         totalAmount,
+    //         shippingFee,
+    //         note,
+    //         paymentMethod,
+    //         address,
+    //     };
+
+    //     console.log("data tao order", orderData);
+        
+
+    //     try {
+    //         if (paymentMethod === 'cod') {
+    //             const response = await OrderFetch.createNewOrder(orderData);
+
+    //             // Xóa từng sản phẩm đã thanh toán trong giỏ hàng
+    //             for (const product of products) {
+
+    //                 await UserFetch.removeFromCart(user._id, product.productId);
+    //             }
+
+    //             /////////////////////
+
+    //             //const productIdsToDelete = selectedItems.map(item => item.productId);
+                
+    //             // Gọi API xóa những sản phẩm đã thanh toán
+    //             // productIdsToDelete.forEach(async (productId) => {
+    //             //     try {
+    //             //         await UserFetch.removeFromCart(user._id, productId); // Xóa sản phẩm khỏi giỏ hàng của người dùng
+    //             //     } catch (error) {
+    //             //         console.error('Lỗi khi xóa sản phẩm khỏi giỏ hàng:', error);
+    //             //     }
+    //             // });
+
+    //             console.log("KKKKKKKKKKKKK:", products);
+    //             // Cập nhật lại giỏ hàng trong context (hoặc local state) sau khi thanh toán
+    //             updateCart(user.cart.filter(item => !products.some(product => product.productId === item.productId)));
+
+    //             // const updatedCart = await UserFetch.removeFromCart(user._id, productId);
+    //             // updateCart([]); // Xóa giỏ hàng sau khi thanh toán thành công
+    //             alert(response.message || "Đơn hàng của bạn đã được tạo thành công!");
+    //             navigate('/'); // Chuyển hướng về trang chủ
+    //         } else {
+    //             const response = await OrderFetch.createNewOrderandPayment(orderData);
+
+    //             // Xóa từng sản phẩm đã thanh toán trong giỏ hàng
+    //             for (const product of products) {
+
+    //                 await UserFetch.removeFromCart(user._id, product.productId);
+    //             }
+
+    //             /////////////////////
+
+    //             //const productIdsToDelete = selectedItems.map(item => item.productId);
+                
+    //             // Gọi API xóa những sản phẩm đã thanh toán
+    //             // productIdsToDelete.forEach(async (productId) => {
+    //             //     try {
+    //             //         await UserFetch.removeFromCart(user._id, productId); // Xóa sản phẩm khỏi giỏ hàng của người dùng
+    //             //     } catch (error) {
+    //             //         console.error('Lỗi khi xóa sản phẩm khỏi giỏ hàng:', error);
+    //             //     }
+    //             // });
+
+    //             console.log("KKKKKKKKKKKKK:", products);
+    //             // Cập nhật lại giỏ hàng trong context (hoặc local state) sau khi thanh toán
+    //             updateCart(user.cart.filter(item => !products.some(product => product.productId === item.productId)));
+
+    //             // const updatedCart = await UserFetch.removeFromCart(user._id, productId);
+    //             // updateCart([]); // Xóa giỏ hàng sau khi thanh toán thành công
+    //             alert(response.message || "Đơn hàng của bạn đã được tạo thành công!");
+    //             navigate('/'); // Chuyển hướng về trang chủ
+    //         }
+    //     } catch (error) {
+    //         console.error('Lỗi khi tạo đơn hàng:', error);
+    //         alert("Có lỗi xảy ra khi tạo đơn hàng. Vui lòng thử lại.");
+    //     }
+    // };
+
     const handleSubmit = async () => {
         const orderData = {
             customerId: user._id,
+            name: user.name,
+            phone: user.phone,
             products: products.map(product => ({
                 productId: product.productId,
                 quantity: product.quantity,
@@ -82,49 +173,48 @@ const Payment = () => {
             paymentMethod,
             address,
         };
-
+    
         console.log("data tao order", orderData);
-        
-
+    
         try {
             if (paymentMethod === 'cod') {
-                const response = await OrderFetch.createNewOrder(orderData);
 
+                const response = await OrderFetch.createNewOrder(orderData);
+    
                 // Xóa từng sản phẩm đã thanh toán trong giỏ hàng
                 for (const product of products) {
-
                     await UserFetch.removeFromCart(user._id, product.productId);
                 }
-
-                /////////////////////
-
-                //const productIdsToDelete = selectedItems.map(item => item.productId);
-                
-                // Gọi API xóa những sản phẩm đã thanh toán
-                // productIdsToDelete.forEach(async (productId) => {
-                //     try {
-                //         await UserFetch.removeFromCart(user._id, productId); // Xóa sản phẩm khỏi giỏ hàng của người dùng
-                //     } catch (error) {
-                //         console.error('Lỗi khi xóa sản phẩm khỏi giỏ hàng:', error);
-                //     }
-                // });
-
+    
                 console.log("KKKKKKKKKKKKK:", products);
-                // Cập nhật lại giỏ hàng trong context (hoặc local state) sau khi thanh toán
                 updateCart(user.cart.filter(item => !products.some(product => product.productId === item.productId)));
-
-                // const updatedCart = await UserFetch.removeFromCart(user._id, productId);
-                // updateCart([]); // Xóa giỏ hàng sau khi thanh toán thành công
+    
                 alert(response.message || "Đơn hàng của bạn đã được tạo thành công!");
                 navigate('/'); // Chuyển hướng về trang chủ
-            } else {
-                alert("Vui lòng chọn phương thức thanh toán đúng!");
+            } else if (paymentMethod === 'vnpay') {
+                // Tạo đơn hàng và lấy URL thanh toán từ VNPay
+                const response = await OrderFetch.createNewOrderandPayment(orderData);
+    
+                if (response.success && response.data) {
+                    // Chuyển hướng người dùng tới trang thanh toán VNPay
+                    window.location.href = response.data; // Đây là URL thanh toán từ VNPay
+                } else {
+                    alert("Lỗi khi tạo đơn hàng với VNPay. Vui lòng thử lại.");
+                }
+    
+                // Xóa sản phẩm khỏi giỏ hàng sau khi thanh toán
+                for (const product of products) {
+                    await UserFetch.removeFromCart(user._id, product.productId);
+                }
+    
+                updateCart(user.cart.filter(item => !products.some(product => product.productId === item.productId)));
             }
         } catch (error) {
             console.error('Lỗi khi tạo đơn hàng:', error);
             alert("Có lỗi xảy ra khi tạo đơn hàng. Vui lòng thử lại.");
         }
     };
+    
 
     return (
         <Box sx={{
@@ -256,8 +346,8 @@ const Payment = () => {
                                 <label>
                                     <Radio
                                         name="payment-method"
-                                        value="e-wallet"
-                                        checked={paymentMethod === 'e-wallet'}
+                                        value="vnpay"
+                                        checked={paymentMethod === 'vnpay'}
                                         onChange={handlePaymentChange}
                                     />
                                     Trả trước qua ví điện tử momo
