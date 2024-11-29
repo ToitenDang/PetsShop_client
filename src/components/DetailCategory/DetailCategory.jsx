@@ -1,5 +1,6 @@
 import myStyle from './DetailCategory.module.scss'
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -27,7 +28,8 @@ const DetailCategory = ({ value, onChange }) => {
                 setIsLoading(false);
             })
             .catch(err => {
-                window.alert(`Lấy danh sách danh mục thất bại: \n ${err}`)
+                console.log(`Lấy danh sách danh mục thất bại: \n ${err}`)
+                toast.error("Lấy danh sách danh mục thất bại")
             })
     }, [])
     if (isLoading) {
@@ -79,6 +81,7 @@ const DetailCategory = ({ value, onChange }) => {
                     })
                 }
             </Box>
+            <ToastContainer />
         </Box>
     )
 }

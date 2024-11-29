@@ -16,7 +16,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import Divider from '@mui/material/Divider';
 import { UserFetch } from '~/REST-API-client';
 import { useAuth } from '~/components/Authentication/Authentication';
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const pass = '123456'
 
 export default function Password() {
@@ -56,7 +57,7 @@ export default function Password() {
             })
             .catch(err => {
                 console.log("err resetpass: ", err);
-                window.alert(`Cập nhật mật khẩu thất bại: \n ${err}`)
+                toast.error(`Cập nhật mật khẩu thất bại`)
             })
        
     }
@@ -173,6 +174,7 @@ export default function Password() {
                     </Alert>
                 </Box>
             </Dialog>
+            <ToastContainer />
         </>
     );
 }

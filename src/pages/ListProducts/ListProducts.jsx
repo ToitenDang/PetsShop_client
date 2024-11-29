@@ -12,6 +12,8 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useEffect, useState } from 'react';
 import { CategoryFetch } from '~/REST-API-client';
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const ListProduct = () => {
     // console.log("re-render list")
     // const { tag } = useParams();
@@ -44,8 +46,8 @@ const ListProduct = () => {
                 setPageValue(page);
             })
             .catch(err => {
-                // console.log("err: ", err)
-                window.alert(`Lỗi lấy chi tiết danh mục\n ${err}`);
+                console.log("Lỗi lấy chi tiết danh mục: ", err)
+                toast.error(`Lỗi lấy chi tiết danh mục`);
             })
     }
     useEffect(() => {
@@ -190,6 +192,7 @@ const ListProduct = () => {
 
                 </Box>
             </Box>
+            <ToastContainer />
         </>
     )
 }

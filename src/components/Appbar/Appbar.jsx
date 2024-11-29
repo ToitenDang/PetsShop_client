@@ -14,24 +14,15 @@ import Category from '~/components/Category/Category';
 import Box from '@mui/material/Box';
 import PetsIcon from '@mui/icons-material/Pets';
 import ModeSelect from '~/components/ModeSelect/ModeSelect';
-import SearchIcon from '@mui/icons-material/Search';
+
 import { Divider } from '@mui/material';
 import { useAuth } from "~/components/Authentication/Authentication";
 import { Link } from 'react-router-dom';
-
+import Search from './Search';
 
 function Appbar() {
   const auth = useAuth();
-  const [searchQuery, setSearchQuery] = useState(''); // State để lưu giá trị tìm kiếm
-  const navigate = useNavigate(); // Hook để chuyển hướng
-
-  // Hàm xử lý sự kiện khi nhấn nút tìm kiếm
-  const handleSearch = () => {
-    if (searchQuery) {
-      // Nếu có từ khóa tìm kiếm, chuyển hướng đến trang ProductSearch với query string
-      navigate(`/product-search?query=${searchQuery}`);
-    }
-  };
+  
 
   console.log('rerender appbar');
 
@@ -50,18 +41,7 @@ function Appbar() {
             <ResponsiveLogo sx={{ margin: 0, fontSize: '2rem', fontWeight: 'bold' }}>Bet Shob</ResponsiveLogo>
           </Box>
           {/* Search path */}
-          <div className={mystyles.searchContainer}>
-            <input
-              placeholder='Tìm kiếm...'
-              className={mystyles.searchInput}
-              type='text'
-              value={searchQuery} // Lấy giá trị từ state
-              onChange={(e) => setSearchQuery(e.target.value)} // Cập nhật state khi người dùng nhập
-            />
-            <button className={mystyles.searchButton} onClick={handleSearch}> {/* Gọi hàm handleSearch */}
-              <SearchIcon />
-            </button>
-          </div>
+          <Search />
           {/* Right part */}
           <Box sx={{
             display: 'flex', alignItems: 'center', gap: 2

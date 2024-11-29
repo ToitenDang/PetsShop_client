@@ -8,7 +8,8 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import SubCategory from './SubCategory';
 import { CategoryFetch } from '~/REST-API-client';
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 // const data = [
 //     {
 //         _id: '1',
@@ -76,8 +77,7 @@ const Category = () => {
                 setData(res.data);
             })
             .catch(err => {
-                // console.log("category err: ", err);
-                window.alert("Không thể lấy dữ liệu: ", err);
+               toast.error("Lỗi lấy dữ liệu danh mục")
             })
     },[])
 
@@ -122,6 +122,7 @@ const Category = () => {
             <Drawer open={open} onClose={toggleDrawer(false)}>
                 {<DrawerList />}
             </Drawer>
+            <ToastContainer />
         </div>
     );
 }

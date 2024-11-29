@@ -20,6 +20,9 @@ import Alert from '@mui/material/Alert';
 import { useAuth } from "~/components/Authentication/Authentication";
 import { obfuscateEmail, obfuscatePhone } from '~/utils/hiddenInfo';
 import { EmailSenderFetch, UserFetch } from '~/REST-API-client';
+
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const initialTiming = 60;
 // const pinCodeInitial = '123456';
 
@@ -59,11 +62,11 @@ function ChangEmailDialog(props) {
         setPageNumber(2);
         EmailSenderFetch.sendPIN(auth?.user.email, auth?.user._id)
             .then(data => {
-
+                toast.success("Chúng tôi đã gửi mã PIN cho bạn, check lại email cũ nhé")
             })
             .catch(err => {
                 console.log("Lỗi tạo pin: ", err);
-                window.alert(`Lỗi khi tạo mã PIN: \n${err}`);
+                toast.error(`Lỗi khi tạo mã PIN`);
             })
     }
 
@@ -154,7 +157,7 @@ function ChangEmailDialog(props) {
             })
             .catch(err => {
                 console.log("Lỗi tạo pin: ", err);
-                window.alert(`Lỗi khi tạo mã PIN: \n${err}`);
+                toast.error(`Lỗi khi tạo mã PIN: \n${err}`);
             })
 
     }
@@ -360,13 +363,13 @@ const Profile = () => {
                 // console.log("Updated: ", data.data.user)
                 localStorage.setItem("access_token", data.data.access_token)
                 auth.authenUser(data.data.user);
-                window.alert("Cập nhật thông tin thành công");
+                toast.success("Cập nhật thông tin thành công");
                 setDisableSaveButton(false)
                 // console.log("new User:", auth.user);
             })
             .catch(err => {
                 console.log("Err: ", err)
-                window.alert(`Cập nhật thông tin thất bại: \n ${err}`);
+                toast.error(`Cập nhật thông tin thất bại: \n ${err}`);
             })
 
     }
@@ -467,6 +470,7 @@ const Profile = () => {
                     </Box>
                 </Box>
             </Box>
+            <ToastContainer />
         </>
     )
 }

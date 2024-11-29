@@ -8,7 +8,8 @@ import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useLocation } from 'react-router-dom';
 import { ProductFetch } from '~/REST-API-client/index'
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 function ProductSearch() {
 
     const location = useLocation(); // Hook để lấy thông tin URL hiện tại
@@ -57,6 +58,7 @@ function ProductSearch() {
 
             } catch (error) {
                 console.error("Error fetching products:", error);
+                toast.error("Lỗi tìm sản phẩm")
             } finally {
                 setLoading(false);
             }
@@ -124,6 +126,7 @@ function ProductSearch() {
                     </Stack>
                 </Box>
             )}
+            <ToastContainer />
         </Box>
     );
 }
