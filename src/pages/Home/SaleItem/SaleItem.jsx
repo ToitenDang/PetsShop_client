@@ -34,9 +34,9 @@ const SaleItem = ({ data }) => {
                         }}  variant='contained'>Xem ngay</Button>
                     </Box>
                 </Box>
-                <Box sx={{width:"150px", position:"absolute", right:"0", top:"-15px"}}>
+                {/* <Box sx={{width:"150px", position:"absolute", right:"0", top:"-15px"}}>
                     <img className={myStyle.icon} src={`${publicUrl}/images/promotion/icon.png`}/>
-                </Box>
+                </Box> */}
             </Box>
         </ResponsiveSaleItem>
     )
