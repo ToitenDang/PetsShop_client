@@ -14,7 +14,6 @@ const TopSaleProducts = () => {
     // const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [loading, setLoading] = useState(true);
-    console.log("renderrung topprod")
     useEffect(() => {
         const fetchProducts = async () => {
             setLoading(true);
