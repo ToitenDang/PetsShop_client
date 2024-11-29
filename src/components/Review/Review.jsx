@@ -133,6 +133,19 @@ const Review = ({ entityId, type }) => {
                 {reviews && reviews.length === 0
                     ?
                     <Typography>Sản phẩm hiện chưa có đánh giá nào!</Typography>
+// <<<<<<< HEAD
+//                 : reviews.map(review => (
+//                     <Box key={review?._id} sx={{ padding: 2, marginTop: 1 }}>
+//                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+//                             <Typography variant="body1"><strong>{review.user}</strong></Typography>
+//                             <Rating
+//                                 name="rating"
+//                                 value={review?.rating}
+//                                 precision={0.5}
+//                                 size="small"
+//                                 readOnly
+//                             />
+// =======
                     : reviews.map(review => (
                         <Box key={review?._id} sx={{ padding: 2, marginTop: 1 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
@@ -147,6 +160,7 @@ const Review = ({ entityId, type }) => {
                             </Box>
                             <Typography variant="body2"><strong>Bình luận:</strong> {review?.comment}</Typography>
                             <Typography variant="body2" sx={{ fontStyle: 'italic' }}>{new Date(review.createdAt).toLocaleString()}</Typography>
+
                         </Box>
                     ))}
             </Box>

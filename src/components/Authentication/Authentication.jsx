@@ -4,6 +4,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
+    console.log("re-render-authen")
     useEffect(() => {
         if(user == null) {    
             CheckTokenFetch.post()

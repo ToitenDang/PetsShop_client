@@ -16,8 +16,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import CircularProgress from '@mui/material/CircularProgress';
 import Appointment from './Appointment';
-import Avatar from '@mui/material/Avatar';
-import Rating from '@mui/material/Rating';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { BookingFetch, ServiceFetch } from '~/REST-API-client';
@@ -26,6 +24,7 @@ import Dialog from '@mui/material/Dialog';
 import Alert from '@mui/material/Alert';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+import Review from '~/components/Review/Review';
 
 const DialogAlert = ({ onClose, data, open }) => {
     const handleClose = () => {
@@ -327,69 +326,8 @@ const Service = () => {
                     <Typography variant='h4' sx={{ fontWeight: "bold" }}>🌟Đánh giá của khách hàng</Typography>
                 </Box>
 
-                <Box sx={{ border: "solid 1.5px #dbdbdb", padding: "10px", marginTop: "20px" }}>
-                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
-                        {/* Comment 1 */}
-                        <Box sx={{ border: "solid 1.5px #dbdbdb", padding: "10px", width: "100%" }}>
-                            <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-start", padding: "10px" }}>
-                                <Avatar src='https://zent.edu.vn/wp-content/uploads/2024/10/tran-ha-linh-31t6ujJB.png' sx={{ width: 56, height: 56 }} />
-                                <Box>
-                                    <Box>
-                                        <Box sx={{ display: "flex", gap: 1 }}>
-                                            <Typography>Trần Hà Linh</Typography>
-                                            <Divider orientation="vertical" flexItem />
-                                            <Typography>24/11/2023</Typography>
-                                        </Box>
-                                        <Rating defaultValue={2.5} precision={0.5} readOnly />
-                                    </Box>
-                                    <Box sx={{ marginTop: "20px" }}>
-                                        <Typography>Mê quá ạ, đáp ứng chất lượng rất tốt</Typography>
-                                    </Box>
-                                </Box>
-
-                            </Box>
-                        </Box>
-                        {/* Comment 2 */}
-                        <Box sx={{ border: "solid 1.5px #dbdbdb", padding: "10px", width: "100%" }}>
-                            <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-start", padding: "10px" }}>
-                                <Avatar src='https://zent.edu.vn/wp-content/uploads/2024/10/tran-ha-linh-31t6ujJB.png' sx={{ width: 56, height: 56 }} />
-                                <Box>
-                                    <Box>
-                                        <Box sx={{ display: "flex", gap: 1 }}>
-                                            <Typography>Trần Hà Linh</Typography>
-                                            <Divider orientation="vertical" flexItem />
-                                            <Typography>24/11/2023</Typography>
-                                        </Box>
-                                        <Rating defaultValue={2.5} precision={0.5} readOnly />
-                                    </Box>
-                                    <Box sx={{ marginTop: "20px" }}>
-                                        <Typography>Mê quá ạ, đáp ứng chất lượng rất tốt</Typography>
-                                    </Box>
-                                </Box>
-
-                            </Box>
-                        </Box>
-                        {/* Comment 3 */}
-                        <Box sx={{ border: "solid 1.5px #dbdbdb", padding: "10px", width: "100%" }}>
-                            <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-start", padding: "10px" }}>
-                                <Avatar src='https://zent.edu.vn/wp-content/uploads/2024/10/tran-ha-linh-31t6ujJB.png' sx={{ width: 56, height: 56 }} />
-                                <Box>
-                                    <Box>
-                                        <Box sx={{ display: "flex", gap: 1 }}>
-                                            <Typography>Trần Hà Linh</Typography>
-                                            <Divider orientation="vertical" flexItem />
-                                            <Typography>24/11/2023</Typography>
-                                        </Box>
-                                        <Rating defaultValue={2.5} precision={0.5} readOnly />
-                                    </Box>
-                                    <Box sx={{ marginTop: "20px" }}>
-                                        <Typography>Mê quá ạ, đáp ứng chất lượng rất tốt</Typography>
-                                    </Box>
-                                </Box>
-
-                            </Box>
-                        </Box>
-                    </Box>
+                <Box sx={{  padding: "10px", marginTop: "20px" }}>
+                    <Review entityId={id} type="service"/>
                 </Box>
             </Box>
             <DialogAlert open={open}

@@ -20,23 +20,33 @@ const ExperienceBlogs = () => {
                     {/* List blogs in 1 row*/}
                     <Box  className={myStyle.blogsCol}>
                         {/* Detail blog */}
-                            <BlogItem url={`${publicUrl}/images/blogs/test.png`}/>
+                            <BlogItem
+                            //  url={`${publicUrl}/images/blogs/test.png`}
+                             />
                     </Box>
                     <Box  className={myStyle.blogsCol}>
                         {/* Detail blog */}
-                            <BlogItem url={`${publicUrl}/images/blogs/test_2.png`}/>
+                            <BlogItem 
+                            // url={`${publicUrl}/images/blogs/test_2.png`}
+                            />
                     </Box>
                     <Box  className={myStyle.blogsCol}>
                         {/* Detail blog */}
-                            <BlogItem url={`${publicUrl}/images/blogs/test_3.png`}/>
+                            <BlogItem 
+                            // url={`${publicUrl}/images/blogs/test_3.png`}
+                            />
                     </Box>
                     <Box  className={myStyle.blogsCol}>
                         {/* Detail blog */}
-                            <BlogItem url={`${publicUrl}/images/blogs/test_4.png`}/>
+                            <BlogItem 
+                            // url={`${publicUrl}/images/blogs/test_4.png`}
+                            />
                     </Box>
                     <Box  className={myStyle.blogsCol}>
                         {/* Detail blog */}
-                            <BlogItem url={`${publicUrl}/images/blogs/test_5.png`}/>
+                            <BlogItem 
+                            // url={`${publicUrl}/images/blogs/test_5.png`}
+                            />
                     </Box>
                 </Box>
             </Box>

@@ -7,21 +7,21 @@ const slideData = [
     {
         id: "1",
         name: 'Bet shob cung cấp thức ăn',
-        title: 'Đa dạng về các loại thức ăn cho thú cưng, thức ăn hạt, pate, dinh dưỡng,...',
+        title: 'Đa dạng các loại thức ăn cho thú cưng, từ thức ăn hạt, pate, đồ ăn dinh dưỡng đến các sản phẩm hỗ trợ sức khỏe, đáp ứng mọi nhu cầu chăm sóc vật nuôi của bạn.',
         // url: "https://www.aafco.org/wp-content/uploads/2023/01/iStock-1361708626.jpg"
         url: `${publicUrl}/images/slider_1.jpg`
     },
     {
         id: "2",
         name: 'Bet shob cung cấp dịch vụ',
-        title: 'Hỗ trợ về các dịch vụ cho thú cưng, cắt tỉa, chăm sóc, y tế, spa,...',
+        title: 'Hỗ trợ toàn diện các dịch vụ dành cho thú cưng như cắt tỉa lông, chăm sóc sức khỏe, dịch vụ y tế, spa thư giãn và nhiều dịch vụ đặc biệt khác.',
         // url: 'https://afamilycdn.com/150157425591193600/2023/1/13/rni-films-img-609874a8-1de4-4961-bbbc-98b52efaeb15-1673497561046990811075-1673608178215-16736081783942036348662.jpg'
         url: `${publicUrl}/images/slider_2.webp`
     },
     {
         id: "3",
         name: 'Bet shob cung cấp các phụ kiện',
-        title: 'Cung cấp chuồng xinh, dây đeo, phụ kiện, đồ chơi,...',
+        title: 'Cung cấp đa dạng phụ kiện cho thú cưng như chuồng tiện dụng, dây đeo bền chắc, đồ chơi sáng tạo, và nhiều sản phẩm xinh xắn khác.',
         // url: 'https://img.lazcdn.com/g/p/320de7a8ae2578e086656bc8d1d3e116.png_720x720q80.png'
         url: `${publicUrl}/images/slider_3.png`
     }
@@ -57,7 +57,7 @@ const Slider = () => {
     useEffect(() => {
         const idTimer = setInterval(() => {
             nextSlide()
-        },2000);
+        },5000);
         return () => {
             clearInterval(idTimer)
         }

@@ -25,7 +25,8 @@ const Filter = ({ valueFilters, onChange, getData }) => {
     const [priceFrom, setPriceFrom] = useState('');
     const [priceTo, setPriceTo] = useState('');
     const [openDialog, setOpenDialog] = useState(false);
-    const [onlyPromotion, setOnlyPromotion] = useState(false)
+    const [onlyPromotion, setOnlyPromotion] = useState(false);
+    const [validRangePrice, setValidRangePrice] = useState(true)
     const handleOpenDialog = () => {
         setOpenDialog(true);
     };
@@ -47,6 +48,7 @@ const Filter = ({ valueFilters, onChange, getData }) => {
             handleOpenDialog();
             return;
         }
+        setValidRangePrice(true)
         setPriceFrom(e.target.value)
         onChange({
             ...valueFilters,
@@ -59,6 +61,7 @@ const Filter = ({ valueFilters, onChange, getData }) => {
             handleOpenDialog();
             return
         }
+        setValidRangePrice(true)
         setPriceTo(e.target.value)
         onChange({
             ...valueFilters,
@@ -68,6 +71,10 @@ const Filter = ({ valueFilters, onChange, getData }) => {
 
 
     const handleApplyFilters = () => {
+        if(priceFrom!== "" && priceTo!=="" && priceFrom > priceTo) {
+            setValidRangePrice(false);
+            return;
+        }
         getData();
     }
     const handleClearFilers = () => {
@@ -81,6 +88,7 @@ const Filter = ({ valueFilters, onChange, getData }) => {
         setPriceTo("");
         setValueSlider([0, 5]);
         setOnlyPromotion(false);
+        setValidRangePrice(true);
     }
     const handleChangeOnlyPromotion = (e) => {      
         setOnlyPromotion(e.target.checked)
@@ -120,6 +128,7 @@ const Filter = ({ valueFilters, onChange, getData }) => {
                             className={myStyle.inputPrice} name='priceTo' type='text' id='priceTo' />
                     </Box>
                 </Box>
+                { validRangePrice? null: <Typography sx={{fontSize:"0.7rem", fontWeight:"bold", color:"red"}}>Vui lòng nhập vào khoảng giá thích hợp</Typography>}
                 {/* Filter with Rating */}
                 <Box sx={{ paddingY: '5px' }}>
                     <Typography sx={{ fontWeight: 'bold' }}>Đánh giá:</Typography>
