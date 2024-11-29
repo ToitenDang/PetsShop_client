@@ -47,7 +47,7 @@ const Login = () => {
         setTimeout(() => {
           setOpenDialog(false);
           navigate("/");
-        }, 3000)
+        }, 1500)
       } catch(err) {
         setErrorMassage(err.toString());
         setIsSuccess(false)
