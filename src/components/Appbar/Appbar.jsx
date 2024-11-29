@@ -2,8 +2,8 @@
 // CSS
 import mystyles from './Appbar.module.scss';
 
-import * as React from 'react';
-
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 // Function components
 import ShoppingCart from '~/components/ShoppingCard/ShoppingCard';
 import Profile from '~/components/Profile/Profile';
@@ -22,15 +22,25 @@ import { Link } from 'react-router-dom';
 
 function Appbar() {
   const auth = useAuth();
-  //console.log("cart length: ", auth?.user?.cart.length)
-  console.log('rerender appbar')
+  const [searchQuery, setSearchQuery] = useState(''); // State để lưu giá trị tìm kiếm
+  const navigate = useNavigate(); // Hook để chuyển hướng
+
+  // Hàm xử lý sự kiện khi nhấn nút tìm kiếm
+  const handleSearch = () => {
+    if (searchQuery) {
+      // Nếu có từ khóa tìm kiếm, chuyển hướng đến trang ProductSearch với query string
+      navigate(`/product-search?query=${searchQuery}`);
+    }
+  };
+
+  console.log('rerender appbar');
+
   return (
     <Box className={mystyles.mainContainer}
-     sx={{ backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#062c4f' : null  }}
-     >
+      sx={{ backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#062c4f' : null }}
+    >
       <ResponsiveContainer className={mystyles.container} sx={{
-        width: '90%',
-        gap: 2, paddingY: '5px'
+        width: '90%', gap: 2, paddingY: '5px'
       }}>
         {/* Higher part */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1, justifyContent: 'space-between', zIndex: 1 }}>
@@ -41,8 +51,14 @@ function Appbar() {
           </Box>
           {/* Search path */}
           <div className={mystyles.searchContainer}>
-            <input placeholder='Tìm kiếm...' className={mystyles.searchInput} type='text' />
-            <button className={mystyles.searchButton}>
+            <input
+              placeholder='Tìm kiếm...'
+              className={mystyles.searchInput}
+              type='text'
+              value={searchQuery} // Lấy giá trị từ state
+              onChange={(e) => setSearchQuery(e.target.value)} // Cập nhật state khi người dùng nhập
+            />
+            <button className={mystyles.searchButton} onClick={handleSearch}> {/* Gọi hàm handleSearch */}
               <SearchIcon />
             </button>
           </div>
@@ -55,12 +71,12 @@ function Appbar() {
             {/* Avatar */}
             {
               !auth.user ?
-                <Box sx={{display:'flex', gap:1}}>
-                  <Link to="/dang-nhap" style={{textDecoration:'none'}}>Đăng nhập</Link>
-                  <Divider orientation="vertical" flexItem/>
-                  <Link to="/dang-ky" style={{textDecoration:'none'}}>Đăng ký</Link>
-                </Box> : 
-                < Profile />
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  <Link to="/dang-nhap" style={{ textDecoration: 'none' }}>Đăng nhập</Link>
+                  <Divider orientation="vertical" flexItem />
+                  <Link to="/dang-ky" style={{ textDecoration: 'none' }}>Đăng ký</Link>
+                </Box> :
+                <Profile />
             }
 
             {/* Select mode */}
@@ -82,7 +98,7 @@ function Appbar() {
 
       </ResponsiveContainer>
     </Box>
-
   );
 }
+
 export default Appbar;

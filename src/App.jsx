@@ -19,11 +19,14 @@ import Service from './pages/Service/Service'
 import Promotion from './pages/Promotion/Promotion'
 import { AuthProvider } from './components/Authentication/Authentication'
 import Payment from './pages/Payment/Payment'
+import VNPayReturn from './pages/Payment/NotyPayments/VNPayReturn'
+import ProductSearch from './pages/ProductSearch/ProductSearch'
 function App() {
 
   return (
     <AuthProvider>
       <Routes>
+          <Route path='vnpay_return' element={<VNPayReturn />} />
         <Route path='/' element={<HeaderLayout />}>
           <Route index element={<Home />} />
           <Route path='lien-he' element={<Contact />} />
@@ -41,6 +44,7 @@ function App() {
           </Route>
           <Route path='dich-vu/:id' element = {<Service />} />
           <Route path='khuyen-mai/:id' element = {<Promotion />} />
+          <Route path='product-search' element={<ProductSearch/>}/>
           <Route path='*' element={<NoFound />} />
         </Route>
         <Route path="dang-ky" element={<Register />} />
