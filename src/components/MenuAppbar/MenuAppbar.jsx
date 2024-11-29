@@ -10,7 +10,8 @@ import { NavLink } from "react-router-dom"
 import { useEffect, useState } from 'react';
 import { ServiceFetch } from '~/REST-API-client';
 import { Divider } from '@mui/material';
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const navLinkStyle = ({ isActive }) => {
     return {
         color: isActive ? '#ef6a41' : '#000',
@@ -30,7 +31,8 @@ const MenuAppbar = () => {
                 setServices(data.data)
             })
             .catch(err => {
-                window.alert(`Lỗi lấy dữ liệu: \n${err}`)
+                console.log(`Lỗi lấy dữ liệu: \n${err}`)
+                toast.error("Lỗi lấy dữ liệu dịch vụ")
             })
     }, [])
     const serviceExpand = (
@@ -102,6 +104,7 @@ const MenuAppbar = () => {
                 Tham khảo <ExpandMoreIcon />
                 {pageExpand}
             </Box>
+            <ToastContainer />
         </Box>
     )
 }

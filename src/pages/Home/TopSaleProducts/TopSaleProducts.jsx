@@ -7,7 +7,8 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
 import { ProductFetch } from '~/REST-API-client/index'
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const TopSaleProducts = () => {
     const [products, setProducts] = useState([]);
@@ -25,6 +26,7 @@ const TopSaleProducts = () => {
                 setTotalPages(data.totalPages);
             } catch (error) {
                 console.error("Error fetching products:", error);
+                toast.error("Lỗi lấy danh sách sản phẩm")
             } finally {
                 setLoading(false);
             }
@@ -82,6 +84,7 @@ const TopSaleProducts = () => {
                     />
                 </Stack>
             </Box>
+            <ToastContainer />
         </Box>
     );
 };

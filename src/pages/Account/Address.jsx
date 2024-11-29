@@ -9,7 +9,8 @@ import Dialog from '@mui/material/Dialog';
 import TextField from '@mui/material/TextField';
 import { useAuth } from '~/components/Authentication/Authentication';
 import { UserFetch } from '~/REST-API-client';
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const strongText = {
     fontWeight:"bold",
     color: ""
@@ -44,12 +45,12 @@ const DialogDeltailAddress = ({ onClose, open, data = null, index = null }) => {
                 }];
                 UserFetch.updateShippingAddress(auth?.user?._id, newAddress)
                     .then((data) => {
-                        window.alert(`Cập nhật địa chỉ thành công`);
+                        toast.success(`Cập nhật địa chỉ thành công`);
                         console.log("new user: ", data.data.user)
                         auth.authenUser(data.data.user);
                         handleClose();
                     }).catch(err => {
-                        window.alert(`Cập nhật địa chỉ thất bại: \n ${err}`);
+                        toast.error(`Cập nhật địa chỉ thất bại`);
                         console.log("error: ", err)
                     })
             } else {
@@ -67,12 +68,12 @@ const DialogDeltailAddress = ({ onClose, open, data = null, index = null }) => {
                 }
                 UserFetch.updateShippingAddress(auth?.user?._id, newAddress)
                     .then((data) => {
-                        window.alert(`Cập nhật địa chỉ thành công`);
+                        toast.success(`Cập nhật địa chỉ thành công`);
                         // console.log("new user: ", data.data.user)
                         auth.authenUser(data.data.user);
                         handleClose();
                     }).catch(err => {
-                        window.alert(`Cập nhật địa chỉ thất bại: \n ${err}`);
+                        toast.error(`Cập nhật địa chỉ thất bại`);
                         console.log("error: ", err)
                     })
             } else {
@@ -145,12 +146,12 @@ const Address = () => {
         UserFetch.updateShippingAddress(auth?.user?._id, coppyAddress)
             .then((data) => {
                 // console.log("get new: ", data);
-                window.alert(`Cập nhật địa chỉ thành công`);
+                toast.success(`Cập nhật địa chỉ thành công`);
                 auth.authenUser(data.data.user);
             })
             .catch((err) => {
-                window.alert(`Cập nhật địa chỉ thất bại: \n ${err}`);
-                console.log("error: ", err)
+                toast.error(`Cập nhật địa chỉ thất bại`);
+                console.log(`Cập nhật địa chỉ thất bại: \n ${err}`)
             })
     }
     const handleRemoveAddress = (index) => {
@@ -167,12 +168,12 @@ const Address = () => {
             UserFetch.updateShippingAddress(auth?.user?._id, newAddress)
                 .then((data) => {
                     // console.log("get new: ", data);
-                    window.alert(`Cập nhật địa chỉ thành công`);
+                    toast.success(`Cập nhật địa chỉ thành công`);
                     auth.authenUser(data.data.user);
                 })
                 .catch((err) => {
-                    window.alert(`Cập nhật địa chỉ thất bại: \n ${err}`);
-                    console.log("error: ", err)
+                    toast.error(`Cập nhật địa chỉ thất bại`);
+                    console.log(`Cập nhật địa chỉ thất bại: \n ${err}`)
                 })
         } else {
             window.alert(`Bạn không thể xóa hết địa chỉ giao hàng`);
@@ -243,7 +244,7 @@ const Address = () => {
                 data={addressData ? addressData[idAddressSelected.current] : null}
                 index={idAddressSelected.current}
             />
-
+            <ToastContainer />
         </>
     )
 }

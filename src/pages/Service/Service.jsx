@@ -25,7 +25,8 @@ import Alert from '@mui/material/Alert';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import Review from '~/components/Review/Review';
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const DialogAlert = ({ onClose, data, open }) => {
     const handleClose = () => {
         onClose();
@@ -61,7 +62,8 @@ const Service = () => {
                 setService(data.data);
             })
             .catch(err => {
-                window.alert(`Lỗi lấy thông tin: \n${err}`);
+                console.log(`Lỗi lấy thông tin dịch vụ : ${err}`)
+                toast.error(`Lỗi lấy thông tin dịch vụ`);
             })
     }, [id]);
     const handleClose = () => {
@@ -332,6 +334,7 @@ const Service = () => {
             </Box>
             <DialogAlert open={open}
                 onClose={handleClose} data={contentDialog} />
+            <ToastContainer />
         </Box>
     )
 }

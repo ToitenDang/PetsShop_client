@@ -1,5 +1,6 @@
 import myStyle from './index.module.scss';
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -11,9 +12,10 @@ import { useState, useRef, useEffect } from 'react';
 import { OrderFetch } from '~/REST-API-client';
 import SearchIcon from '@mui/icons-material/Search';
 import { useAuth } from '~/components/Authentication/Authentication';
+import { CircularProgress } from '@mui/material';
 const Purchase = () => {
     const firstEl = useRef();
-    const [isLoading, setIsLoaing] = useState(false);
+    const toastId = useRef(null);
     const [lineWidth, setLineWidth] = useState(0);
     const [lineLeft, setLineLeft] = useState(0);
     const [orders, setOrders] = useState();
@@ -21,7 +23,7 @@ const Purchase = () => {
     const [find, setFind] = useState("");
     const auth = useAuth();
     const fetchData = (myFilter, myFind) => {
-        setIsLoaing(true);
+       
         let condition;
         if (myFilter === "all") {
             condition = { ...condition }
@@ -44,16 +46,15 @@ const Purchase = () => {
                 }
                 setOrders(data.data);
 
-                setIsLoaing(false);
             })
             .catch(err => {
-                window.alert(`Lỗi lấy dữ liệu đơn hàng: \n ${err}`);
+                toast.error("Lấy dữ liệu đơn hàng thất bại")
             })
     }
     useEffect(() => {
         setLineWidth(firstEl.current.offsetWidth);
         setLineLeft(firstEl.current.offsetLeft);
-    },[])
+    }, [])
     useEffect(() => {
         fetchData(filter, find);
     }, [filter])
@@ -64,7 +65,26 @@ const Purchase = () => {
         setLineWidth(rect.width);
         setFilter(type);
     }
+    const handleSearch = () => {
+        fetchData(filter, find);
+    }
+    const handleCanle = (id) => {
+        toastId.current = toast.loading("Đang cập nhật dữ liệu!")
 
+        OrderFetch.updateOrderByUser(auth.user._id, {
+            orderId: id,
+            status: "hbb"
+        })
+            .then((data) => {
+                toast.success("Cập nhật thành công!")
+                toast.dismiss(toastId.current);
+                fetchData(filter, find)
+            })
+            .catch((err) => {
+                toast.error("Cập nhật thất bại")
+                toast.dismiss(toastId.current);
+            })
+    }
     return (
         <Box >
             <Box sx={{ padding: '10px' }}>
@@ -93,8 +113,8 @@ const Purchase = () => {
                     <Box sx={{ display: 'flex', flex: 1 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, gap: 2 }}>
 
-                            <TextField sx={{ flex: 1 }} label="Tìm kiếm" variant="standard" />
-                            <button><SearchIcon /></button>
+                            <TextField value={find} onChange={(e) => setFind(e.target.value)} sx={{ flex: 1 }} label="Tìm kiếm" variant="standard" />
+                            <button onClick={handleSearch} style={{ border: "none", borderRadius: "4px", cursor: "pointer" }}><SearchIcon /></button>
                             <Tooltip title="Bạn có thể tìm theo Tên sản phẩm">
                                 <HelpIcon />
                             </Tooltip>
@@ -102,7 +122,9 @@ const Purchase = () => {
                     </Box>
                 </Box>
 
+
                 {/* Danh sahcs đơn hàng */}
+
                 <Box sx={{ padding: '10px', overflowY: 'auto', height: '740px', maxHeight: '740px' }}>
                     {/* 1 don hang */}
                     {
@@ -111,20 +133,24 @@ const Purchase = () => {
                             orders.map((order, index) => {
                                 return (
                                     <Box key={index} sx={{ border: 'solid 2px #f2693c', padding: '10px', marginY: '5px' }}>
-                                        <Box sx={{ display: 'flex', gap: 2 }}>
+                                        <Box sx={{ display: 'flex', gap: 2, alignItems: "center" }}>
                                             <Typography>Mã đơn hàng: {order._id}</Typography>
                                             <Divider orientation="vertical" flexItem />
                                             <Typography>Trạng thái:</Typography>
                                             <Typography sx={{ color: '#72a492' }}>
                                                 {order?.status === "dxl" ? "Đang xử lý" : (order?.status === "dg" ? "Đang giao" : (order?.status === "tc" ? "Hoàn thành" : (order?.status === "hbb" ? "Hủy bởi bạn" : "Hủy bởi shop")))}
                                             </Typography>
+                                            {
+                                                order.status === "dxl" && <Button onClick={() => handleCanle(order._id)} variant='contained' color='warning' sx={{ textTransform: "none" }}>Hủy đơn</Button>
+                                            }
+
                                         </Box>
                                         <Divider sx={{ marginY: '10px' }} />
                                         {/* Danh sach san pham */}
                                         {
                                             order.products.map((product, idx) => {
                                                 return (
-                                                    <Box key={{idx}}>
+                                                    <Box key={idx}>
                                                         <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-start', alignItems: 'center', marginY: '4px' }}>
                                                             <Box sx={{ width: '100px', height: '100px' }}>
                                                                 <img className={myStyle.imagePurchase} src={`${product.details.img}`} />
@@ -161,6 +187,7 @@ const Purchase = () => {
                 </Box>
 
             </Box>
+            <ToastContainer />
         </Box>
     )
 }

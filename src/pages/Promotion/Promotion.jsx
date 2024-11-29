@@ -8,6 +8,8 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { PromotionFetch } from '~/REST-API-client';
 import { CircularProgress } from '@mui/material';
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const Promotion = () => {
     const [promotion, setPromotion] = useState();
     const { id } = useParams();
@@ -17,7 +19,8 @@ const Promotion = () => {
                 setPromotion(data.data);
             })
             .catch(err => {
-                window.alert(`Lỗi lấy dữ liệu chương trình khuyến mãi: \n ${err}`)
+                toast.error(`Lỗi lấy dữ liệu chương trình khuyến mãi:`)
+                console.log(`Lỗi lấy dữ liệu chương trình khuyến mãi: ${err}`)
             })
     }, [id])
     if (!promotion) {
@@ -60,6 +63,7 @@ const Promotion = () => {
                     </Box>
                 </Box>
             </Box>
+            <ToastContainer />
         </Box>
     )
 }

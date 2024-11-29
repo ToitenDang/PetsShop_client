@@ -12,6 +12,8 @@ import { PromotionFetch, UserFetch } from '~/REST-API-client';
 import { useAuth } from "~/components/Authentication/Authentication";
 import { useNavigate } from 'react-router-dom';
 import { Typography } from '@mui/material';
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 function Home() {
   const navigate = useNavigate();
   const auth = useAuth();
@@ -29,6 +31,7 @@ function Home() {
         })
         .catch(err => {
           console.log("Promotions error: ", err);
+          toast.error("Lỗi lấy thông tin khuyến mãi")
         })
     }
     getPromotions();
@@ -68,6 +71,7 @@ function Home() {
         {/* Blog chia sẻ kinh nghiệm */}
         <ExperienceBlogs />
       </div>
+      <ToastContainer />
     </>
   );
 }
