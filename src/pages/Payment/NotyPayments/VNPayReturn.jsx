@@ -6,6 +6,7 @@ const VNPayReturn = () => {
   const [paymentStatus, setPaymentStatus] = useState('');
   const [orderDetails, setOrderDetails] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [statusColor, setStatusColor] = useState(''); // Thêm trạng thái màu sắc
 
   useEffect(() => {
     // Lấy các tham số từ URL query
@@ -21,6 +22,7 @@ const VNPayReturn = () => {
     // Kiểm tra trạng thái và hiển thị thông tin
     if (status === 'success') {
       setPaymentStatus('Payment was successful!');
+      setStatusColor('green'); // Đặt màu xanh lá cho thành công
       setOrderDetails({
         orderId,
         customerId,
@@ -29,17 +31,20 @@ const VNPayReturn = () => {
       });
     } else if (status === 'failed') {
       setPaymentStatus('Payment failed. Please try again.');
+      setStatusColor('red'); // Đặt màu đỏ cho thất bại
     } else if (status === 'error') {
       setPaymentStatus('There was an error processing the payment.');
+      setStatusColor('red'); // Đặt màu đỏ cho lỗi hệ thống
       setErrorMessage('An unexpected error occurred. Please contact support.');
     } else {
       setPaymentStatus('Unknown status. Please try again.');
+      setStatusColor('orange'); // Đặt màu cam cho trạng thái không xác định
     }
   }, [location]);
 
   return (
     <div className="payment-result" style={{ textAlign: 'center', padding: '20px' }}>
-      <h2>{paymentStatus}</h2>
+      <h2 style={{ color: statusColor }}>{paymentStatus}</h2> {/* Áp dụng màu cho h2 */}
 
       {/* Hiển thị thông tin đơn hàng khi thanh toán thành công */}
       {paymentStatus === 'Payment was successful!' && orderDetails && (
