@@ -49,6 +49,7 @@ const Login = () => {
           navigate("/");
         }, 1500)
       } catch(err) {
+        console.log("err: ", err)
         setErrorMassage(err.toString());
         setIsSuccess(false)
         setOpenDialog(true);

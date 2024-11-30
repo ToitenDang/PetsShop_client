@@ -1,11 +1,15 @@
 const ServiceAPI = (axiosInstance) => {
-    const get = async () => {
+    const get = async (sorting,condition, finding) => {
+        const params = new URLSearchParams({});
         try {
-            const res = await axiosInstance.get(`/services`)
+            if (sorting) params.append("sort", (JSON.stringify(sorting)));
+            if (finding) params.append("find", finding);
+            if(condition) params.append("filter", JSON.stringify(condition));
+            const res = await axiosInstance.get(`/services?${params}`);
             return res.data
         } catch (error) {
             if (error.response) {
-                throw new Error(error.response.data.message.message);
+                throw new Error(error.response.data.message);
             } else if (error.request) {
                 throw new Error("Server không phản hồi");
             } else {
@@ -20,7 +24,7 @@ const ServiceAPI = (axiosInstance) => {
             return res.data;
         } catch (error) {
             if (error.response) {
-                throw new Error(error.response.data.message.message);
+                throw new Error(error.response.data.message);
             } else if (error.request) {
                 throw new Error("Server không phản hồi");
             } else {

@@ -20,7 +20,7 @@ const SaleItem = ({ data }) => {
                             <span>Giảm lên đến:</span>
                             <span style={{ backgroundColor: '#d66c15', borderRadius: '10px', padding: "10px", marginLeft: "10px" }}>
                                 {
-                                    data?.type === "percent" ? data?.value + "%" : data?.value + "k"
+                                    data?.type === "percent" ? data?.value + "%" : data?.value.toLocaleString("vi-VN") + "đ"
                                 }
                             </span>
 

@@ -25,7 +25,7 @@ const navLinkStyle = ({ isActive }) => {
 const MenuAppbar = () => {
     const [services, setServices] = useState();
     useEffect(() => {
-        ServiceFetch.get()
+        ServiceFetch.get(undefined, {state: true}, undefined)
             .then(data => {
                 // console.log("services: ", data.data);
                 setServices(data.data)

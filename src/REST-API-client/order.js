@@ -86,7 +86,7 @@ const OrderAPI = (axiosInstance) => {
     } catch (error) {
         if (error.response) {
             console.log("err: ", error);
-            throw new Error(error.response.data.message.message);
+            throw new Error(error.response.data.message);
         } else if (error.request) {
             throw new Error("Server không phản hồi");
         } else {
@@ -127,6 +127,9 @@ const OrderAPI = (axiosInstance) => {
     }
   }
 
+  const getOrderById = async (id) => {
+
+  }
   return {
     createNewOrder,
     createNewOrderandPayment,

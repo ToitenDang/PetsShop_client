@@ -45,7 +45,6 @@ const DialogDeltailAddress = ({ onClose, open, data = null, index = null }) => {
                 }];
                 UserFetch.updateShippingAddress(auth?.user?._id, newAddress)
                     .then((data) => {
-                        toast.success(`Cập nhật địa chỉ thành công`);
                         console.log("new user: ", data.data.user)
                         auth.authenUser(data.data.user);
                         handleClose();
@@ -68,7 +67,7 @@ const DialogDeltailAddress = ({ onClose, open, data = null, index = null }) => {
                 }
                 UserFetch.updateShippingAddress(auth?.user?._id, newAddress)
                     .then((data) => {
-                        toast.success(`Cập nhật địa chỉ thành công`);
+                 
                         // console.log("new user: ", data.data.user)
                         auth.authenUser(data.data.user);
                         handleClose();
@@ -146,7 +145,6 @@ const Address = () => {
         UserFetch.updateShippingAddress(auth?.user?._id, coppyAddress)
             .then((data) => {
                 // console.log("get new: ", data);
-                toast.success(`Cập nhật địa chỉ thành công`);
                 auth.authenUser(data.data.user);
             })
             .catch((err) => {
@@ -168,7 +166,6 @@ const Address = () => {
             UserFetch.updateShippingAddress(auth?.user?._id, newAddress)
                 .then((data) => {
                     // console.log("get new: ", data);
-                    toast.success(`Cập nhật địa chỉ thành công`);
                     auth.authenUser(data.data.user);
                 })
                 .catch((err) => {

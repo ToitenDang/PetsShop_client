@@ -36,6 +36,12 @@ export default function Product() {
                         product.data.price_before_discount = beforeDiscount;  // Gán vào trường beforediscount
                         product.data.price -= discountAmount;  // Cập nhật giá sau khuyến mãi
                     }
+                    if(product.data.promotions[0].type === "price"){
+                        const discountAmount =  product.data.promotions[0].value;
+                        const beforeDiscount = product.data.price  // Tính toán giá gốc từ giá giảm
+                        product.data.price_before_discount = beforeDiscount;  // Gán vào trường beforediscount
+                        product.data.price -= discountAmount;  // Cập nhật giá sau khuyến mãi
+                    }
                 }
 
                 setProduct(product.data); 
