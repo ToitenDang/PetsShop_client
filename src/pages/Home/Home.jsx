@@ -15,7 +15,6 @@ import { Typography } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 function Home() {
-  const navigate = useNavigate();
   const auth = useAuth();
   const [promotions, setPromotions] = useState([]);
   // console.log("user: ", auth.user);
@@ -24,7 +23,7 @@ function Home() {
   }, [])
   useEffect(() => {
     async function  getPromotions() {
-      PromotionFetch.get({outdated: "false"})
+      PromotionFetch.getAllPromotion(1,{outdated: "false"})
         .then((data) => {
           console.log("Promotions data: ", data);
           setPromotions(data.data);

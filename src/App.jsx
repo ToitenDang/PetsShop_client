@@ -21,6 +21,9 @@ import { AuthProvider } from './components/Authentication/Authentication'
 import Payment from './pages/Payment/Payment'
 import VNPayReturn from './pages/Payment/NotyPayments/VNPayReturn'
 import ProductSearch from './pages/ProductSearch/ProductSearch'
+import Booking from './pages/Account/Booking'
+import PurchaseDetail from './pages/PurchaseDetail/PurchaseDetail'
+import Activity from './pages/Account/Activity'
 function App() {
 
   return (
@@ -41,7 +44,10 @@ function App() {
             <Route path='dia-chi' element={<Address />} />
             <Route path='mat-khau' element={<Password />} />
             <Route path='don-mua' element={<Purchase />} />
+            <Route path='lich-dat' element={<Booking />} />
+            <Route path='hoat-dong' element={<Activity />}/>
           </Route>
+          <Route path='don-hang/:id' element={<PurchaseDetail />}/>
           <Route path='dich-vu/:id' element = {<Service />} />
           <Route path='khuyen-mai/:id' element = {<Promotion />} />
           <Route path='product-search' element={<ProductSearch/>}/>

@@ -38,8 +38,8 @@ const Promotion = () => {
             </Box>
             <Box sx={{ marginTop: "40px" }}>
                 <Typography sx={{ fontSize: "1.2rem", textAlign: "center" }}>
-                    Chương trình kéo dài từ ngày <span style={{ color: "#f26843", fontWeight: "bold" }}>{new Date(promotion?.startDate).toLocaleDateString("vi-VN")}</span>
-                    cho đến hết ngày <span style={{ color: "#f26843", fontWeight: "bold" }}>{new Date(promotion?.endDate).toLocaleDateString("vi-VN") }</span>
+                    Chương trình kéo dài từ ngày <span style={{ color: "#f26843", fontWeight: "bold" }}>{new Date(promotion?.startDate).toLocaleDateString("vi-VN")} </span>
+                    cho đến đầu ngày <span style={{ color: "#f26843", fontWeight: "bold" }}>{new Date(promotion?.endDate).toLocaleDateString("vi-VN") }</span>
                 </Typography>
             </Box>
             <Divider sx={{ marginY: "20px" }} />

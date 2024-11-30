@@ -220,11 +220,11 @@ const Payment = () => {
         <Box sx={{
             bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#062c4f' : '#fff'),
             width: '100%',
-            height: '100vh',
+            height: '100%',
             padding: '0 16px 20px',
             display: 'flex',
             alignItems: 'center',
-            mt: '60px'
+            mt: '150px'
         }}>
             <Box sx={{
                 width: '1240px',

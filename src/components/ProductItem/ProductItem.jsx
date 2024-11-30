@@ -53,7 +53,7 @@ const ProductItem = ({ product }) => {
                         product?.promotions[0]?.type === "percent" ?
                             <Typography sx={{ fontWeight: "bold", color: "#fff" }}>{product?.promotions[0]?.value}%</Typography>
                             :
-                            <Typography sx={{ fontWeight: "bold", color: "#fff" }}>{product?.promotions[0]?.value}k</Typography>
+                            <Typography sx={{ fontWeight: "bold", color: "#fff" }}>{product?.promotions[0]?.value / 1000}k</Typography>
                     }
 
                 </Box>) : null

@@ -1,6 +1,4 @@
 import myStyle from './index.module.scss';
-
-import Appbar from "~/components/Appbar/Appbar";
 import Box from '@mui/material/Box';
 import { NavLink, Outlet } from "react-router-dom"
 import Typography from '@mui/material/Typography';
@@ -9,13 +7,17 @@ import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import KeyIcon from '@mui/icons-material/Key';
 import CasesOutlinedIcon from '@mui/icons-material/CasesOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import BarChartIcon from '@mui/icons-material/BarChart';
 import { useState } from 'react';
 import { useAuth } from "~/components/Authentication/Authentication";
-
+const navlinkStyle = ({ isActive }) => {
+    return {
+        color: isActive ? '#ef6a41' : '#000'
+    }
+}
 const Account = () => {
     const auth = useAuth();
-    const [pageChoosed, setPageChoosed] = useState(0)
     if(auth.user !== null) {
         return (
             <>
@@ -32,23 +34,33 @@ const Account = () => {
                                 {/* Link part */}
                                 <ul className={myStyle.listContainer}>
                                     <li>
-                                        <NavLink style={{color: pageChoosed === 0 ? '#ef6a41' : '#000'}} to='ho-so' className={myStyle.linkNav} onClick={() => setPageChoosed(0)}>
+                                        <NavLink style={navlinkStyle} to='ho-so' className={myStyle.linkNav}>
                                             <Typography sx={{ display: 'flex', alignItems: 'center', gap: 2 }}><AccountBoxIcon /> Hồ sơ</Typography>
                                         </NavLink>
                                     </li>
                                     <li>
-                                        <NavLink style={{color: pageChoosed === 1 ? '#ef6a41' : '#000'}} to='dia-chi' className={myStyle.linkNav} onClick={() => setPageChoosed(1)}>
+                                        <NavLink style={navlinkStyle} to='dia-chi' className={myStyle.linkNav}>
                                             <Typography sx={{ display: 'flex', alignItems: 'center', gap: 2 }}><FmdGoodIcon />Địa chỉ</Typography>
                                         </NavLink>
                                     </li>
                                     <li>
-                                        <NavLink style={{color: pageChoosed === 2 ? '#ef6a41' : '#000'}} to='mat-khau' className={myStyle.linkNav} onClick={() => setPageChoosed(2)}>
+                                        <NavLink style={navlinkStyle} to='mat-khau' className={myStyle.linkNav}>
                                             <Typography sx={{ display: 'flex', alignItems: 'center', gap: 2 }}><KeyIcon />Mật khẩu</Typography>
                                         </NavLink>
                                     </li>
                                     <li>
-                                        <NavLink style={{color: pageChoosed === 3 ? '#ef6a41' : '#000'}} to='don-mua' className={myStyle.linkNav} onClick={() => setPageChoosed(3)}>
+                                        <NavLink style={navlinkStyle} to='don-mua' className={myStyle.linkNav} >
                                             <Typography sx={{ display: 'flex', alignItems: 'center', gap: 2 }}><CasesOutlinedIcon />Đơn mua</Typography>
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink style={navlinkStyle} to='lich-dat' className={myStyle.linkNav} >
+                                            <Typography sx={{ display: 'flex', alignItems: 'center', gap: 2 }}><CalendarTodayIcon />Lịch đặt</Typography>
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink style={navlinkStyle} to='hoat-dong' className={myStyle.linkNav} >
+                                            <Typography sx={{ display: 'flex', alignItems: 'center', gap: 2 }}><BarChartIcon />Hoạt động</Typography>
                                         </NavLink>
                                     </li>
                                 </ul>

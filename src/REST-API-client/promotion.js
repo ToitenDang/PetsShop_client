@@ -1,17 +1,26 @@
 const PromotionAPI = (axiosInstance) => {
-    const get = async (condition = {}) => {
-        const params = new URLSearchParams(condition);
+    const getAllPromotion = async (page, filters) => {
+
+        const accessToken = localStorage.getItem("access_token");
+
+
         try {
-            console.log("searchParams: ", params);
-            const res = await axiosInstance.get(`/promotions?${params}`)
-            return res.data
+            const filtersString = encodeURIComponent(JSON.stringify(filters));
+            const res = await axiosInstance.get(`/promotions/?page=${page}&limit=10&filters=${filtersString}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    "Accept": "application/json",
+                }
+            });
+            return res.data; // Trả về dữ liệu từ API
         } catch (error) {
             if (error.response) {
-                throw new Error(error.response.data.message.message);
+                console.log("err: ", error);
+                throw new Error(error.response.data.message);
             } else if (error.request) {
                 throw new Error("Server không phản hồi");
             } else {
-                throw new Error(error.message)
+                throw new Error(error.message);
             }
         }
     }
@@ -31,8 +40,8 @@ const PromotionAPI = (axiosInstance) => {
         }
     }
     return {
-        get,
-        getById
+        getById,
+        getAllPromotion
     }
 }
 

@@ -363,7 +363,6 @@ const Profile = () => {
                 // console.log("Updated: ", data.data.user)
                 localStorage.setItem("access_token", data.data.access_token)
                 auth.authenUser(data.data.user);
-                toast.success("Cập nhật thông tin thành công");
                 setDisableSaveButton(false)
                 // console.log("new User:", auth.user);
             })
