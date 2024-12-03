@@ -51,6 +51,9 @@ const Review = ({ entityId, type }) => {
             comment,
             createdAt: new Date().toISOString()
         };
+
+        console.log("new review", newReview);
+        
     
         try {
             // Gọi API để tạo đánh giá mới
