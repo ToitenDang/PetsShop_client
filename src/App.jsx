@@ -24,38 +24,41 @@ import ProductSearch from './pages/ProductSearch/ProductSearch'
 import Booking from './pages/Account/Booking'
 import PurchaseDetail from './pages/PurchaseDetail/PurchaseDetail'
 import Activity from './pages/Account/Activity'
+import { ChatProvider } from './pages/ChatProvider/ChatProvider'
 function App() {
 
   return (
     <AuthProvider>
-      <Routes>
+      <ChatProvider>
+        <Routes>
           <Route path='vnpay_return' element={<VNPayReturn />} />
-        <Route path='/' element={<HeaderLayout />}>
-          <Route index element={<Home />} />
-          <Route path='lien-he' element={<Contact />} />
-          <Route path='thanh-toan' element={<Payment />} />
-       
-          <Route path='product/:id' element={<Product />} />
-          <Route path='do-thu-cung' element={<ListProduct />} />
-          <Route path='do-thu-cung/:tag' element={<ListProduct />}/>
-          <Route path='tai-khoan' element={<Account />}>
-            <Route index element={<Navigate to="ho-so" />} />
-            <Route path='ho-so' element={<Profile />} />
-            <Route path='dia-chi' element={<Address />} />
-            <Route path='mat-khau' element={<Password />} />
-            <Route path='don-mua' element={<Purchase />} />
-            <Route path='lich-dat' element={<Booking />} />
-            <Route path='hoat-dong' element={<Activity />}/>
+          <Route path='/' element={<HeaderLayout />}>
+            <Route index element={<Home />} />
+            <Route path='lien-he' element={<Contact />} />
+            <Route path='thanh-toan' element={<Payment />} />
+
+            <Route path='product/:id' element={<Product />} />
+            <Route path='do-thu-cung' element={<ListProduct />} />
+            <Route path='do-thu-cung/:tag' element={<ListProduct />} />
+            <Route path='tai-khoan' element={<Account />}>
+              <Route index element={<Navigate to="ho-so" />} />
+              <Route path='ho-so' element={<Profile />} />
+              <Route path='dia-chi' element={<Address />} />
+              <Route path='mat-khau' element={<Password />} />
+              <Route path='don-mua' element={<Purchase />} />
+              <Route path='lich-dat' element={<Booking />} />
+              <Route path='hoat-dong' element={<Activity />} />
+            </Route>
+            <Route path='don-hang/:id' element={<PurchaseDetail />} />
+            <Route path='dich-vu/:id' element={<Service />} />
+            <Route path='khuyen-mai/:id' element={<Promotion />} />
+            <Route path='product-search' element={<ProductSearch />} />
+            <Route path='*' element={<NoFound />} />
           </Route>
-          <Route path='don-hang/:id' element={<PurchaseDetail />}/>
-          <Route path='dich-vu/:id' element = {<Service />} />
-          <Route path='khuyen-mai/:id' element = {<Promotion />} />
-          <Route path='product-search' element={<ProductSearch/>}/>
-          <Route path='*' element={<NoFound />} />
-        </Route>
-        <Route path="dang-ky" element={<Register />} />
-        <Route path="dang-nhap" element={<Login />} />
-      </Routes>
+          <Route path="dang-ky" element={<Register />} />
+          <Route path="dang-nhap" element={<Login />} />
+        </Routes>
+      </ChatProvider>
     </AuthProvider>
 
   )

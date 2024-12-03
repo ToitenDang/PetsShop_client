@@ -362,6 +362,7 @@ const Profile = () => {
             .then(data => {
                 // console.log("Updated: ", data.data.user)
                 localStorage.setItem("access_token", data.data.access_token)
+                // console.log("data: ", data);
                 auth.authenUser(data.data.user);
                 setDisableSaveButton(false)
                 // console.log("new User:", auth.user);
@@ -375,101 +376,107 @@ const Profile = () => {
 
     return (
         <>
-            <Box sx={{ padding: '10px' }}>
-                <Box>
-                    <Typography sx={{ fontWeight: 'bold', fontSize: '1.4rem' }}>Hồ sơ của tôi</Typography>
-                </Box>
-                <Divider sx={{ margin: '10px 0' }} />
-                <Box sx={{ width: '100%', display: 'flex' }}>
-
-                    <Box sx={{ display: 'flex', flex: 1, flexDirection: 'column', gap: 2 }}>
-                        <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
-                            <Typography>Tên: </Typography>
-                            <input type="text" value={name} onChange={handleChangeName} />
-                        </Box>
-                        <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
-                            <Typography>Email: </Typography>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                <Typography >{obfuscateEmail(email)}</Typography>
-                                <Button sx={{ textTransform: 'none' }}
-                                    onClick={() => {
-
-                                        setOpenChangeEmail(true)
-                                    }
-                                    }
-                                >Thay đổi</Button>
-                            </Box>
-                            <ChangEmailDialog
-                                resetData={(value) => {
-                                    setEmail(value)
-                                }}
-                                open={openChangeEmail}
-                                onClose={handleCloseChangePassDialog}
-                            />
-                        </Box>
-                        <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
-                            <Typography>Số điện thoại: </Typography>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                <Typography >{obfuscatePhone(phone)}</Typography>
-                                <Button onClick={() => {
-                                    setOpenChangePhone(true)
-                                }} sx={{ textTransform: 'none' }}>Thay đổi</Button>
-                            </Box>
-                            <ChangePhoneDialog
-                                open={openChangePhone}
-                                onClose={handleCloseChangePhoneDialog}
-                                resetData={(value) => setPhone(value)}
-                            />
-                        </Box>
-                        <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
-                            <Typography>Giới tính: </Typography>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                <FormControl>
-                                    <RadioGroup
-                                        aria-labelledby="demo-radio-buttons-group-label"
-                                        defaultValue="female"
-                                        name="radio-buttons-group"
-                                        row
-                                        value={gender}
-                                        onChange={handleChangeGender}
-                                    >
-                                        <FormControlLabel value="female" control={<Radio />} label="Nữ" />
-                                        <FormControlLabel value="male" control={<Radio />} label="Nam" />
-                                        <FormControlLabel value="other" control={<Radio />} label="Khác" />
-                                    </RadioGroup>
-                                </FormControl>
-                            </Box>
-                        </Box>
-                        <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between', gap: 3 }}>
-                            <Typography>Địa chỉ sống: </Typography>
-                            <input type="text" style={{ flex: 1 }} value={address} onChange={handleChangeAddress} />
-                        </Box>
-                        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            <Button disabled={disbleSaveButton} onClick={handleSaveChangeInfo} variant='contained'>Lưu</Button>
-                        </Box>
-                    </Box>
-
-                    <Divider sx={{ margin: '0 10px' }} orientation="vertical" flexItem variant="middle" />
-                    <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            {
+                auth?.user &&
+                <>
+                    <Box sx={{ padding: '10px' }}>
                         <Box>
-                            <Box sx={{ minWidth: '100px', maxWidth: '100px', height: "100px", overflow: 'hidden', borderRadius: '50%' }}>
+                            <Typography sx={{ fontWeight: 'bold', fontSize: '1.4rem' }}>Hồ sơ của tôi</Typography>
+                        </Box>
+                        <Divider sx={{ margin: '10px 0' }} />
+                        <Box sx={{ width: '100%', display: 'flex' }}>
 
-                                <Avatar sx={{ width: "100%", height: "100%" }} src={avatar.preview} />
+                            <Box sx={{ display: 'flex', flex: 1, flexDirection: 'column', gap: 2 }}>
+                                <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
+                                    <Typography>Tên: </Typography>
+                                    <input type="text" value={name} onChange={handleChangeName} />
+                                </Box>
+                                <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
+                                    <Typography>Email: </Typography>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <Typography >{obfuscateEmail(email)}</Typography>
+                                        <Button sx={{ textTransform: 'none' }}
+                                            onClick={() => {
 
+                                                setOpenChangeEmail(true)
+                                            }
+                                            }
+                                        >Thay đổi</Button>
+                                    </Box>
+                                    <ChangEmailDialog
+                                        resetData={(value) => {
+                                            setEmail(value)
+                                        }}
+                                        open={openChangeEmail}
+                                        onClose={handleCloseChangePassDialog}
+                                    />
+                                </Box>
+                                <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
+                                    <Typography>Số điện thoại: </Typography>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <Typography >{obfuscatePhone(phone)}</Typography>
+                                        <Button onClick={() => {
+                                            setOpenChangePhone(true)
+                                        }} sx={{ textTransform: 'none' }}>Thay đổi</Button>
+                                    </Box>
+                                    <ChangePhoneDialog
+                                        open={openChangePhone}
+                                        onClose={handleCloseChangePhoneDialog}
+                                        resetData={(value) => setPhone(value)}
+                                    />
+                                </Box>
+                                <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
+                                    <Typography>Giới tính: </Typography>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <FormControl>
+                                            <RadioGroup
+                                                aria-labelledby="demo-radio-buttons-group-label"
+                                                defaultValue="female"
+                                                name="radio-buttons-group"
+                                                row
+                                                value={gender}
+                                                onChange={handleChangeGender}
+                                            >
+                                                <FormControlLabel value="female" control={<Radio />} label="Nữ" />
+                                                <FormControlLabel value="male" control={<Radio />} label="Nam" />
+                                                <FormControlLabel value="other" control={<Radio />} label="Khác" />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </Box>
+                                </Box>
+                                <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between', gap: 3 }}>
+                                    <Typography>Địa chỉ sống: </Typography>
+                                    <input type="text" style={{ flex: 1 }} value={address} onChange={handleChangeAddress} />
+                                </Box>
+                                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                    <Button disabled={disbleSaveButton} onClick={handleSaveChangeInfo} variant='contained'>Lưu</Button>
+                                </Box>
                             </Box>
-                            <Box>
-                                <Button>
-                                    <label style={{ cursor: 'pointer' }} htmlFor="file-upload" >
-                                        Chọn ảnh
-                                    </label>
-                                </Button>
-                                <input accept="image/*" id="file-upload" style={{ display: 'none' }} type='file' onChange={handleUploadImage} />
+
+                            <Divider sx={{ margin: '0 10px' }} orientation="vertical" flexItem variant="middle" />
+                            <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <Box>
+                                    <Box sx={{ minWidth: '100px', maxWidth: '100px', height: "100px", overflow: 'hidden', borderRadius: '50%' }}>
+
+                                        <Avatar sx={{ width: "100%", height: "100%" }} src={avatar.preview} />
+
+                                    </Box>
+                                    <Box>
+                                        <Button>
+                                            <label style={{ cursor: 'pointer' }} htmlFor="file-upload" >
+                                                Chọn ảnh
+                                            </label>
+                                        </Button>
+                                        <input accept="image/*" id="file-upload" style={{ display: 'none' }} type='file' onChange={handleUploadImage} />
+                                    </Box>
+                                </Box>
                             </Box>
                         </Box>
                     </Box>
-                </Box>
-            </Box>
-            <ToastContainer />
+                    <ToastContainer />
+                </>
+            }
+
         </>
     )
 }
