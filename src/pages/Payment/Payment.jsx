@@ -350,7 +350,7 @@ const Payment = () => {
                                         checked={paymentMethod === 'vnpay'}
                                         onChange={handlePaymentChange}
                                     />
-                                    Trả trước qua ví điện tử momo
+                                    Trả trước qua ví điện tử vnPay
                                 </label>
                             </Box>
 
