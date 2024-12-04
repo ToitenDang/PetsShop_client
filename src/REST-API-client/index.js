@@ -18,6 +18,7 @@ import EmailSenderAPI from './email.js';
 import PromotionAPI from './promotion';
 import ChatAPI from './chat';
 import MessageAPI from './message';
+import NotifyAPI from './notify';
 // Tạo một instance của axios
 
 const axiosInstance = axios.create({
@@ -47,3 +48,4 @@ export const EmailSenderFetch = EmailSenderAPI(axiosInstance);
 export const PromotionFetch = PromotionAPI(axiosInstance);
 export const ChatFetch = ChatAPI(axiosInstance);
 export const MessageFetch = MessageAPI(axiosInstance);
+export const NotifyFetch = NotifyAPI(axiosInstance);
