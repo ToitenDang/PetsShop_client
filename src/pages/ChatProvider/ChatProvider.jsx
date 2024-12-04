@@ -1,9 +1,10 @@
 
 import { createContext, useCallback, useEffect, useState } from "react"
 import { useAuth } from "~/components/Authentication/authentication";
-import { ChatFetch, MessageFetch, UserFetch } from "~/REST-API-client";
+import { ChatFetch, MessageFetch, NotifyFetch, UserFetch } from "~/REST-API-client";
 import { io } from "socket.io-client";
 import { SOCKET_URL } from "~/constants";
+import { ADMIN_ID } from "~/utils/constants";
 export const ChatContext = createContext();
 export const ChatProvider = ({ children }) => {
     const [userChats, setUserChats] = useState(null);
@@ -16,6 +17,8 @@ export const ChatProvider = ({ children }) => {
     const [messagesError, setMessagesError] = useState(null);
     const [newMessage, setNewMessage] = useState(null);
     const [socket, setSocket] = useState(null);
+    const [notifications, setNotifications] = useState([]);
+    const [unReadNotifications, setUnReadNotifications] = useState([]);
     const auth = useAuth();
     // useEffect(() => {
     //     const getUsers = () => {
@@ -44,43 +47,70 @@ export const ChatProvider = ({ children }) => {
     //     getUsers();
     // }, [userChats])
     useEffect(() => {
-        const newSocket = io(SOCKET_URL);
-        setSocket(newSocket);
-     
+        if(auth.user) {
+            const newSocket = io(SOCKET_URL);
+            setSocket(newSocket);
+        }
+
         return () => {
-            if(socket !== null ) {
+            if (socket !== null) {
                 socket.disconnect();
             }
         }
     }, [auth.user])
     //SOCKET ADD USER ONLINE
     useEffect(() => {
-        if(socket === null) return;
-        if(auth.user) {
+        if (socket === null) return;
+        if (auth.user) {
             socket.emit("addNewUser", auth.user._id)
         }
     }, [socket])
     // SOKET SEND MESSAGE 
     useEffect(() => {
-        if(socket === null) return;
-        if(currentChat) {
+        if (socket === null) return;
+        if (currentChat) {
             const recipientId = currentChat.members.find((id) => id !== auth.user._id)
-            socket.emit("sendMessage", {...newMessage, recipientId})
+            socket.emit("sendMessage", { ...newMessage, recipientId })
         }
 
     }, [newMessage]);
     // SOKET RECEIVE MESSAGE 
+    console.log("notifications: ", notifications)
+    console.log("unread notify", unReadNotifications)
     useEffect(() => {
-        if(socket === null) return;
-        if(currentChat) {
-            socket.on("getMessage",(res) => {
-                if(currentChat?._id !== res.chatId) return;
+        if (socket === null) return;
+        if (currentChat) {
+            socket.on("getMessage", (res) => {
+                if (currentChat?._id !== res.chatId) return;
                 console.log("user get new message: ", res)
-                setMessages((prev) => [...prev, res] )
+                setMessages((prev) => [...prev, res])
             })
         }
+        socket.on("getNotification", (res) => {
+            const isChatOpen = currentChat?.members.some(id => id === res.senderId);
+            if (isChatOpen) {
+                
+                setNotifications(prev => [{ ...res, isReading: true }, ...prev])
+
+            } else {
+                NotifyFetch.createNotify({
+                    senderId: res.senderId,
+                    receiverId: auth.user._id,
+                    type:"message",
+                    targetId:"",
+                    text: `Tin nhắn chưa đọc từ ${res.senderId} tới ${auth.user._id}`
+                }).then(data => {
+                    console.log("Tạo thông báo thành công: ", data.data);
+                    setNotifications(prev => [res, ...prev])
+                    setUnReadNotifications((prev) => [{...res, receiverId: auth.user._id},...prev])
+                }).catch(err => {
+                    console.log("Lỗi tạo thông báo: ", err);
+                })
+            }
+        })
         return () => {
-            socket.off("getMessage")
+            socket.off("getMessage");
+            socket.off("getNotification");
         }
 
     }, [socket, currentChat]);
@@ -103,6 +133,9 @@ export const ChatProvider = ({ children }) => {
                 console.log("err create chat: ", err)
             })
     }, [])
+    const updateNotifications = (data) => {
+        setNotifications(data);
+    }
     useEffect(() => {
         const getUserChats = () => {
             if (auth.user?._id) {
@@ -122,11 +155,14 @@ export const ChatProvider = ({ children }) => {
         }
         getUserChats()
     }, [auth.user])
+    const updateUnreadNotifications = (data) => {
+        setUnReadNotifications(data)
+    }
     useEffect(() => {
         const getMessages = () => {
             setIsMessagesLoading(true);
             setMessagesError(null);
-            
+
             MessageFetch.getMessageByChatId(currentChat?._id)
                 .then(data => {
                     console.log("data messages: ", data);
@@ -145,15 +181,15 @@ export const ChatProvider = ({ children }) => {
         console.log("currentchat:", chat);
     }, [])
     const sendTextMessage = useCallback((textMessage, sender, currentChatId, setTexMessage) => {
-        if(!textMessage) {
+        if (!textMessage) {
             return
         }
-        MessageFetch.createMessage(sender._id,currentChatId, textMessage)
+        MessageFetch.createMessage(sender._id, currentChatId, textMessage)
             .then(data => {
                 console.log("sended message: ", data.data)
                 setNewMessage(data.data);
                 setMessages((prev) => [...prev, data.data]),
-                setTexMessage("")
+                    setTexMessage("")
             })
             .catch(err => {
                 console.log("err send message: ", err);
@@ -170,7 +206,11 @@ export const ChatProvider = ({ children }) => {
             messages,
             isMessagesLoading,
             messagesError,
-            sendTextMessage
+            sendTextMessage,
+            notifications,
+            updateNotifications,
+            unReadNotifications,
+            updateUnreadNotifications
             // potentialChats
         }}>
             {children}
