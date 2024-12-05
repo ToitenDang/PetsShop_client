@@ -23,6 +23,7 @@ import { EmailSenderFetch, UserFetch } from '~/REST-API-client';
 
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { updateSchema } from '~/utils/rules';
 const initialTiming = 60;
 // const pinCodeInitial = '123456';
 
@@ -58,7 +59,18 @@ function ChangEmailDialog(props) {
         }
     }, [pageNumber])
 
+
     const handleNextStep = () => {
+
+        // Biểu thức chính quy để kiểm tra định dạng email
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        // Kiểm tra xem email có hợp lệ không
+        if (!emailRegex.test(email)) {
+            toast.error("Email không đúng định dạng!");
+            return; // Dừng hành động tiếp theo nếu email không hợp lệ
+        }
+
         setPageNumber(2);
         EmailSenderFetch.sendPIN(auth?.user.email, auth?.user._id)
             .then(data => {
@@ -259,6 +271,13 @@ function ChangePhoneDialog(props) {
         handleClose()
     }
     const handleSubmit = () => {
+        const phoneRegex = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
+
+    // Kiểm tra xem email có hợp lệ không
+    if (!phoneRegex.test(phone)) {
+        toast.error("Số điện thoại gồm 10 chữ số, bắt đầu từ 0!");
+        return; 
+    }
         resetData(phone);
         handleClose();
     }
@@ -344,7 +363,45 @@ const Profile = () => {
     const handleCloseChangePhoneDialog = () => {
         setOpenChangePhone(false)
     }
-    const handleSaveChangeInfo = () => {
+
+    const validateForm = async () => {
+        try {
+            await updateSchema.validate(
+                {
+                    name: name,
+                    email: email,
+                    address: address,
+                    phone: phone,  
+                },
+                { abortEarly: false }
+            );
+            return true;
+        } catch (error) {
+            if (error.inner) {
+                // Nhóm lỗi theo path (tên trường) và chỉ hiển thị lỗi đầu tiên
+                const uniqueErrors = {};
+                error.inner.forEach(err => {
+                    if (!uniqueErrors[err.path]) {
+                        uniqueErrors[err.path] = err.message;  // Lưu lỗi đầu tiên cho mỗi trường
+                    }
+                });
+    
+                // Hiển thị lỗi cho từng trường
+                Object.values(uniqueErrors).forEach(errorMessage => {
+                    toast.error(errorMessage);
+                });
+            } else {
+                toast.error("Lỗi: " + error.message);  // Hiển thị lỗi chung nếu có
+            }
+            return false;
+        }
+    };
+
+    const handleSaveChangeInfo = async () => {
+
+        const isValid = await validateForm();
+        if (!isValid) return;
+
         // console.log(auth?.user)
         console.log("avatar: ", avatar)
         const formData = new FormData();

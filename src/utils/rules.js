@@ -6,7 +6,7 @@ export const loginSchema = yup.object().shape({
     .string()
     .required('Vui lòng nhập email!')
     .matches(
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       'Email không đúng định dạng!'
     )
     .min(6, 'Email có độ dài từ 6 - 120 ký tự!')
@@ -24,13 +24,13 @@ export const registerSchema = yup.object().shape({
   name: yup
     .string()
     .required('Vui lòng nhập tên!')
-    .matches(/^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/, 'Tên không được chứa ký tự đặc biệt!')
+    .matches(/^[a-zA-Z\u00C0-\u1EF9\s'\-,.]+$/u, 'Tên không được chứa ký tự đặc biệt!')
     .max(120, 'Tên có độ dài không vượt quá 120 ký tự!'),
   email: yup
     .string()
     .required('Vui lòng nhập email!')
     .matches(
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       'Email không đúng định dạng!'
     )
     .min(6, 'Email có độ dài từ 6 - 120 ký tự!')
@@ -39,6 +39,7 @@ export const registerSchema = yup.object().shape({
     .string()
     .required('Vui lòng nhập mật khẩu!')
     .matches(/^\S*$/, 'Mật khẩu không được chứa khoảng trắng!')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/, 'Mật khẩu phải có chữ hoa, chữ thường, số, ký tự đặc biệt!')
     .min(6, 'Mật khẩu có độ dài từ 6 - 120 ký tự!')
     .max(120, 'Mật khẩu có độ dài từ 6 - 120 ký tự!'),
   confirmPassword: yup
@@ -75,8 +76,17 @@ export const updateSchema = yup.object().shape({
   name: yup
     .string()
     .required('Vui lòng nhập tên!')
-    .matches(/^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/, 'Tên không được chứa ký tự đặc biệt!')
+    .matches(/^[a-zA-Z\u00C0-\u1EF9\s'\-,.]+$/u, 'Tên không được chứa ký tự đặc biệt!')
     .max(120, 'Tên có độ dài không vượt quá 120 ký tự!'),
+  email: yup
+    .string()
+    .required('Vui lòng nhập email!')
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      'Email không đúng định dạng!'
+    )
+    .min(6, 'Email có độ dài từ 6 - 120 ký tự!')
+    .max(120, 'Email có độ dài từ 6 - 120 ký tự!'),
   phone: yup
     .string()
     .required('Vui lòng nhập số điện thoại!')
@@ -108,7 +118,7 @@ export const forgotPasswordSchema = yup.object().shape({
     .string()
     .required('Vui lòng nhập email!')
     .matches(
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       'Email không đúng định dạng!'
     )
     .min(6, 'Email có độ dài từ 6 - 120 ký tự!')
@@ -126,6 +136,7 @@ export const resetPasswordSchema = yup.object().shape({
     .string()
     .required('Vui lòng nhập mật khẩu!')
     .matches(/^\S*$/, 'Mật khẩu không được chứa khoảng trắng!')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/, 'Mật khẩu phải có chữ hoa, chữ thường, số, ký tự đặc biệt!')
     .min(6, 'Mật khẩu có độ dài từ 6 - 120 ký tự!')
     .max(120, 'Mật khẩu có độ dài từ 6 - 120 ký tự!'),
   confirm_password: yup
@@ -140,7 +151,7 @@ export const sendMessageSchema = yup.object().shape({
     .string()
     .required('Vui lòng nhập email!')
     .matches(
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       'Email không đúng định dạng!'
     )
     .min(6, 'Email có độ dài từ 6 - 120 ký tự!')
