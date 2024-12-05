@@ -79,7 +79,7 @@ const MenuAppbar = () => {
 
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <NavLink to='/do-thu-cung' style={navLinkStyle}>Thú cưng </NavLink>
+                <NavLink to='/do-thu-cung'  style={navLinkStyle} >Thú cưng </NavLink>
             </Box>
 
             <Box
