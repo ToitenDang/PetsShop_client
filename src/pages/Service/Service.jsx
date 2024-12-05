@@ -17,7 +17,7 @@ import Paper from '@mui/material/Paper';
 import CircularProgress from '@mui/material/CircularProgress';
 import Appointment from './Appointment';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { BookingFetch, ServiceFetch } from '~/REST-API-client';
 import { useAuth } from '~/components/Authentication/Authentication';
 import Dialog from '@mui/material/Dialog';
@@ -27,6 +27,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import Review from '~/components/Review/Review';
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { ChatContext } from '../ChatProvider/ChatProvider';
+import { ADMIN_ID } from '~/utils/constants';
 const DialogAlert = ({ onClose, data, open }) => {
     const handleClose = () => {
         onClose();
@@ -54,6 +56,7 @@ const Service = () => {
     const [service, setService] = useState();
     const [open, setOpen] = useState(false);
     const [contentDialog, setContentDialog] = useState("");
+    const {sendBookingNotify} = useContext(ChatContext);
     useEffect(() => {
         setLoading(true);
         ServiceFetch.getById(id)
@@ -84,13 +87,20 @@ const Service = () => {
             serviceId: id
         }
         BookingFetch.createNew(data)
-            .then(data => {
+            .then(getedData => {
                 setContentDialog({
                     isSuccess: true,
                     content: "Cảm ơn bạn đã đăng ký lịch dịch vụ của chúng tôi. Đơn của bạn đang được xác nhận, hãy chú ý thông báo nhé"
                 })
                 setOpen(true);
-                
+                // console.log("booking getted: ", getedData);
+                sendBookingNotify({
+                    senderId: auth?.user._id,
+                    receiverId: ADMIN_ID,
+                    targetId: getedData.data._id,
+                    type:"booking",
+                    text:`Cần xác nhận đơn hàng dịch vụ` 
+                })
             })
             .catch(err => {
                 setContentDialog({
@@ -307,7 +317,7 @@ const Service = () => {
                             <Box sx={{ border: "solid 1.5px #dbdbdb", padding: "10px", height: "100%" }}>
                                 <Typography variant="h5" sx={{ fontWeight: "bold" }}>📄Đặt trực tiếp tại đây</Typography>
                                 <Divider sx={{ marginY: "10px" }} />
-                                <Appointment user={auth?.user} addresses={service?.applicableBranches} prices={service?.price} onChange={handleChangeValueSubmit} />
+                                <Appointment name={service?.name} user={auth?.user} addresses={service?.applicableBranches} prices={service?.price} onChange={handleChangeValueSubmit} />
                             </Box>
                         </Box>
                         {/* Dat qua lien he */}

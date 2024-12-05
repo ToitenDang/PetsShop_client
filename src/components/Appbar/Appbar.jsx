@@ -19,10 +19,10 @@ import { Divider } from '@mui/material';
 import { useAuth } from "~/components/Authentication/Authentication";
 import { Link } from 'react-router-dom';
 import Search from './Search';
-
+import Notify from './Notify';
 function Appbar() {
   const auth = useAuth();
-  
+
 
   console.log('rerender appbar');
 
@@ -42,10 +42,15 @@ function Appbar() {
           </Box>
           {/* Search path */}
           <Search />
+
           {/* Right part */}
           <Box sx={{
-            display: 'flex', alignItems: 'center', gap: 2
+            display: 'flex', alignItems: 'center', gap: 3
           }}>
+            {/* Notify Parrt */}
+            <Link to={"/thong-bao"}>
+              <Notify />
+            </Link>
             {/* shopping cart */}
             <ShoppingCart quantity={auth?.user?.cart?.length || 0} />
             {/* Avatar */}

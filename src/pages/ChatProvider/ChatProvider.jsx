@@ -19,6 +19,8 @@ export const ChatProvider = ({ children }) => {
     const [socket, setSocket] = useState(null);
     const [notifications, setNotifications] = useState([]);
     const [unReadNotifications, setUnReadNotifications] = useState([]);
+    const [newBookingNoti, setNewBookingNoti] = useState(null);
+    const [unreadBookingNotifies, setUnreadBookingNotifyes] = useState([]);
     const auth = useAuth();
     // useEffect(() => {
     //     const getUsers = () => {
@@ -47,7 +49,7 @@ export const ChatProvider = ({ children }) => {
     //     getUsers();
     // }, [userChats])
     useEffect(() => {
-        if(auth.user) {
+        if (auth.user) {
             const newSocket = io(SOCKET_URL);
             setSocket(newSocket);
         }
@@ -75,8 +77,8 @@ export const ChatProvider = ({ children }) => {
 
     }, [newMessage]);
     // SOKET RECEIVE MESSAGE 
-    console.log("notifications: ", notifications)
-    console.log("unread notify", unReadNotifications)
+
+
     useEffect(() => {
         if (socket === null) return;
         if (currentChat) {
@@ -89,20 +91,20 @@ export const ChatProvider = ({ children }) => {
         socket.on("getNotification", (res) => {
             const isChatOpen = currentChat?.members.some(id => id === res.senderId);
             if (isChatOpen) {
-                
+
                 setNotifications(prev => [{ ...res, isReading: true }, ...prev])
 
             } else {
                 NotifyFetch.createNotify({
                     senderId: res.senderId,
                     receiverId: auth.user._id,
-                    type:"message",
-                    targetId:"",
+                    type: "message",
+                    targetId: "",
                     text: `Tin nhắn chưa đọc từ ${res.senderId} tới ${auth.user._id}`
                 }).then(data => {
                     console.log("Tạo thông báo thành công: ", data.data);
                     setNotifications(prev => [res, ...prev])
-                    setUnReadNotifications((prev) => [{...res, receiverId: auth.user._id},...prev])
+                    setUnReadNotifications((prev) => [{ ...res, receiverId: auth.user._id }, ...prev])
                 }).catch(err => {
                     console.log("Lỗi tạo thông báo: ", err);
                 })
@@ -114,6 +116,42 @@ export const ChatProvider = ({ children }) => {
         }
 
     }, [socket, currentChat]);
+
+    // Socket receive Booking Notify
+    console.log("Unread booking notifys: ", unreadBookingNotifies)
+    useEffect(() => {
+        if (socket === null) return;
+        socket.on("getBookingNotify", (notify) => {
+            console.log("getting notify booking: ", notify)
+            setUnreadBookingNotifyes((prev) => [notify, ...prev])
+        })
+        return () => {
+            socket.off("getBookingNotify")
+        }
+    }, [socket])
+
+    // socket send Booking notify
+    // useEffect(() => {
+    //     if (socket === null) return;
+    //     if(!newBookingNoti) return;
+    //     if (newBookingNoti) {
+    //         socket.emit("sendBookingNotify", newBookingNoti)
+    //     }
+    // }, [newBookingNoti])
+
+    const sendBookingNotify = useCallback((notify) => {
+        NotifyFetch.createNotify(notify)
+            .then((data) => {
+                console.log("Them notify thanh cong: ", data.data)
+                setNewBookingNoti(data.data)
+                if (socket) {
+                    socket.emit("sendBookingNotify", data.data)
+                }
+            })
+            .catch(err => {
+                console.log("Loi them booking notify", err)
+            })
+    }, [])
     const createChat = useCallback(async (firstId, secondId) => {
         return ChatFetch.createChat(firstId, secondId)
             .then(data => {
@@ -195,6 +233,13 @@ export const ChatProvider = ({ children }) => {
                 console.log("err send message: ", err);
             })
     }, []);
+    useEffect(() => {
+        if (socket === null) return;
+        if (newBookingNoti === null) return;
+        socket.emit("sendBookingNotify", newBookingNoti)
+
+    }, [newBookingNoti])
+
     return (
         <ChatContext.Provider value={{
             userChats,
@@ -210,7 +255,10 @@ export const ChatProvider = ({ children }) => {
             notifications,
             updateNotifications,
             unReadNotifications,
-            updateUnreadNotifications
+            updateUnreadNotifications,
+            sendBookingNotify,
+            unreadBookingNotifies,
+            setUnreadBookingNotifyes
             // potentialChats
         }}>
             {children}
