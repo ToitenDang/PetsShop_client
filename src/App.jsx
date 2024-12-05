@@ -25,6 +25,8 @@ import Booking from './pages/Account/Booking'
 import PurchaseDetail from './pages/PurchaseDetail/PurchaseDetail'
 import Activity from './pages/Account/Activity'
 import { ChatProvider } from './pages/ChatProvider/ChatProvider'
+import NotifyPage from './pages/Notify/NotifyPage'
+import BookingPage from './pages/Booking/Booking'
 function App() {
 
   return (
@@ -36,7 +38,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path='lien-he' element={<Contact />} />
             <Route path='thanh-toan' element={<Payment />} />
-
+            <Route path='thong-bao' element={<NotifyPage />} />
             <Route path='product/:id' element={<Product />} />
             <Route path='do-thu-cung' element={<ListProduct />} />
             <Route path='do-thu-cung/:tag' element={<ListProduct />} />
@@ -53,6 +55,7 @@ function App() {
             <Route path='dich-vu/:id' element={<Service />} />
             <Route path='khuyen-mai/:id' element={<Promotion />} />
             <Route path='product-search' element={<ProductSearch />} />
+            <Route path='lich-dat/:id' element={< BookingPage />} />
             <Route path='*' element={<NoFound />} />
           </Route>
           <Route path="dang-ky" element={<Register />} />

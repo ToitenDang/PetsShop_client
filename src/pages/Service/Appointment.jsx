@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {  useState } from 'react';
 import dayjs from 'dayjs';
 import TextField from '@mui/material/TextField';
 import Typography from "@mui/material/Typography";
@@ -22,7 +22,7 @@ const getCurrentTime = () => {
 
 
 
-const Appointment = ({ addresses, onChange, prices, user }) => {
+const Appointment = ({ name, addresses, onChange, prices, user }) => {
     const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
     const [selectedTime, setSeletedTime] = useState(getCurrentTime());
     const [weightPet, setWeightPet] = useState(2);
@@ -32,6 +32,7 @@ const Appointment = ({ addresses, onChange, prices, user }) => {
     const [detailPet, setDetailPet] = useState("");
     const [note, setNote] = useState("");
     const [totalPrice, setTotalPrice] = useState(getTotalPrice(weightPet))
+    
     function getTotalPrice(value) {
         const sortedPrices = prices.sort((a, b) => a.maxWeight - b.maxWeight);
         const priceObj = sortedPrices.find(price => value <= price.maxWeight);
@@ -93,7 +94,7 @@ const Appointment = ({ addresses, onChange, prices, user }) => {
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1, paddingX: "20px" }}>
                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     <Typography sx={{ fontSize: "1.2rem" }}>Tên dịch vụ:</Typography>
-                    <Typography sx={{ fontSize: "1.2rem" }}>Cắt tỉa lông thú cưng</Typography>
+                    <Typography sx={{ fontSize: "1.2rem" }}>{name}</Typography>
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     <Box>
