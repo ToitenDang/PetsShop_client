@@ -12,6 +12,9 @@ import { useNavigate } from 'react-router-dom';
 const ProductItem = ({ product }) => {
     const navigate = useNavigate();
 
+    console.log("img anh: ", product);
+    
+
     const handleViewDetails = () => {
         navigate(`/product/${product?._id}`);
     };
