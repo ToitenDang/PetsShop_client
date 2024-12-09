@@ -75,7 +75,7 @@ const ShoppingCart = () => {
         }
         setSelectedItems(updatedSelectedItems);
     };
-    
+
     // Tính tổng tiền của các sản phẩm được chọn
     const calculateTotal = () => {
         let total = 0;
@@ -90,7 +90,7 @@ const ShoppingCart = () => {
     // Điều hướng đến trang thanh toán và truyền giỏ hàng
     const handleCheckout = () => {
         setOpen(false);
-        navigate('/thanh-toan', { state: { productsToPay: selectedItems , cartItems: cartItems} }); // Truyền selectedItems và cartItems qua state
+        navigate('/thanh-toan', { state: { productsToPay: selectedItems, cartItems: cartItems } }); // Truyền selectedItems và cartItems qua state
     };
 
     const DrawerList = (
@@ -117,17 +117,24 @@ const ShoppingCart = () => {
                         />
                     ))
                 ) : (
-                    <Typography variant="body1" sx={{ padding: 2 }}>Giỏ hàng của bạn trống</Typography>
+                    <Typography variant="body1" sx={{ padding: 2, fontWeight:"bold", fontSize:"1.2rem" }}>Chưa có đồ trong giỏ, thú cưng của bạn sẽ buồn, mua sắm nhanh nào😒</Typography>
                 )}
             </Box>
             <Divider />
-            <Box sx={{ paddingX: '20px', textAlign: 'center', paddingY: '10px' }}>
-                <Box sx={{ paddingX: '10px', display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography variant="h5">Tổng tiền: </Typography>
-                    <Typography>{calculateTotal()}đ</Typography>
-                </Box>
-                <Button onClick={handleCheckout}>Thanh toán</Button>
-            </Box>
+            {
+                cartItems.length === 0 ?
+                    (null) :
+                    (
+                        <Box sx={{ paddingX: '20px', textAlign: 'center', paddingY: '10px' }}>
+                            <Box sx={{ paddingX: '10px', display: 'flex', justifyContent: 'space-between' }}>
+                                <Typography variant="h5">Tổng tiền: </Typography>
+                                <Typography>{calculateTotal()}đ</Typography>
+                            </Box>
+                            <Button onClick={handleCheckout}>Thanh toán</Button>
+                        </Box>
+                    ) 
+            }
+
         </Box>
     );
 

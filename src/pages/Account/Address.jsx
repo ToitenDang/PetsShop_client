@@ -34,6 +34,11 @@ const DialogDeltailAddress = ({ onClose, open, data = null, index = null }) => {
         }
     };
     const handleConfirm = () => {
+        const phoneRegex = /^\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})$/;
+        if (!phoneRegex.test(phone)) {
+            toast.error("Số điện thoại không đúng định dạng!");
+            return; 
+        }
         if (data === null) {
             if (phone !== "" && name !== "" && address !== "") {
                 const newAddress = [...auth.user.shippingAddress, {
@@ -100,7 +105,7 @@ const DialogDeltailAddress = ({ onClose, open, data = null, index = null }) => {
                     </Box>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 3, marginTop: '10px' }}>
-                    <Button>Trở lại</Button>
+                    <Button onClick={onClose}>Trở lại</Button>
                     <Button variant='contained' onClick={handleConfirm}>Hoàn Thành</Button>
                 </Box>
             </Box>
