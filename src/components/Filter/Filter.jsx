@@ -156,7 +156,7 @@ const Filter = ({ valueFilters, onChange, getData }) => {
                 <Box sx={{ padding: '10px' }}>
                     <DialogTitle>Cảnh báo</DialogTitle>
                     <Alert severity="error">Bạn cần nhập vào số</Alert>
-                    <Button onClick={handleCloseDialog}>Đã hiểu</Button>
+                    <Button sx={{marginTop:"10px", float:"right"}} variant='contained' onClick={handleCloseDialog}>Đã hiểu</Button>
                 </Box>
 
             </Dialog>

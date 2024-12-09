@@ -29,7 +29,7 @@ const Account = () => {
                             <Box sx={{ boxShadow: 'rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px', padding: '8px', borderRadius: '6px' }}>
                                 {/* Name account */}
                                 <Box sx={{ padding: '8px 0' }}>
-                                    <Typography sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 2 }}><AccountCircleIcon />Thông tin riêng tư</Typography>
+                                    <Typography sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 2 }}><AccountCircleIcon />Thông tin cá nhân</Typography>
                                 </Box>
                                 {/* Link part */}
                                 <ul className={myStyle.listContainer}>
