@@ -12,6 +12,7 @@ import {
   FormControlLabel,
   FormControl,
   FormLabel,
+  CircularProgress,
 } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerSchema } from '../../utils/rules'; // Đường dẫn đến file validate
@@ -30,6 +31,7 @@ const Register = () => {
     phone: '',
     gender: 'male'
   });
+  const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
   const handleChange = (event) => {
@@ -50,12 +52,13 @@ const Register = () => {
 
       console.log('Form data:', formData);
       try {
+        setIsLoading(true);
         const data = await RegisterFetch.post(formData);
         // console.log("data", data);
         // console.log("thanh cong tao")
         setIsSuccess(true);
         setOpenDialog(true);
-
+        setIsLoading(false)
         // Xóa dữ liệu trong các textField khi thành công
         setFormData({
           name: '',
@@ -66,10 +69,6 @@ const Register = () => {
           phone: '',
           gender: 'male'
         });
-        setTimeout(() => {
-          setOpenDialog(false);
-          navigate("/dang-nhap");
-        }, 3000)
 
 
       } catch (err) {
@@ -77,6 +76,7 @@ const Register = () => {
         setErrorMassage(err.toString());
         setIsSuccess(false)
         setOpenDialog(true);
+        setIsLoading(false)
       }
 
     } catch (err) {
@@ -87,6 +87,10 @@ const Register = () => {
       setErrors(validationErrors);
     }
   };
+  const handleSuccess = () => {
+    setOpenDialog(false);
+    navigate("/dang-nhap");
+  }
 
   return (
     <>
@@ -217,12 +221,32 @@ const Register = () => {
           </Typography>
         </Paper>
       </Box>
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+      <Dialog open={openDialog} >
         {
-          isSuccess === true ? <Alert severity='success'>Bạn đã đăng ký tài khoản thành công. Chờ 3 giây rồi hãy đăng nhập lại để tiếp tục nhé!</Alert>
-            : <Alert severity='error'>{errorMessage}</Alert>
+          isSuccess === true ?
+            <Box sx={{backgroundColor:"#f5e3b0", padding: "10px"}}>
+              <Alert severity='warning'>Hãy kiểm tra email để xác nhận tài khoản </Alert>
+              <Button sx={{marginTop:"10px"}} variant='contained' onClick={handleSuccess}>Đã hiểu</Button>
+            </Box>
+            :
+            <Box sx={{backgroundColor:"#ffbad1", padding: "10px"}}>
+              <Alert severity='error'>{errorMessage}</Alert>
+              <Button sx={{marginTop:"10px",float:"right"}} variant='contained' onClick={() => setOpenDialog(false)}>Đã hiểu</Button>
+            </Box>
         }
       </Dialog>
+      {/* Loading */}
+      {
+        isLoading && (
+          <Box sx={{
+            position: "absolute", top: 0, bottom: 0, left: 0, right: 0, backgroundColor: "rgba(0,0,0,0.3)",
+            display: "flex", justifyContent: "center", alignItems: "center"
+          }}
+          >
+            <CircularProgress />
+          </Box>
+        )
+      }
     </>
   );
 };
