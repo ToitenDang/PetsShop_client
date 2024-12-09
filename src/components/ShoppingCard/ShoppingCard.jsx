@@ -122,7 +122,8 @@ const ShoppingCart = () => {
             </Box>
             <Divider />
             {
-                !cartItems.length === 0 ?
+                cartItems.length === 0 ?
+                    (null) :
                     (
                         <Box sx={{ paddingX: '20px', textAlign: 'center', paddingY: '10px' }}>
                             <Box sx={{ paddingX: '10px', display: 'flex', justifyContent: 'space-between' }}>
@@ -131,8 +132,7 @@ const ShoppingCart = () => {
                             </Box>
                             <Button onClick={handleCheckout}>Thanh toán</Button>
                         </Box>
-                    ) :
-                    (null)
+                    ) 
             }
 
         </Box>
