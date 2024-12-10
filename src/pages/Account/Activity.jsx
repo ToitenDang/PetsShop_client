@@ -92,6 +92,11 @@ const Activity = () => {
     }, [])
 
     const handleFindYearList = () => {
+        const isPositiveInteger = (yearList) => /^[1-9]\d*$/.test(yearList);
+        if(yearList !== '' && !isPositiveInteger(yearList))  {
+            toast.error("Dữ liệu năm chưa hợp lệ!");
+            return
+        }
         fetchDataOrder();
         fetchDataBookings();
     }
@@ -100,7 +105,7 @@ const Activity = () => {
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 2 }}>
                 <Typography variant="h6" sx={{ fontWeight: "bold" }}>Hoạt động mua hàng của bạn</Typography>
                 <Divider orientation="vertical" flexItem />
-                <Typography variant="h6" sx={{ fontWeight: "bold" }}>Năm: {yearTK}</Typography>
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>Năm: <span style={{color: "#de5945"}}>{yearTK}</span></Typography>
             </Box>
 
             <Box sx={{ marginTop: "20px", display: "flex", justifyContent: "flex-start", gap: 2 }}>

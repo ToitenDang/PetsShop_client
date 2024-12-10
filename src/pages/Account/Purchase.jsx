@@ -39,7 +39,7 @@ const Purchase = () => {
         } else {
             window.alert("Bộ lọc không hợp lệ hoặc không còn hỗ trợ");
         }
-        OrderFetch.getOrderByUserId(auth.user._id, condition, myFind)
+        OrderFetch.getOrderByUserId(auth.user._id, condition, myFind.trim())
             .then((data) => {
                 console.log(`orders: ${auth.user._id}`, data);
                 if (orders === null) {
@@ -115,7 +115,7 @@ const Purchase = () => {
                         <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, gap: 2 }}>
 
                             <TextField value={find} onChange={(e) => setFind(e.target.value)} sx={{ flex: 1 }} label="Tìm kiếm" variant="standard" />
-                            <button onClick={handleSearch} style={{ border: "none", borderRadius: "4px", cursor: "pointer" }}><SearchIcon /></button>
+                            <button onClick={handleSearch} style={{ border: "none", borderRadius: "4px", cursor: "pointer", backgroundColor:"#de5945", color:"#fff" }}><SearchIcon /></button>
                             <Tooltip title="Bạn có thể tìm theo Tên sản phẩm">
                                 <HelpIcon />
                             </Tooltip>

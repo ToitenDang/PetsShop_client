@@ -5,6 +5,7 @@ import { Add, Remove } from '@mui/icons-material';
 import Review from '~/components/Review/Review';
 import {ProductFetch, UserFetch} from '~/REST-API-client/index'
 import { useAuth } from "~/components/Authentication/Authentication";
+import { ToastContainer } from 'react-toastify';
 
 
 
@@ -248,6 +249,7 @@ export default function Product() {
                 {product && <Review entityId={product._id} type='product' />}
                 
             </Box>
+            <ToastContainer />
         </Box>
     );
 }

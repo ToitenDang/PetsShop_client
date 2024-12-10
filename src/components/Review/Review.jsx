@@ -3,7 +3,8 @@ import { Box, Typography, Button, TextField, Rating } from '@mui/material';
 //import { createNewReview, feachReviewByProductId } from "~/apis";
 import { ReviewFetch } from '~/REST-API-client/index'
 import { useAuth } from "~/components/Authentication/Authentication";
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const Review = ({ entityId, type }) => {
     const {user} = useAuth();
@@ -19,7 +20,7 @@ const Review = ({ entityId, type }) => {
                 const review = await ReviewFetch.fetchReviewByEntityId(entityId, type);
                 setReview(review);
             } catch (error) {
-
+                toast.error(`Lỗi lấy dữ liệu đánh giá:\n${error}`)
                 console.error('Error fetching review details:', error);
             }
         };
@@ -33,12 +34,14 @@ const Review = ({ entityId, type }) => {
     
         if (!user) {
             console.error("Người dùng chưa đăng nhập");
-            alert("Bạn cần đăng nhập để viết đánh giá.");
+            // alert("Bạn cần đăng nhập để viết đánh giá.");
+            toast.error("Bạn cần đăng nhập để viết đánh giá.")
             return; // Không cho phép gửi đánh giá nếu người dùng chưa đăng nhập
         }
     
         if (!rating || !comment) {
-            alert("Bạn chưa nhập đánh giá!");
+            // alert("Bạn chưa nhập đánh giá!");
+            toast.error("Bạn chưa nhập đánh giá!")
             return;
         }
     
@@ -61,12 +64,14 @@ const Review = ({ entityId, type }) => {
     
             // Kiểm tra nếu server trả về lỗi, hiển thị thông báo lỗi cho người dùng
             if (response.status === "ERROR") {
-                alert(response.message);  // Hiển thị thông báo lỗi từ server
+                // alert(response.message);  // Hiển thị thông báo lỗi từ server
+                toast.error(response.message);
                 return;
             }
     
             // Cập nhật danh sách đánh giá sau khi tạo thành công
-            alert(response.message); // Hiển thị thông báo thành công
+            // alert(response.message); // Hiển thị thông báo thành công
+            toast.success(response.message);
             setReview((prev) => [...prev, response.data]);
     
             // Đặt lại giá trị rating và comment sau khi tạo đánh giá mới
@@ -75,7 +80,8 @@ const Review = ({ entityId, type }) => {
     
         } catch (error) {
             console.error('Error creating review:', error);
-            alert("Đã xảy ra lỗi khi gửi đánh giá. Vui lòng thử lại.");
+            // alert("Đã xảy ra lỗi khi gửi đánh giá. Vui lòng thử lại.");
+            toast.error(`Đã xảy ra lỗi khi gửi đánh giá. Vui lòng thử lại.\n${error}`)
         }
     };
     
@@ -167,6 +173,7 @@ const Review = ({ entityId, type }) => {
                         </Box>
                     ))}
             </Box>
+            {/* <ToastContainer /> */}
         </Box>
     );
 };

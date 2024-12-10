@@ -95,7 +95,7 @@ const Booking = () => {
                         <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, gap: 2 }}>
 
                             <TextField value={find} onChange={(e) => setFind(e.target.value)} sx={{ flex: 1 }} label="Tìm kiếm" variant="standard" />
-                            <button onClick={handleSearch} style={{ border: "none", borderRadius: "4px", cursor: "pointer" }}><SearchIcon /></button>
+                            <button onClick={handleSearch} style={{ border: "none", borderRadius: "4px", cursor: "pointer", backgroundColor:"#de5945", color:"#fff" }}><SearchIcon /></button>
                             <Tooltip title="Bạn có thể tìm theo mã đơn">
                                 <HelpIcon />
                             </Tooltip>

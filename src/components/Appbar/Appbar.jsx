@@ -65,7 +65,7 @@ function Appbar() {
             }
 
             {/* Select mode */}
-            <ModeSelect sx={{ flex: 1 }} />
+            {/* <ModeSelect sx={{ flex: 1 }} /> */}
           </Box>
         </Box>
 

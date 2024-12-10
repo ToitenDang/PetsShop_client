@@ -57,6 +57,7 @@ const UserAPI = (axiosInstance) => {
             return res.data;
         } catch (error) {
             if (error.response) {
+                console.log("err update: ", error)
                 throw new Error(error.response.data.message.message);
             } else if (error.request) {
                 throw new Error("Server không phản hồi");

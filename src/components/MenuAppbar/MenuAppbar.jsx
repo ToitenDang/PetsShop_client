@@ -36,18 +36,18 @@ const MenuAppbar = () => {
             })
     }, [])
     const serviceExpand = (
-        <Box sx={{backgroundColor: "#fff"}} className={mystyle.expandService}>
+        <Paper sx={{backgroundColor: "#fff"}} className={mystyle.expandService}>
             {
                 services?.map((service, index) => {
                     return (
-                        <Box key={index} >
-                            <NavLink  className={mystyle.expandServiceItem} to={`/dich-vu/${service?._id}`} >{service?.name}</NavLink>
-                            <Divider sx={{marginY: "5px"}}/>
-                        </Box>
+                        <NavLink  to={`/dich-vu/${service?._id}`} key={index}  className={mystyle.expandServiceItem} sx={{padding:'10px'}} >
+                            <Box>{service?.name}</Box>
+                            {/* <Divider sx={{marginY: "5px"}}/> */}
+                        </NavLink>
                     )
                 })
             }
-        </Box>
+        </Paper>
     )
     const pageExpand = (
         <Paper sx={{ width: '150px' }} className={mystyle.expandPage}>

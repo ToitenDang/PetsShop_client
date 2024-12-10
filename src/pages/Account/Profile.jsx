@@ -72,9 +72,9 @@ function ChangEmailDialog(props) {
         }
 
         setPageNumber(2);
-        EmailSenderFetch.sendPIN(auth?.user.email, auth?.user._id)
+        EmailSenderFetch.sendPIN(email, auth?.user._id)
             .then(data => {
-                toast.success("Chúng tôi đã gửi mã PIN cho bạn, check lại email cũ nhé")
+                toast.success("Chúng tôi đã gửi mã PIN tới email mới, hãy kiểm tra!")
             })
             .catch(err => {
                 console.log("Lỗi tạo pin: ", err);
@@ -135,7 +135,7 @@ function ChangEmailDialog(props) {
     };
     const handleConfirm = () => {
         const inputpin = pin.join('');
-        EmailSenderFetch.checkPIN(auth?.user.email, auth?.user._id, inputpin)
+        EmailSenderFetch.checkPIN(email, auth?.user._id, inputpin)
             .then(data => {
                 clearInterval(reCode.current);
                 resetData(email);
@@ -202,7 +202,7 @@ function ChangEmailDialog(props) {
                                 <CloseIcon />
                             </Button>
                         </DialogTitle>
-                        <Typography>Nhập mã pin chúng tôi đã gửi tới {<span style={{ fontWeight: "bold", fontSize: "1.1rem", color: "#e77045" }}>email cũ</span>}</Typography>
+                        <Typography>Nhập mã pin chúng tôi đã gửi tới {<span style={{ fontWeight: "bold", fontSize: "1.1rem", color: "#e77045" }}>email mới</span>}</Typography>
                         <Box style={{ display: 'flex', maxWidth: '350px', gap: 4 }}>
                             {pin.map((subpin, index) => (
                                 <input
@@ -271,11 +271,11 @@ function ChangePhoneDialog(props) {
         handleClose()
     }
     const handleSubmit = () => {
-        const phoneRegex = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
+        const phoneRegex = /^\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})$/;
 
     // Kiểm tra xem email có hợp lệ không
     if (!phoneRegex.test(phone)) {
-        toast.error("Số điện thoại gồm 10 chữ số, bắt đầu từ 0!");
+        toast.error("Số điện thoại không đúng định dạng!");
         return; 
     }
         resetData(phone);
@@ -422,10 +422,12 @@ const Profile = () => {
                 // console.log("data: ", data);
                 auth.authenUser(data.data.user);
                 setDisableSaveButton(false)
+                window.alert("Cập nhật thông tin thành công")
                 // console.log("new User:", auth.user);
             })
             .catch(err => {
                 console.log("Err: ", err)
+                setDisableSaveButton(false)
                 toast.error(`Cập nhật thông tin thất bại: \n ${err}`);
             })
 
