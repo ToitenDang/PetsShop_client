@@ -20,6 +20,7 @@ export default function Product() {
     const navigate = useNavigate();
     const [quantity, setQuantity] = useState(1);
     const [image, setImage] = useState('');
+    const [selectedThumbnailIndex, setSelectedThumbnailIndex] = useState(0)
 
     useEffect(() => {
         
@@ -125,8 +126,9 @@ export default function Product() {
         navigate('/thanh-toan', { state: { productsToPay: [productToBuy] } });
     };
 
-    const handleImageClick = (thumb) => {
+    const handleImageClick = (thumb, index) => {
         setImage(thumb)
+        setSelectedThumbnailIndex(index)
     }
     
 
@@ -157,10 +159,10 @@ export default function Product() {
                 >
                     <Box display="flex" sx={{ width: { xs: '100%', md: '45%' }, height: 'auto', flexDirection: 'column', alignItems: 'center' }}>
                         <Box sx={{display: 'flex', justifyContent: 'center', maxWidth: '70%'}}>
-                            <img
+                            <img 
                             src= {image||'https://th.bing.com/th/id/OIP.Y9MaxiVxV-8HnzG7MuNC3wHaE8?w=302&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7'}
                             //src={product?.img}
-                            alt={product?.name} style={{ maxWidth: '70%', height: 'auto', cursor: 'zoom-in' }} />
+                            alt={product?.name} style={{ with: "70%",maxWidth: '70%', height: 'auto', cursor: 'zoom-in' ,objectFit: "fit", border: "1px solid #333"}} />
                         </Box>
 
                         <Box display="flex" justifyContent="center" sx={{ marginTop: 2 }}>
@@ -176,8 +178,11 @@ export default function Product() {
                                     key={index}
                                     src={thumb.url}
                                     alt={`Thumbnail ${index + 1}`}
-                                    style={{ width: '50px', height: '50px', margin: '0 5px', cursor: 'pointer' }}
-                                    onClick={() => handleImageClick(thumb.url)} // Hàm để hiển thị ảnh lớn
+                                    style={{ width: '50px', height: '50px', margin: '0 5px', cursor: 'pointer' ,
+                                        border: selectedThumbnailIndex === index ? '2px solid #e96c48' : 'none' // Thêm border khi được
+                                    }}
+                                    
+                                    onClick={() => handleImageClick(thumb.url, index)} // Hàm để hiển thị ảnh lớn
                                 />
                             ))}
                         </Box>
