@@ -118,7 +118,7 @@ const Login = () => {
           </Button>
         </form>
         <Typography variant="body2" align="center" sx={{ marginTop: 2 }} color={(theme) => (theme.palette.mode === 'dark' ? '#ffffff' : '#666666')}>
-          <Link to="#" variant="body2" style={{ color: "#2d98da" }}>
+          <Link to="/quen-mat-khau" variant="body2" style={{ color: "#2d98da" }}>
             Quên mật khẩu?
           </Link>
         </Typography>

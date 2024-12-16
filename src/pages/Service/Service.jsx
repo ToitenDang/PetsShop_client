@@ -41,7 +41,7 @@ const DialogAlert = ({ onClose, data, open }) => {
             }
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                   {data.content}
+                    {data.content}
                 </DialogContentText>
             </DialogContent>
 
@@ -56,7 +56,7 @@ const Service = () => {
     const [service, setService] = useState();
     const [open, setOpen] = useState(false);
     const [contentDialog, setContentDialog] = useState("");
-    const {sendBookingNotify} = useContext(ChatContext);
+    const { sendBookingNotify } = useContext(ChatContext);
     useEffect(() => {
         setLoading(true);
         ServiceFetch.getById(id)
@@ -98,8 +98,8 @@ const Service = () => {
                     senderId: auth?.user._id,
                     receiverId: ADMIN_ID,
                     targetId: getedData.data._id,
-                    type:"booking",
-                    text:`Cần xác nhận đơn hàng dịch vụ` 
+                    type: "booking",
+                    text: `Cần xác nhận đơn hàng dịch vụ`
                 })
             })
             .catch(err => {
@@ -324,6 +324,35 @@ const Service = () => {
                         <Box className={myStyle.col50}>
                             <Box sx={{ border: "solid 1.5px #dbdbdb", padding: "10px", height: "100%" }}>
                                 <Typography variant="h5" sx={{ fontWeight: "bold" }}>📱Liên hệ với chúng tôi để đặt</Typography>
+                                <Box sx={{marginTop:"20px", display:"flex", flexDirection:"column", gap:2}}>
+                                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 2 }}>
+                                        <Box sx={{ width: "50px", height: "50px" }}>
+                                            <img style={{ width: "100%", height: "100%", objectFit: "cover" }} src='https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/1200px-Icon_of_Zalo.svg.png' />
+                                        </Box>
+                                        <Box>
+                                            <Typography sx={{fontWeight:"bold"}}>Liên hệ qua Zalo</Typography>
+                                            <Typography sx={{fontWeight:"bold"}}>0928895717</Typography>
+                                        </Box>
+                                    </Box>
+                                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 2 }}>
+                                        <Box sx={{ width: "50px", height: "50px" }}>
+                                            <img style={{ width: "100%", height: "100%", objectFit: "cover" }} src='https://pngimg.com/uploads/whatsapp/whatsapp_PNG21.png' />
+                                        </Box>
+                                        <Box>
+                                            <Typography sx={{fontWeight:"bold"}}>Liên hệ qua số điện thoại</Typography>
+                                            <Typography sx={{fontWeight:"bold"}}>0928895717</Typography>
+                                        </Box>
+                                    </Box>
+                                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 2 }}>
+                                        <Box sx={{ width: "50px", height: "50px" }}>
+                                            <img style={{ width: "100%", height: "100%", objectFit: "cover" }} src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1024px-Facebook_Logo_%282019%29.png' />
+                                        </Box>
+                                        <Box>
+                                            <Typography sx={{fontWeight:"bold"}}>Chúng tôi trên facebook</Typography>
+                                            <a href='https://www.facebook.com/profile.php?id=100049653632141' target='_blank' sx={{fontWeight:"bold"}}>Xem tại đây</a>
+                                        </Box>
+                                    </Box>
+                                </Box>
                             </Box>
                         </Box>
                     </Box>
@@ -338,8 +367,8 @@ const Service = () => {
                     <Typography variant='h4' sx={{ fontWeight: "bold" }}>🌟Đánh giá của khách hàng</Typography>
                 </Box>
 
-                <Box sx={{  padding: "10px", marginTop: "20px" }}>
-                    <Review entityId={id} type="service"/>
+                <Box sx={{ padding: "10px", marginTop: "20px" }}>
+                    <Review entityId={id} type="service" />
                 </Box>
             </Box>
             <DialogAlert open={open}

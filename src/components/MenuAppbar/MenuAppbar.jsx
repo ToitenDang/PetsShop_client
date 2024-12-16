@@ -14,7 +14,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 const navLinkStyle = ({ isActive }) => {
     return {
-        color: isActive ? '#ef6a41' : '#000',
+        color:  '#000',
         textTransform: 'none',
         fontSize: '1.1rem',
         fontWeight: 'bold',
@@ -59,19 +59,19 @@ const MenuAppbar = () => {
                 <NavLink to='/lien-he' style={navLinkStyle}><Typography>Liên hệ</Typography></NavLink>
             </button>
 
-            <button className={mystyle.expandServiceItem}>
+            {/* <button className={mystyle.expandServiceItem}>
                 <Typography>Team</Typography>
             </button>
 
             <button className={mystyle.expandServiceItem}>
                 <Typography>Trợ giúp</Typography>
-            </button>
+            </button> */}
         </Paper>
     )
     return (
         <Box sx={{
             display: 'flex',
-            gap: 2,
+            gap: 4,
             justifyContent: 'flex-start'
         }}>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -92,10 +92,10 @@ const MenuAppbar = () => {
                 {serviceExpand}
 
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {/* <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <NavLink to='/tap-chi' style={navLinkStyle}>Tạp chí</NavLink>
 
-            </Box>
+            </Box> */}
             <Box
                 className={mystyle.page}
                 sx={{
