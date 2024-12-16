@@ -27,6 +27,7 @@ import Activity from './pages/Account/Activity'
 import { ChatProvider } from './pages/ChatProvider/ChatProvider'
 import NotifyPage from './pages/Notify/NotifyPage'
 import BookingPage from './pages/Booking/Booking'
+import About from './pages/About/About'
 import ForgetPassword from './pages/ForgetPassword/ForgetPassword'
 function App() {
 
@@ -38,6 +39,7 @@ function App() {
           <Route path='/' element={<HeaderLayout />}>
             <Route index element={<Home />} />
             <Route path='lien-he' element={<Contact />} />
+            <Route path='gioi-thieu' element={<About />} />
             <Route path='thanh-toan' element={<Payment />} />
             <Route path='thong-bao' element={<NotifyPage />} />
             <Route path='product/:id' element={<Product />} />

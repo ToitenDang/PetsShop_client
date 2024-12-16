@@ -52,7 +52,8 @@ const MenuAppbar = () => {
     const pageExpand = (
         <Paper sx={{ width: '150px' }} className={mystyle.expandPage}>
             <button className={mystyle.expandServiceItem}>
-                <Typography>Về chúng tôi</Typography>
+            <NavLink to='/gioi-thieu' style={navLinkStyle}><Typography>Về chúng tôi</Typography></NavLink>
+
             </button>
             <button className={mystyle.expandServiceItem}>
 
