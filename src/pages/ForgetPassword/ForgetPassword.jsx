@@ -7,7 +7,7 @@ import myStyle from './ForgetPass.module.scss';
 import { UserFetch } from "~/REST-API-client";
 import { EmailSenderFetch } from "~/REST-API-client";
 const initialTiming = 60;
-
+const publicUrl = import.meta.env.VITE_PUBLIC_URL;
 const PageThree = ({ toFirstPage, user }) => {
     const [newPass, setNewPass] = useState("");
     const [rePass, setRepass] = useState("");
@@ -17,7 +17,7 @@ const PageThree = ({ toFirstPage, user }) => {
     const [isLoading, setIsloading] = useState(false);
     const [successPassDialog, setSuccessPassDialog] = useState(false);
     const navigate = useNavigate();
-    console.log("getted user: ", user);
+   
     const handleClose = () => {
         setOpen(false);
     };
@@ -37,10 +37,10 @@ const PageThree = ({ toFirstPage, user }) => {
     const handleComfirm = () => {
         const regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         if (regexPass.test(newPass)) {
-            if(newPass !== rePass) {
+            if (newPass !== rePass) {
                 setIsValidRePass(false);
                 return;
-            } 
+            }
             setIsloading(true);
             UserFetch.forgetPassword(user._id, newPass)
                 .then(data => {
@@ -57,14 +57,14 @@ const PageThree = ({ toFirstPage, user }) => {
     }
     const handleChangeNewPass = (e) => {
         const content = e.target.value;
-        if(content !== "") {
+        if (content !== "") {
             setIsValidPass(true);
         }
         setNewPass(content);
     }
     const handleChangeRePass = (e) => {
         const content = e.target.value;
-        if(content !== "") {
+        if (content !== "") {
             setIsValidRePass(true);
         }
         setRepass(content);
@@ -81,24 +81,24 @@ const PageThree = ({ toFirstPage, user }) => {
                     <TextField value={newPass} onChange={handleChangeNewPass} />
                     {
                         !isValidPass && <Box>
-                        <Typography sx={{fontSize:"0.7rem", fontWeight:"bold", color:"red"}}>
-                            Mật khẩu tối thiểu 8 ký tự 
-                        </Typography>
-                        <Typography sx={{fontSize:"0.7rem", fontWeight:"bold", color:"red"}}>         
-                            Tối thiểu 1 ký tự in hoa, 1 ký tự in thường 
-                        </Typography>
-                        <Typography sx={{fontSize:"0.7rem", fontWeight:"bold", color:"red"}}>
-                            1 chữ số và 1 ký hiệu đặc biệt
-                        </Typography>
-                    </Box>
+                            <Typography sx={{ fontSize: "0.7rem", fontWeight: "bold", color: "red" }}>
+                                Mật khẩu tối thiểu 8 ký tự
+                            </Typography>
+                            <Typography sx={{ fontSize: "0.7rem", fontWeight: "bold", color: "red" }}>
+                                Tối thiểu 1 ký tự in hoa, 1 ký tự in thường
+                            </Typography>
+                            <Typography sx={{ fontSize: "0.7rem", fontWeight: "bold", color: "red" }}>
+                                1 chữ số và 1 ký hiệu đặc biệt
+                            </Typography>
+                        </Box>
                     }
                     <Typography>Nhập lại mật khẩu</Typography>
                     <TextField value={rePass} onChange={handleChangeRePass} />
-                    {!isValidRePass && <Typography sx={{fontSize:"0.7rem", fontWeight:"bold", color:"red"}}>Mật khẩu nhập lại không khớp</Typography>}
+                    {!isValidRePass && <Typography sx={{ fontSize: "0.7rem", fontWeight: "bold", color: "red" }}>Mật khẩu nhập lại không khớp</Typography>}
                 </Box>
                 <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, marginTop: "10px" }}>
-                    <Button disabled = {isLoading} onClick={handleCancle}>Huỷ</Button>
-                    <Button disabled = {isLoading} onClick={handleComfirm}>Xác nhận</Button>
+                    <Button disabled={isLoading} onClick={handleCancle}>Huỷ</Button>
+                    <Button disabled={isLoading} onClick={handleComfirm}>Xác nhận</Button>
                 </Box>
             </Paper>
             <Dialog
@@ -355,41 +355,54 @@ const ForgetPassword = () => {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                bgcolor: '#4b6584',
+                // bgcolor: '#4b6584',
                 position: 'relative',
+                backgroundImage: `url(${publicUrl}/images/background.jpg)`
             }}
         >
             {
-                page === 1 ? <Paper sx={{ padding: "20px", display: "flex", flexDirection: "column", gap: 2, minWidth: "400px" }}>
-                    <Box >
-                        <Typography sx={{ textAlign: "center", fontSize: "1.2rem", fontWeight: "bold" }}>Tìm tài khoản của bạn</Typography>
+                page === 1 ?
+                    <Paper sx={{zIndex:2, padding: "20px", display: "flex", flexDirection: "column", gap: 2, minWidth: "400px" }}>
+                        <Box >
+                            <Typography sx={{ textAlign: "center", fontSize: "1.2rem", fontWeight: "bold" }}>Tìm tài khoản của bạn</Typography>
 
-                    </Box>
+                        </Box>
 
-                    <Box sx={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: 2 }}>
-                        <Typography sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>Vui lòng nhập email để tìm được tài khoản của bạn</Typography>
-                        <TextField placeholder="example@gmail.com" value={email} sx={{ width: "100%" }} onChange={(e) => setEmail(e.target.value)} />
-                    </Box>
-                    <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: "10px", gap: 2 }}>
-                        <Button
-                            disabled={isLoading}
-                            onClick={() => {
-                                navigate("/dang-nhap")
-                            }} variant="contained" >Hủy</Button>
-                        <Button disabled={isLoading} onClick={handleNext} variant="contained" >Tiếp tục</Button>
-                    </Box>
+                        <Box sx={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: 2 }}>
+                            <Typography sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>Vui lòng nhập email để tìm được tài khoản của bạn</Typography>
+                            <TextField placeholder="example@gmail.com" value={email} sx={{ width: "100%" }} onChange={(e) => setEmail(e.target.value)} />
+                        </Box>
+                        <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: "10px", gap: 2 }}>
+                            <Button
+                                disabled={isLoading}
+                                onClick={() => {
+                                    navigate("/dang-nhap")
+                                }} variant="contained" >Hủy</Button>
+                            <Button disabled={isLoading} onClick={handleNext} variant="contained" >Tiếp tục</Button>
+                        </Box>
 
-                </Paper>
+                    </Paper>
                     : page === 2 ?
-                        <Box>
+                        <Box sx={{ zIndex: 2 }}>
                             <MyPageTwo toPrevPage={toPrevPage} toNextPage={toNextPage} email={email} />
                         </Box>
                         :
-                        <Box>
+                        <Box sx={{ zIndex: 2 }}>
                             <MyPageThree toFirstPage={toFirstPage} user={user} />
                         </Box>
             }
             <ToastContainer />
+            <Box
+                sx={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Màu phủ trong suốt
+                    zIndex: 1, // Thấp hơn form
+                }}
+            ></Box>
         </Box>
 
 
