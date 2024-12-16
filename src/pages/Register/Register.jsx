@@ -17,6 +17,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { registerSchema } from '../../utils/rules'; // Đường dẫn đến file validate
 import { RegisterFetch } from '~/REST-API-client';
+const publicUrl = import.meta.env.VITE_PUBLIC_URL;
 const Register = () => {
   const navigate = useNavigate();
   const [isSuccess, setIsSuccess] = useState(true);
@@ -100,13 +101,15 @@ const Register = () => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          bgcolor: '#4b6584',
+          // bgcolor: '#4b6584',
           position: 'relative',
+          backgroundImage: `url(${publicUrl}/images/background.jpg)`
         }}
       >
         <Paper
           elevation={3}
           sx={{
+            zIndex:2,
             padding: '20px',
             width: '100%',
             maxWidth: 400,
@@ -220,18 +223,29 @@ const Register = () => {
             </Link>
           </Typography>
         </Paper>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Màu phủ trong suốt
+            zIndex: 1, // Thấp hơn form
+          }}
+        ></Box>
       </Box>
       <Dialog open={openDialog} >
         {
           isSuccess === true ?
-            <Box sx={{backgroundColor:"#f5e3b0", padding: "10px"}}>
+            <Box sx={{ backgroundColor: "#f5e3b0", padding: "10px" }}>
               <Alert severity='warning'>Hãy kiểm tra email để xác nhận tài khoản </Alert>
-              <Button sx={{marginTop:"10px"}} variant='contained' onClick={handleSuccess}>Đã hiểu</Button>
+              <Button sx={{ marginTop: "10px" }} variant='contained' onClick={handleSuccess}>Đã hiểu</Button>
             </Box>
             :
-            <Box sx={{backgroundColor:"#ffbad1", padding: "10px"}}>
+            <Box sx={{ backgroundColor: "#ffbad1", padding: "10px" }}>
               <Alert severity='error'>{errorMessage}</Alert>
-              <Button sx={{marginTop:"10px",float:"right"}} variant='contained' onClick={() => setOpenDialog(false)}>Đã hiểu</Button>
+              <Button sx={{ marginTop: "10px", float: "right" }} variant='contained' onClick={() => setOpenDialog(false)}>Đã hiểu</Button>
             </Box>
         }
       </Dialog>
@@ -247,6 +261,7 @@ const Register = () => {
           </Box>
         )
       }
+
     </>
   );
 };

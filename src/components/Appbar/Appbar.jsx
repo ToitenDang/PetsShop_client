@@ -73,10 +73,10 @@ function Appbar() {
 
         {/* Upper part */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, justifyContent: 'center' }}>
-          <Box sx={{ flex: 1 }}>
+          <Box sx={{ flex: 2 }}>
             <Category />
           </Box>
-          <Box sx={{ flex: 3 }}>
+          <Box sx={{ flex: 4 }}>
             <MenuAppbar />
           </Box>
         </Box>

@@ -27,6 +27,7 @@ import Activity from './pages/Account/Activity'
 import { ChatProvider } from './pages/ChatProvider/ChatProvider'
 import NotifyPage from './pages/Notify/NotifyPage'
 import BookingPage from './pages/Booking/Booking'
+import ForgetPassword from './pages/ForgetPassword/ForgetPassword'
 function App() {
 
   return (
@@ -60,6 +61,7 @@ function App() {
           </Route>
           <Route path="dang-ky" element={<Register />} />
           <Route path="dang-nhap" element={<Login />} />
+          <Route path='quen-mat-khau' element={<ForgetPassword />}/>
         </Routes>
       </ChatProvider>
     </AuthProvider>
