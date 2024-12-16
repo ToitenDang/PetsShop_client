@@ -1,14 +1,16 @@
 import { Box, Button, CircularProgress, Divider, Typography } from "@mui/material";
 import { useEffect, useState, useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { BookingFetch } from "~/REST-API-client";
+import { useAuth } from "~/components/Authentication/Authentication";
 const BookingPage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
+    const auth = useAuth();
     const [isLoading, setIsLoading] = useState(true);
     const [status, setStatus] = useState()
     const [booking, setBooking] = useState();
@@ -33,13 +35,14 @@ const BookingPage = () => {
     }, [])
     if (isLoading) {
         return (
-            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center",marginTop:"150px" }}>
                 <CircularProgress />
             </Box>
         )
     }
     return (
-        <Box>
+        auth.user !== null ? 
+        <Box sx={{marginTop:"150px", width:"900px", marginLeft:"auto", marginRight:"auto"}}>
             <Box sx={{ display: "flex", justifyContent: "flex-start", alignItems: "center", gap: 0, cursor: "pointer" }} onClick={handleBackPrevPage}>
                 <ArrowBackIosIcon />
                 <Typography>Quay lại</Typography>
@@ -98,6 +101,8 @@ const BookingPage = () => {
         
             <ToastContainer />
         </Box>
+        :
+        <Navigate to={"/"}/>
     )
 }
 

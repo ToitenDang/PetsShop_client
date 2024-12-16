@@ -118,7 +118,7 @@ const ListProduct = () => {
                             </Box>
                         </Box>
                         {/* Relative blog */}
-                        <Box sx={{ marginTop: '10px' }}>
+                        {/* <Box sx={{ marginTop: '10px' }}>
                             <Typography variant='h6' sx={{ fontWeight: 'bold' }}>Các bài viết liên quan</Typography>
                             <Box sx={{ height: '550px', maxHeight: '550px', overflowY: 'auto' }}>
                                 <BlogItem />
@@ -132,7 +132,7 @@ const ListProduct = () => {
                                 <BlogItem />
                                 <BlogItem />
                             </Box>
-                        </Box>
+                        </Box> */}
                     </Box>
                     {/* Right side -- Danh sach + Sap xep + Mo ta*/}
                     {/* <Outlet /> */}

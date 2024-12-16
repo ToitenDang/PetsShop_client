@@ -1,12 +1,12 @@
-import {useState, createContext, useContext, useEffect } from "react";
-import { CheckTokenFetch, UserFetch} from "~/REST-API-client";
+import { useState, createContext, useContext, useEffect } from "react";
+import { CheckTokenFetch, UserFetch } from "~/REST-API-client";
 const AuthContext = createContext();
 
-export const AuthProvider = ({children}) => {
+export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     console.log("re-render-authen")
     useEffect(() => {
-        if(user == null) {    
+        if (user == null) {
             CheckTokenFetch.post()
                 .then(data => {
                     // console.log(data);
@@ -14,14 +14,18 @@ export const AuthProvider = ({children}) => {
                     UserFetch.getById(userId)
                         .then(userInfo => {
                             // console.log(userInfo.data)
-                            setUser(userInfo.data)
+                            if (userInfo.data.state === 0) {
+                                setUser(null);
+                            } else {
+                                setUser(userInfo.data)
+                            }
                         });
                 })
                 .catch(err => {
                     setUser(null);
                 })
         }
-    },[])
+    }, [])
     const authenUser = user => {
         setUser(user)
     }
@@ -37,9 +41,9 @@ export const AuthProvider = ({children}) => {
     };
 
     return (
-    <AuthContext.Provider value={{user, authenUser, clearAuthenUser, updateCart}}>
-        {children}
-    </AuthContext.Provider>
+        <AuthContext.Provider value={{ user, authenUser, clearAuthenUser, updateCart }}>
+            {children}
+        </AuthContext.Provider>
     )
 }
 

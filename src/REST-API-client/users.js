@@ -23,6 +23,23 @@ const UserAPI = (axiosInstance) => {
         }
     }
 
+    async function getByEmail(email) {
+        try {
+            const accessToken = localStorage.getItem("access_token")
+            const res = await axiosInstance.get(`/users/get-by-email/${email}`)
+
+            return res.data;
+        } catch (error) {
+            if (error.response) {
+                throw new Error(error.response.data.message);
+            } else if (error.request) {
+                throw new Error("Server không phản hồi");
+            } else {
+                throw new Error(error.message)
+            }
+        }
+    }
+
     async function getById(id) {
         const access_token = localStorage.getItem("access_token");
         try {
@@ -245,7 +262,30 @@ const UserAPI = (axiosInstance) => {
         
     }
     
-    
+    async function forgetPassword(userId, password) {
+        try {
+            try {
+                const res = await axiosInstance.post(`/users/forget-password/${userId}`, {password} );
+                return res.data;
+            } catch (error) {
+                if (error.response) {
+                    throw new Error(error.response.data.message.message);
+                } else if (error.request) {
+                    throw new Error("Server không phản hồi");
+                } else {
+                    throw new Error(error.message);
+                }
+            }
+        }catch(error) {
+            if(error.response){
+                throw new Error(error.response.data.message)
+            }else if (error.request) {
+                throw new Error("Server không phản hồi");
+            } else {
+                throw new Error(error.message);
+            }
+        }
+    }
     
     return {
         get,
@@ -257,7 +297,9 @@ const UserAPI = (axiosInstance) => {
         updateCart,
         removeFromCart,
         clearCart,
-        sendMessage
+        sendMessage,
+        getByEmail,
+        forgetPassword
     }
 }
 

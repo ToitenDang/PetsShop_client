@@ -43,7 +43,8 @@ const Footer = () => {
                     </Box>
                     <Box>
                         <Typography sx={{ fontWeight: 'bold', fontSize: '1.5', marginY: '10px' }}>Địa chỉ </Typography>
-                        <Typography>Đường số ahihi, quận hí hí, phường hì hì, tỉnh hi hi</Typography>
+                        <Typography>437, Lê Văn Việt, Tăng Nhơn Phú A, Thủ Đức, TP.Hồ Chí Minh</Typography>
+                        <Typography>58, Tân Lập, Đông Hòa, Dĩ An, Bình Dương</Typography>
                     </Box>
                 </Box>
             </Box>
