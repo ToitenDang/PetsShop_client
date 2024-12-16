@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
-import { NavLink } from "react-router-dom"
+import { NavLink, Link} from "react-router-dom"
 import { useEffect, useState } from 'react';
 import { ServiceFetch } from '~/REST-API-client';
 import { Divider } from '@mui/material';
@@ -14,7 +14,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 const navLinkStyle = ({ isActive }) => {
     return {
-        color:  '#000',
+        color: isActive? "red" : '#000',
         textTransform: 'none',
         fontSize: '1.1rem',
         fontWeight: 'bold',
@@ -52,12 +52,24 @@ const MenuAppbar = () => {
     const pageExpand = (
         <Paper sx={{ width: '150px' }} className={mystyle.expandPage}>
             <button className={mystyle.expandServiceItem}>
-            <NavLink to='/gioi-thieu' style={navLinkStyle}><Typography>Về chúng tôi</Typography></NavLink>
+            <Link to='/gioi-thieu' style={{
+                color: '#000',
+                textTransform: 'none',
+                fontSize: '1.1rem',
+                fontWeight: 'bold',
+                textDecoration: 'none'
+            }}><Typography>Về chúng tôi</Typography></Link>
 
             </button>
             <button className={mystyle.expandServiceItem}>
 
-                <NavLink to='/lien-he' style={navLinkStyle}><Typography>Liên hệ</Typography></NavLink>
+                <Link to='/lien-he' style={{
+                     color: '#000',
+                     textTransform: 'none',
+                     fontSize: '1.1rem',
+                     fontWeight: 'bold',
+                     textDecoration: 'none'
+                }}><Typography>Liên hệ</Typography></Link>
             </button>
 
             {/* <button className={mystyle.expandServiceItem}>
