@@ -71,7 +71,7 @@ const Filter = ({ valueFilters, onChange, getData }) => {
 
 
     const handleApplyFilters = () => {
-        if(priceFrom!== "" && priceTo!=="" && priceFrom > priceTo) {
+        if(priceFrom!== "" && priceTo!=="" && parseInt(priceFrom) > parseInt(priceTo)) {
             setValidRangePrice(false);
             return;
         }
@@ -128,7 +128,7 @@ const Filter = ({ valueFilters, onChange, getData }) => {
                             className={myStyle.inputPrice} name='priceTo' type='text' id='priceTo' />
                     </Box>
                 </Box>
-                { validRangePrice? null: <Typography sx={{fontSize:"0.7rem", fontWeight:"bold", color:"red"}}>Vui lòng nhập vào khoảng giá thích hợp</Typography>}
+                { validRangePrice ? null: <Typography sx={{fontSize:"0.7rem", fontWeight:"bold", color:"red"}}>Vui lòng nhập vào khoảng giá thích hợp</Typography>}
                 {/* Filter with Rating */}
                 <Box sx={{ paddingY: '5px' }}>
                     <Typography sx={{ fontWeight: 'bold' }}>Đánh giá:</Typography>
