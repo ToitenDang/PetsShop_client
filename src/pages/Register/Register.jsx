@@ -254,7 +254,7 @@ const Register = () => {
         isLoading && (
           <Box sx={{
             position: "absolute", top: 0, bottom: 0, left: 0, right: 0, backgroundColor: "rgba(0,0,0,0.3)",
-            display: "flex", justifyContent: "center", alignItems: "center"
+            display: "flex", justifyContent: "center", alignItems: "center",zIndex:5
           }}
           >
             <CircularProgress />
