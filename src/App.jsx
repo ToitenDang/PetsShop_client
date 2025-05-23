@@ -29,6 +29,8 @@ import NotifyPage from './pages/Notify/NotifyPage'
 import BookingPage from './pages/Booking/Booking'
 import About from './pages/About/About'
 import ForgetPassword from './pages/ForgetPassword/ForgetPassword'
+import Blogs from './pages/Blogs/Blogs'
+import Blog from './pages/Home/Blog/Blog'
 function App() {
 
   return (
@@ -54,6 +56,9 @@ function App() {
               <Route path='lich-dat' element={<Booking />} />
               <Route path='hoat-dong' element={<Activity />} />
             </Route>
+            <Route path='tap-chi' element={<Blogs />} />
+            <Route path='tap-chi/:id' element={<Blog />} />
+              {/* <Route path='/:id' element={<Booking />} /> */}
             <Route path='don-hang/:id' element={<PurchaseDetail />} />
             <Route path='dich-vu/:id' element={<Service />} />
             <Route path='khuyen-mai/:id' element={<Promotion />} />

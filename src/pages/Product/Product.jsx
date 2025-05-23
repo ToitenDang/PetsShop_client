@@ -3,59 +3,87 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Typography, Box, RadioGroup, FormControlLabel, Radio, IconButton, Rating, TextField } from '@mui/material';
 import { Add, Remove } from '@mui/icons-material';
 import Review from '~/components/Review/Review';
-import {ProductFetch, UserFetch} from '~/REST-API-client/index'
+import { ProductFetch, RecommendFetch, UserFetch } from '~/REST-API-client/index'
 import { useAuth } from "~/components/Authentication/Authentication";
 import { ToastContainer } from 'react-toastify';
-
-
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 
 
 
 //import { feachProductDetailsAPI } from "~/apis"
 
 export default function Product() {
-    const {user, updateCart} = useAuth();
-    const {id} = useParams();
+    const { user, updateCart } = useAuth();
+    const { id } = useParams();
     const [product, setProduct] = useState(null)
     const navigate = useNavigate();
     const [quantity, setQuantity] = useState(1);
     const [image, setImage] = useState('');
     const [selectedThumbnailIndex, setSelectedThumbnailIndex] = useState(0)
-
+    const [isLike, setIsLike] = useState(false);
     useEffect(() => {
-        
         window.scrollTo(0, 0);
         const fetchProductDetails = async () => {
             try {
-                
+
                 const product = await ProductFetch.getById(id);
                 console.log(product);
 
-                if(product.data.hasPromotion){
-                    if(product.data.promotions[0].type === "percent"){
+                if (product.data.hasPromotion) {
+                    if (product.data.promotions[0].type === "percent") {
                         const discountAmount = (product.data.price / 100) * product.data.promotions[0].value;
                         const beforeDiscount = product.data.price  // Tính toán giá gốc từ giá giảm
                         product.data.price_before_discount = beforeDiscount;  // Gán vào trường beforediscount
                         product.data.price -= discountAmount;  // Cập nhật giá sau khuyến mãi
                     }
-                    if(product.data.promotions[0].type === "price"){
-                        const discountAmount =  product.data.promotions[0].value;
+                    if (product.data.promotions[0].type === "price") {
+                        const discountAmount = product.data.promotions[0].value;
                         const beforeDiscount = product.data.price  // Tính toán giá gốc từ giá giảm
                         product.data.price_before_discount = beforeDiscount;  // Gán vào trường beforediscount
                         product.data.price -= discountAmount;  // Cập nhật giá sau khuyến mãi
                     }
                 }
 
-                setProduct(product.data); 
+                setProduct(product.data);
                 setImage(product.data.img)
             } catch (error) {
-                
+
                 console.error('Error fetching product details:', error);
             }
         };
-    
         fetchProductDetails();
-    }, [id]); 
+    }, [id]);
+
+    useEffect(() => {
+        const checkLike = async () => {
+            try {
+                const result = await RecommendFetch.checkLiked(user._id, id)
+                // console.log("isLiked: ", result)
+                setIsLike(result.data.data);
+            } catch (error) {
+
+                console.error('Error fetching like check:', error);
+            }
+        }
+        if (user) {
+            checkLike()
+        }
+    }, [user])
+
+    useEffect(() => {
+        const updateReferData = async () => {
+            try {
+                await RecommendFetch.updateRecommendProducts(user._id, id, "view")
+            } catch (error) {
+
+                console.error('Error fetching like check:', error);
+            }
+        }
+        if (user) {
+            updateReferData()
+        }
+    }, [user])
 
 
     const increaseQuantity = () => setQuantity(prev => Math.min(prev + 1, 99));
@@ -68,30 +96,30 @@ export default function Product() {
             navigate('/'); // Điều hướng người dùng tới trang đăng nhập
             return;
         }
-    
+
         const productToAdd = {
             productId: product._id,
             name: product.name,
             //size: size,
-            img: product.img ||'https://th.bing.com/th/id/OIP.Y9MaxiVxV-8HnzG7MuNC3wHaE8?w=302&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7',
+            img: product.img || 'https://th.bing.com/th/id/OIP.Y9MaxiVxV-8HnzG7MuNC3wHaE8?w=302&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7',
             quantity: quantity,
             price: product.price
         };
-    
-        if(productToAdd.quantity > product.quantity){
+
+        if (productToAdd.quantity > product.quantity) {
             alert(`Số lượng sản phẩm này chỉ còn số lượng là: ${product.quantity}`);
             return;
         }
-    
+
         try {
             console.log("user", user);
-            
+
             // Gọi API để thêm sản phẩm vào giỏ hàng trên server
             const updatedCart = await UserFetch.addToCart(user._id, productToAdd);
-    
+
             // Sau khi thêm vào giỏ hàng thành công, cập nhật lại giỏ hàng trong state của ứng dụng
             updateCart(updatedCart.data);
-    
+
             console.log('Giỏ hàng sau khi thêm sản phẩm: ', updatedCart.data);
         } catch (error) {
             console.error('Không thể thêm sản phẩm vào giỏ hàng:', error);
@@ -99,7 +127,7 @@ export default function Product() {
     };
 
     console.log("Sanr pham xey", product);
-    
+
 
     const handleBuyNow = () => {
         // Kiểm tra nếu người dùng chưa đăng nhập
@@ -108,7 +136,7 @@ export default function Product() {
             navigate('/'); // Điều hướng người dùng tới trang đăng nhập
             return;
         }
-    
+
         // Tạo đối tượng sản phẩm cần mua
         const productToBuy = {
             productId: product._id,
@@ -117,11 +145,11 @@ export default function Product() {
             quantity: quantity,
             price: product.price,
         };
-        if(productToBuy.quantity > product.quantity){
+        if (productToBuy.quantity > product.quantity) {
             alert(`Số lượng sản phẩm này chỉ còn số lượng là: ${product.quantity}`);
             return;
         }
-    
+
         // Điều hướng sang trang thanh toán và truyền thông tin sản phẩm
         navigate('/thanh-toan', { state: { productsToPay: [productToBuy] } });
     };
@@ -130,7 +158,15 @@ export default function Product() {
         setImage(thumb)
         setSelectedThumbnailIndex(index)
     }
-    
+    // console.log("user: ", user)
+    const setLike = async () => {
+        try {
+            await RecommendFetch.updateRecommendProducts(user._id, product._id, "prefer")
+            setIsLike(!isLike)
+        } catch (err) {
+            console.error('Error update product reference:', err);
+        }
+    }
 
     return (
         <Box
@@ -158,11 +194,11 @@ export default function Product() {
                     }}
                 >
                     <Box display="flex" sx={{ width: { xs: '100%', md: '45%' }, height: 'auto', flexDirection: 'column', alignItems: 'center' }}>
-                        <Box sx={{display: 'flex', justifyContent: 'center', maxWidth: '70%'}}>
-                            <img 
-                            src= {image||'https://th.bing.com/th/id/OIP.Y9MaxiVxV-8HnzG7MuNC3wHaE8?w=302&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7'}
-                            //src={product?.img}
-                            alt={product?.name} style={{ with: "70%",maxWidth: '70%', height: 'auto', cursor: 'zoom-in' ,objectFit: "fit", border: "1px solid #333"}} />
+                        <Box sx={{ display: 'flex', justifyContent: 'center', maxWidth: '70%' }}>
+                            <img
+                                src={image || 'https://th.bing.com/th/id/OIP.Y9MaxiVxV-8HnzG7MuNC3wHaE8?w=302&h=202&c=7&r=0&o=5&dpr=1.3&pid=1.7'}
+                                //src={product?.img}
+                                alt={product?.name} style={{ with: "70%", maxWidth: '70%', height: 'auto', cursor: 'zoom-in', objectFit: "fit", border: "1px solid #333" }} />
                         </Box>
 
                         <Box display="flex" justifyContent="center" sx={{ marginTop: 2 }}>
@@ -178,10 +214,11 @@ export default function Product() {
                                     key={index}
                                     src={thumb.url}
                                     alt={`Thumbnail ${index + 1}`}
-                                    style={{ width: '50px', height: '50px', margin: '0 5px', cursor: 'pointer' ,
+                                    style={{
+                                        width: '50px', height: '50px', margin: '0 5px', cursor: 'pointer',
                                         border: selectedThumbnailIndex === index ? '2px solid #e96c48' : 'none' // Thêm border khi được
                                     }}
-                                    
+
                                     onClick={() => handleImageClick(thumb.url, index)} // Hàm để hiển thị ảnh lớn
                                 />
                             ))}
@@ -232,7 +269,7 @@ export default function Product() {
 
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <IconButton onClick={decreaseQuantity}><Remove /></IconButton>
-                            <Typography variant="body1" sx={{padding: '0 16px'}}>{quantity} </Typography>
+                            <Typography variant="body1" sx={{ padding: '0 16px' }}>{quantity} </Typography>
                             <IconButton onClick={increaseQuantity}><Add /></IconButton>
                         </Box>
 
@@ -242,12 +279,19 @@ export default function Product() {
                         <Button variant="outlined" onClick={handleBuyNow} sx={{ margin: '16px 0 0 16px' }}>
                             Mua ngay
                         </Button>
+
+                        <Box sx={{ display: "flex", alignItems: "center", marginTop: "10px" }}>
+                            {
+                                isLike ? <FavoriteIcon onClick={setLike} sx={{ cursor: "pointer", color: "#ed6b41" }} /> : <FavoriteBorderOutlinedIcon onClick={setLike} sx={{ cursor: "pointer", color: "#ed6b41" }} />
+                            }
+                        </Box>
+
                     </Box>
                 </Box>
 
                 {/* Phần Đánh giá */}
                 {product && <Review entityId={product._id} type='product' />}
-                
+
             </Box>
             <ToastContainer />
         </Box>

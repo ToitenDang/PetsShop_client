@@ -76,7 +76,7 @@ function Appbar() {
           <Box sx={{ flex: 2 }}>
             <Category />
           </Box>
-          <Box sx={{ flex: 4 }}>
+          <Box sx={{ flex: 5 }}>
             <MenuAppbar />
           </Box>
         </Box>
