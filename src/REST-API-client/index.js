@@ -19,6 +19,8 @@ import PromotionAPI from './promotion';
 import ChatAPI from './chat';
 import MessageAPI from './message';
 import NotifyAPI from './notify';
+import Recommend from './recommend';
+import BlogAPI from './blog';
 // Tạo một instance của axios
 
 const axiosInstance = axios.create({
@@ -49,3 +51,5 @@ export const PromotionFetch = PromotionAPI(axiosInstance);
 export const ChatFetch = ChatAPI(axiosInstance);
 export const MessageFetch = MessageAPI(axiosInstance);
 export const NotifyFetch = NotifyAPI(axiosInstance);
+export const RecommendFetch = Recommend(axiosInstance);
+export const BlogFetch = BlogAPI(axiosInstance);

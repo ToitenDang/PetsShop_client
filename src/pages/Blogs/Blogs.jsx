@@ -1,5 +1,5 @@
-import myStyle from './ExperienceBlogs.module.scss';
 
+import myStyle from './Blogs.module.scss';
 import Box from "@mui/material/Box";
 import Typography from '@mui/material/Typography';
 import BlogItem from '~/components/BlogItem/BlogItem';
@@ -8,9 +8,8 @@ import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
 import { CircularProgress } from '@mui/material';
 import { BlogFetch } from '~/REST-API-client';
-const limit = 6;
-const publicUrl = import.meta.env.VITE_PUBLIC_URL;
-const ExperienceBlogs = () => {
+const limit = 20;
+function Blogs() {
     const [blogs, setBlogs] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [page, setPage] = useState(1);
@@ -47,14 +46,14 @@ const ExperienceBlogs = () => {
         getBlog()
     }, [])
     return (
-        <Box sx={{ marginTop: '40px', paddingY: '10px', backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#2a3b52' : '#fff' }}>
+        <Box sx={{ marginTop: '150px', paddingY: '10px', backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#2a3b52' : '#fff' }}>
             <Box >
                 <Typography sx={{ textAlign: 'center', marginY: '10px', fontSize: '2rem', fontWeight: 'bold' }}>Chia sẻ kinh nghiệm</Typography>
             </Box>
 
             {/* List blogs */}
             {
-                isLoading ? <Box sx={{display:"flex", justifyContent:"center"}}><CircularProgress /></Box> :
+                isLoading ? <Box sx={{ display: "flex", justifyContent: "center" }}><CircularProgress /></Box> :
                     (
                         <>
                             <Box className={myStyle.blogsContainer}>
@@ -89,4 +88,4 @@ const ExperienceBlogs = () => {
     )
 }
 
-export default ExperienceBlogs;
+export default Blogs

@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { Typography } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import Recommend from './Recommend/Recommend';
 function Home() {
   const auth = useAuth();
   const [promotions, setPromotions] = useState([]);
@@ -35,6 +36,7 @@ function Home() {
     }
     getPromotions();
   },[])
+ 
   return (
     <>
 
@@ -63,6 +65,9 @@ function Home() {
         {/* <Divider sx={{marginTop: '20px'}}/> */}
         {/* Quick shop part */}
         <QuickShop />
+
+        {/* Gợi ý sản phẩm */}
+        <Recommend />
 
         {/* Sản phẩm bán chạy */}
         <TopSaleProducts />

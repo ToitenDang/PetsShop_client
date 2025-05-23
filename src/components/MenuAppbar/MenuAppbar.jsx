@@ -85,7 +85,7 @@ const MenuAppbar = () => {
         <Box sx={{
             display: 'flex',
             gap: 4,
-            justifyContent: 'flex-start'
+            justifyContent: 'flex-start',
         }}>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <NavLink to='/' style={navLinkStyle} >Trang chủ</NavLink>
@@ -105,10 +105,10 @@ const MenuAppbar = () => {
                 {serviceExpand}
 
             </Box>
-            {/* <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <NavLink to='/tap-chi' style={navLinkStyle}>Tạp chí</NavLink>
 
-            </Box> */}
+            </Box>
             <Box
                 className={mystyle.page}
                 sx={{
