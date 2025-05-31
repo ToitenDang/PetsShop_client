@@ -273,11 +273,11 @@ function ChangePhoneDialog(props) {
     const handleSubmit = () => {
         const phoneRegex = /^\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})$/;
 
-    // Kiểm tra xem email có hợp lệ không
-    if (!phoneRegex.test(phone)) {
-        toast.error("Số điện thoại không đúng định dạng!");
-        return; 
-    }
+        // Kiểm tra xem email có hợp lệ không
+        if (!phoneRegex.test(phone)) {
+            toast.error("Số điện thoại không đúng định dạng!");
+            return;
+        }
         resetData(phone);
         handleClose();
     }
@@ -371,7 +371,7 @@ const Profile = () => {
                     name: name,
                     email: email,
                     address: address,
-                    phone: phone,  
+                    phone: phone,
                 },
                 { abortEarly: false }
             );
@@ -385,7 +385,7 @@ const Profile = () => {
                         uniqueErrors[err.path] = err.message;  // Lưu lỗi đầu tiên cho mỗi trường
                     }
                 });
-    
+
                 // Hiển thị lỗi cho từng trường
                 Object.values(uniqueErrors).forEach(errorMessage => {
                     toast.error(errorMessage);
@@ -442,19 +442,25 @@ const Profile = () => {
                         <Box>
                             <Typography sx={{ fontWeight: 'bold', fontSize: '1.4rem' }}>Hồ sơ của tôi</Typography>
                         </Box>
+                        {
+                            auth.user?.googleId && <Box>
+                            <Typography sx={{ fontSize: '0.8rem', fontStyle:"italic" }}>(Liên kết Google)</Typography>
+                        </Box>
+                        }
                         <Divider sx={{ margin: '10px 0' }} />
                         <Box sx={{ width: '100%', display: 'flex' }}>
 
                             <Box sx={{ display: 'flex', flex: 1, flexDirection: 'column', gap: 2 }}>
                                 <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
                                     <Typography>Tên: </Typography>
-                                    <input type="text" value={name} onChange={handleChangeName} />
+                                    <input disabled={auth.user?.googleId} type="text" value={name} onChange={handleChangeName} />
                                 </Box>
                                 <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
                                     <Typography>Email: </Typography>
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                         <Typography >{obfuscateEmail(email)}</Typography>
                                         <Button sx={{ textTransform: 'none' }}
+                                            disabled={auth.user?.googleId}
                                             onClick={() => {
 
                                                 setOpenChangeEmail(true)
@@ -470,45 +476,51 @@ const Profile = () => {
                                         onClose={handleCloseChangePassDialog}
                                     />
                                 </Box>
-                                <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
-                                    <Typography>Số điện thoại: </Typography>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                        <Typography >{obfuscatePhone(phone)}</Typography>
-                                        <Button onClick={() => {
-                                            setOpenChangePhone(true)
-                                        }} sx={{ textTransform: 'none' }}>Thay đổi</Button>
+                                {
+                                    auth.user?.phone && <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
+                                        <Typography>Số điện thoại: </Typography>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                            <Typography >{obfuscatePhone(phone)}</Typography>
+                                            <Button onClick={() => {
+                                                setOpenChangePhone(true)
+                                            }} sx={{ textTransform: 'none' }}>Thay đổi</Button>
+                                        </Box>
+                                        <ChangePhoneDialog
+                                            open={openChangePhone}
+                                            onClose={handleCloseChangePhoneDialog}
+                                            resetData={(value) => setPhone(value)}
+                                        />
                                     </Box>
-                                    <ChangePhoneDialog
-                                        open={openChangePhone}
-                                        onClose={handleCloseChangePhoneDialog}
-                                        resetData={(value) => setPhone(value)}
-                                    />
-                                </Box>
-                                <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
-                                    <Typography>Giới tính: </Typography>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                        <FormControl>
-                                            <RadioGroup
-                                                aria-labelledby="demo-radio-buttons-group-label"
-                                                defaultValue="female"
-                                                name="radio-buttons-group"
-                                                row
-                                                value={gender}
-                                                onChange={handleChangeGender}
-                                            >
-                                                <FormControlLabel value="female" control={<Radio />} label="Nữ" />
-                                                <FormControlLabel value="male" control={<Radio />} label="Nam" />
-                                                <FormControlLabel value="other" control={<Radio />} label="Khác" />
-                                            </RadioGroup>
-                                        </FormControl>
+                                }
+                                {
+                                    auth.user?.gender && <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
+                                        <Typography>Giới tính: </Typography>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                            <FormControl>
+                                                <RadioGroup
+                                                    aria-labelledby="demo-radio-buttons-group-label"
+                                                    defaultValue="female"
+                                                    name="radio-buttons-group"
+                                                    row
+                                                    value={gender}
+                                                    onChange={handleChangeGender}
+                                                >
+                                                    <FormControlLabel value="female" control={<Radio />} label="Nữ" />
+                                                    <FormControlLabel value="male" control={<Radio />} label="Nam" />
+                                                    <FormControlLabel value="other" control={<Radio />} label="Khác" />
+                                                </RadioGroup>
+                                            </FormControl>
+                                        </Box>
                                     </Box>
-                                </Box>
-                                <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between', gap: 3 }}>
-                                    <Typography>Địa chỉ sống: </Typography>
-                                    <input type="text" style={{ flex: 1 }} value={address} onChange={handleChangeAddress} />
-                                </Box>
-                                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <Button disabled={disbleSaveButton} onClick={handleSaveChangeInfo} variant='contained'>Lưu</Button>
+                                }
+                                {
+                                    auth.user?.address && <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between', gap: 3 }}>
+                                        <Typography>Địa chỉ sống: </Typography>
+                                        <input type="text" style={{ flex: 1 }} value={address} onChange={handleChangeAddress} />
+                                    </Box>
+                                }
+                                <Box  sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                    <Button disabled={disbleSaveButton || auth.user?.googleId} onClick={handleSaveChangeInfo} variant='contained'>Lưu</Button>
                                 </Box>
                             </Box>
 

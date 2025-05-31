@@ -1,20 +1,29 @@
 .detailProdContainer {
   position: relative;
+  height: 100%;
 }
 
 .buyOrAdd {
   position: absolute;
   left: 0;
   right: 0;
+  top: 0;
+  height: 260px;
+  background-color: rgba(0, 0, 0, 0.25);
+  display: none;
+}
+
+.detailButton {
+  position: absolute;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  flex-direction: column;
-  transition: all ease-in 0.2s;
-  height: 0;
-  gap: 16px;
+  left: 0;
+  background-color: #ec6b41;
+  cursor: pointer;
+  border: none;
+  padding: 8px;
+  border-radius: 5px;
+  font-weight: bold;
+  color: #fff;
 }
 
 .prodImage {
@@ -38,13 +47,30 @@
 }
 
 .detailProdContainer:hover .buyOrAdd {
-  height: 100%;
-}
-
-.buyOrAdd button {
-  display: none;
-}
-
-.buyOrAdd:hover button {
   display: block;
+}
+
+.promotionContainer {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background-color: #ec6b41;
+  right: -2px;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.promotionContainer::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  border-width: 0 30px 6px;
+  border-top: 0;
+  border-style: solid;
+  border-color: #ec6b41 #ec6b41 transparent #ec6b41;
+  z-index: 1;
 }/*# sourceMappingURL=ProductItem.module.css.map */

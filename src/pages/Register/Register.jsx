@@ -44,6 +44,9 @@ const Register = () => {
     // Xóa lỗi khi người dùng nhập liệu
     setErrors((prevErrors) => ({ ...prevErrors, [name]: undefined }));
   };
+  const handleOauth = async () => {
+    window.location.href = "http://localhost:8080/auth/google"; // Gọi route từ backend
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -109,7 +112,7 @@ const Register = () => {
         <Paper
           elevation={3}
           sx={{
-            zIndex:2,
+            zIndex: 2,
             padding: '20px',
             width: '100%',
             maxWidth: 400,
@@ -122,6 +125,7 @@ const Register = () => {
           </Typography>
           <form onSubmit={handleSubmit} noValidate>
             <TextField
+              size="small"
               variant="outlined"
               margin="normal"
               required
@@ -133,8 +137,10 @@ const Register = () => {
               onChange={handleChange}
               error={!!errors.name} // Kiểm tra lỗi
               helperText={errors.name} // Hiển thị thông báo lỗi
+              sx={{ margin: "4px" }}
             />
             <TextField
+              size="small"
               variant="outlined"
               margin="normal"
               required
@@ -146,8 +152,10 @@ const Register = () => {
               onChange={handleChange}
               error={!!errors.email}
               helperText={errors.email}
+              sx={{ margin: "4px" }}
             />
             <TextField
+              size="small"
               variant="outlined"
               margin="normal"
               required
@@ -160,8 +168,10 @@ const Register = () => {
               onChange={handleChange}
               error={!!errors.password}
               helperText={errors.password}
+              sx={{ margin: "4px" }}
             />
             <TextField
+              size="small"
               variant="outlined"
               margin="normal"
               required
@@ -173,8 +183,10 @@ const Register = () => {
               onChange={handleChange}
               error={!!errors.confirmPassword}
               helperText={errors.confirmPassword}
+              sx={{ margin: "4px" }}
             />
             <TextField
+              size="small"
               variant="outlined"
               margin="normal"
               required
@@ -185,8 +197,10 @@ const Register = () => {
               onChange={handleChange}
               error={!!errors.address}
               helperText={errors.address}
+              sx={{ margin: "4px" }}
             />
             <TextField
+              size="small"
               variant="outlined"
               margin="normal"
               required
@@ -197,6 +211,7 @@ const Register = () => {
               onChange={handleChange}
               error={!!errors.phone}
               helperText={errors.phone}
+              sx={{ margin: "4px" }}
             />
             {/* Gender Radio Buttons */}
             <FormControl component="fieldset" fullWidth sx={{ marginTop: 2 }}>
@@ -216,6 +231,27 @@ const Register = () => {
               Đăng Ký
             </Button>
           </form>
+          <p style={{
+            fontSize: "0.7rem",
+            fontWeight: "bold",
+            textAlign: "center"
+          }}>Hoặc</p>
+          <button style={{
+            border: "none",
+            backgroundColor: "#fff",
+            padding: "10px",
+            marginTop: "8px",
+            boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 8,
+            borderRadius: "8px",
+            cursor: "pointer"
+          }}
+            onClick={handleOauth}
+          > <img src='/images/google_logo.png' style={{ width: "20px", aspectRatio: "1/1" }} />Đăng nhập với Google</button>
           <Typography variant="body2" align="center" sx={{ marginTop: 2 }} color={(theme) => (theme.palette.mode === 'dark' ? '#ffffff' : '#666666')}>
             Đã có tài khoản?{' '}
             <Link to="/dang-nhap" variant="body2" style={{ color: "#2d98da" }}>
@@ -254,7 +290,7 @@ const Register = () => {
         isLoading && (
           <Box sx={{
             position: "absolute", top: 0, bottom: 0, left: 0, right: 0, backgroundColor: "rgba(0,0,0,0.3)",
-            display: "flex", justifyContent: "center", alignItems: "center",zIndex:5
+            display: "flex", justifyContent: "center", alignItems: "center", zIndex: 5
           }}
           >
             <CircularProgress />

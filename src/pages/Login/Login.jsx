@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Paper, Box, Dialog, Alert } from '@mui/material';
+import { TextField, Button, Typography, Paper, Box, Dialog, Alert, Divider } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginSchema } from '../../utils/rules';
 import { LoginFetch } from '~/REST-API-client';
@@ -70,6 +70,10 @@ const Login = () => {
     }
   };
 
+  const handleOauth = async () => {
+     window.location.href = "http://localhost:8080/auth/google"; // Gọi route từ backend
+  }
+
   return (
     <Box
       sx={{
@@ -80,10 +84,10 @@ const Login = () => {
         // backgroundColor: 'rgba(0,0,0,0.9)',
         position: 'relative',
         backgroundImage: `url(${publicUrl}/images/background.jpg)`
-       
+
       }}
     >
-      <Paper elevation={3} sx={{ zIndex:2, padding: '20px', width: '100%', maxWidth: 400, bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#2c3e50' : '#ffffff'), boxShadow: '0 5px 5px #2c3e50' }}>
+      <Paper elevation={3} sx={{ zIndex: 2, padding: '20px', width: '100%', maxWidth: 400, bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#2c3e50' : '#ffffff'), boxShadow: '0 5px 5px #2c3e50' }}>
         <Typography component="h1" variant="h5" align="center" color={(theme) => (theme.palette.mode === 'dark' ? '#ffffff' : '#333333')}>
           Đăng Nhập
         </Typography>
@@ -119,7 +123,28 @@ const Login = () => {
           <Button type="submit" fullWidth variant="contained" color="primary" sx={{ marginTop: 2 }}>
             Đăng Nhập
           </Button>
+          <p style={{
+            fontSize: "0.7rem",
+            fontWeight: "bold",
+            textAlign: "center"
+          }}>Hoặc</p>
         </form>
+        <button style={{
+          border: "none",
+          backgroundColor: "#fff",
+          padding: "10px",
+          marginTop: "8px",
+          boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 8,
+          borderRadius: "8px",
+          cursor: "pointer"
+        }}
+          onClick={handleOauth}
+        > <img src='/images/google_logo.png' style={{ width: "20px", aspectRatio: "1/1" }} />Đăng nhập với Google</button>
         <Typography variant="body2" align="center" sx={{ marginTop: 2 }} color={(theme) => (theme.palette.mode === 'dark' ? '#ffffff' : '#666666')}>
           <Link to="/quen-mat-khau" variant="body2" style={{ color: "#2d98da" }}>
             Quên mật khẩu?
