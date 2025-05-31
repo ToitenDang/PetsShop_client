@@ -18,7 +18,7 @@ const navlinkStyle = ({ isActive }) => {
 }
 const Account = () => {
     const auth = useAuth();
-    if(auth.user !== null) {
+    if (auth.user !== null) {
         return (
             <>
                 <Box sx={{ marginTop: '150px', width: '100%' }}>
@@ -43,11 +43,14 @@ const Account = () => {
                                             <Typography sx={{ display: 'flex', alignItems: 'center', gap: 2 }}><FmdGoodIcon />Địa chỉ</Typography>
                                         </NavLink>
                                     </li>
-                                    <li>
-                                        <NavLink style={navlinkStyle} to='mat-khau' className={myStyle.linkNav}>
-                                            <Typography sx={{ display: 'flex', alignItems: 'center', gap: 2 }}><KeyIcon />Mật khẩu</Typography>
-                                        </NavLink>
-                                    </li>
+                                    {
+                                        !auth.user?.googleId && <li>
+                                            <NavLink style={navlinkStyle} to='mat-khau' className={myStyle.linkNav}>
+                                                <Typography sx={{ display: 'flex', alignItems: 'center', gap: 2 }}><KeyIcon />Mật khẩu</Typography>
+                                            </NavLink>
+                                        </li>
+                                    }
+
                                     <li>
                                         <NavLink style={navlinkStyle} to='don-mua' className={myStyle.linkNav} >
                                             <Typography sx={{ display: 'flex', alignItems: 'center', gap: 2 }}><CasesOutlinedIcon />Đơn mua</Typography>
@@ -65,26 +68,26 @@ const Account = () => {
                                     </li>
                                 </ul>
                             </Box>
-    
+
                         </Box>
-    
+
                         {/* Right part */}
                         <Box sx={{ flex: 4, padding: '0 4px' }}>
                             <Box sx={{ boxShadow: 'rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px', padding: '8px', borderRadius: '6px' }}>
                                 {/* <Profile /> */}
                                 {/* <Profile /> */}
-    
+
                                 {/* Address */}
                                 {/* <Address /> */}
-    
+
                                 {/* Password */}
                                 {/* <Password /> */}
-    
+
                                 {/* Don mua */}
                                 {/* <Purchase /> */}
                                 <Outlet />
                             </Box>
-    
+
                         </Box>
                     </Box>
                 </Box>
@@ -92,7 +95,7 @@ const Account = () => {
         )
     } else {
         return (
-            <Box sx={{marginTop:"150px", display:'flex', justifyContent:'center', fontSize:'1.3rem', fontWeight:'bold'}}>
+            <Box sx={{ marginTop: "150px", display: 'flex', justifyContent: 'center', fontSize: '1.3rem', fontWeight: 'bold' }}>
                 <p>Bạn cần có tài khoản để xem thông tin</p>
             </Box>
         )

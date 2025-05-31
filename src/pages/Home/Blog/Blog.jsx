@@ -31,8 +31,8 @@ function Blog() {
     return (
         <Box sx={{ marginTop: "150px", display: "flex", flexDirection: "column", alignItems: "start", padding: "40px" }}>
             <h1 >{blogData.title}</h1>
-            <Box>
-                <img src={blogData.img} />
+            <Box sx={{width:"100%"}}>
+                <img style={{width:"100%", aspectRatio:"16/9", objectFit:"cover"}} src={blogData.img} />
             </Box>
             <Box sx={{ border: "solid 1px #ccc", padding: "20px" }}>
                 <h2>Mục lục</h2>
