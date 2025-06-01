@@ -9,11 +9,31 @@
   <title>PetsShop</title>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+  <style>
+    df-messenger {
+      --df-messenger-bot-message: #e0e0e0;
+      --df-messenger-button-titlebar-color: #f1ac93;
+      --df-messenger-chat-background-color: #ffffff;
+      --df-messenger-font-color: #000000;
+      --df-messenger-user-message: #dcedc8;
+      z-index: 9999;
+      position: fixed;
+      bottom: 20px;
+      /* khoảng cách từ dưới */
+      left: 20px;
+      /* đổi từ right sang left */
+      right: auto;
+      /* bỏ vị trí mặc định bên phải */
+    }
+  </style>
 </head>
 
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
+  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+  <df-messenger intent="WELCOME" chat-title="PetShop" agent-id="4011de71-670a-49cb-8226-0a9179968bd6"
+    language-code="vi"></df-messenger>
 </body>
 
 </html>
