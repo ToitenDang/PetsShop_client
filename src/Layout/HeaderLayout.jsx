@@ -12,7 +12,7 @@ function HeaderLayout() {
             <Appbar />
             {
                 auth.user && (
-                    <Box sx={{position:"fixed", bottom:"0", right:"0",zIndex:"100"}}>
+                    <Box sx={{position:"fixed", bottom:"0", right:"100px",zIndex:"100"}}>
                         <ChatBox />
                     </Box>
                 )
