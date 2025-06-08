@@ -1,4 +1,4 @@
-import { Box, Typography, Tooltip, Button } from "@mui/material";
+import { Box, Typography, Tooltip, Button, Divider } from "@mui/material";
 import myStyle from "./Chatbox.module.scss";
 import { useState, useContext, useRef, useEffect } from "react";
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
@@ -98,6 +98,7 @@ const ChatBox = () => {
                 }
 
             </Box>
+                <Divider sx={{width: "100%"}}/>
             {
                 isOpen && (
                     isMessagesLoading ? "Đang tải tin nhắn..." :

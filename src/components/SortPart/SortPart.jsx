@@ -25,15 +25,19 @@ const SortPart = ({value, onChange}) => {
         onChange(target)
     }
     return (
-        <Box sx={{width:"100%", display:'flex', justifyContent:'flex-start', gap: 3, alignItems:'center'}}>
-            <Typography>Sắp xếp theo: </Typography>
+        <Box sx={{width:"100%", display:'flex', justifyContent:'flex-start', gap: 2, alignItems:'center'}}>
+            <Typography sx={{ fontSize:{md:  '15px', xs: '12px'}}}>Sắp xếp theo: </Typography>
             <Box sx={{display:'flex', gap:3, alignItems:'center'}}>
-                <Button onClick={() => {
+                <Button  onClick={() => {
                     handleUpdateTarget("sold")
-                }} variant= {value === "sold" ? 'contained': 'outlined'}>Phổ biến</Button>
+                }} variant= {value === "sold" ? 'contained': 'outlined'}
+                sx={{ fontSize:{md:  '15px', xs: '12px'}}}
+                >Phổ biến</Button>
                 <Button onClick={() => {
                     handleUpdateTarget("date")
-                }} variant= {value === "date" ? 'contained': 'outlined'}>Mới nhất</Button>
+                }} variant= {value === "date" ? 'contained': 'outlined'}
+                sx={{ fontSize:{md:  '15px', xs: '12px'}}}
+                >Mới nhất</Button>
                 <FormControl size="small" sx={{ minWidth: '120px' }}>
                     <InputLabel
                         id="label-sort-by-price"
@@ -59,19 +63,19 @@ const SortPart = ({value, onChange}) => {
                         }}
                     >
                         <MenuItem value={"none"}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '1' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '1', fontSize:{md:  '15px', xs: '12px'} }}>
                                 {/*  */}
                                 Không sắp xếp
                             </Box>
                         </MenuItem>
                         <MenuItem value={"price-up"}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '1' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '1' , fontSize:{md:  '15px', xs: '12px'}}}>
                                 {/*  */}
                                 Thấp đến cao
                             </Box>
                         </MenuItem>
                         <MenuItem value={"price-down"}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '1' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: '1' , fontSize:{md:  '15px', xs: '12px'}}}>
                                 {/*  */}
                                 Cao đến thấp
                             </Box>

@@ -22,27 +22,27 @@ const Payment = () => {
         if (location.state) {
             // Nếu có sản phẩm cần thanh toán trong location.state
             if (Array.isArray(location.state.productsToPay) && location.state.productsToPay.length > 0) {
-            
+
                 setProducts(location.state.productsToPay);
             } else {
-                
+
                 // Nếu không có sản phẩm cần thanh toán, sử dụng giỏ hàng từ user
                 setProducts(user.cart || []);  // Sử dụng cartItems nếu có, nếu không thì trả về mảng rỗng
             }
 
             // Kiểm tra và cập nhật địa chỉ giao hàng
             if (location.state.shippingAddress) {
-                
+
                 setAddress(location.state.shippingAddress);
             } else if (user?.shippingAddress) {
-                
+
                 setAddressShippings(user.shippingAddress);
                 setAddress(user.shippingAddress[0]?.address || ''); // Lấy địa chỉ đầu tiên nếu có
                 setPhone(user?.shippingAddress[0].recipientPhone)
             }
         } else {
             // Nếu không có location.state, lấy dữ liệu từ user
-            
+
             setProducts(user?.cart || []); // Đảm bảo user.cart là mảng
             if (user?.shippingAddress) {
                 setAddressShippings(user.shippingAddress);
@@ -75,15 +75,15 @@ const Payment = () => {
         // Cập nhật state
         setAddress(selectedAddress);
         setPhone(selectedShipping?.recipientPhone || '');
-        
-        
+
+
     };
 
 
     const handleSubmit = async () => {
         const selectedShipping = addressShippings.find(sh => sh.address === address);
         console.log("new phone: ", selectedShipping?.recipientPhone);
-        
+
         const orderData = {
             customerId: user._id,
             name: user.name,
@@ -100,7 +100,7 @@ const Payment = () => {
             address,
         };
 
-        
+
 
         try {
             if (paymentMethod === 'cod') {
@@ -112,7 +112,7 @@ const Payment = () => {
                     await UserFetch.removeFromCart(user._id, product.productId);
                 }
 
-                
+
                 updateCart(user.cart.filter(item => !products.some(product => product.productId === item.productId)));
 
                 alert(response.message || "Đơn hàng của bạn đã được tạo thành công!");
@@ -153,12 +153,13 @@ const Payment = () => {
             mt: '150px'
         }}>
             <Box sx={{
-                width: '1240px',
-                position: 'relative',
-                left: '50%',
-                transform: 'TranslateX(-50%)',
+                width: '100%',
+                maxWidth: '1240px',
+                mx: 'auto', // Canh giữa
+                px: { xs: 2, sm: 4 }, // Padding ngang cho mobile và tablet
             }}>
-                <Typography variant='h5' sx={{ ml: 4 }}>Thanh toán</Typography>
+
+                <Typography variant='h4' sx={{ ml: 4, padding: '16px 0' }}>Thanh toán</Typography>
                 <Box sx={{
                     display: 'flex',
                     justifyContent: 'space-around',
