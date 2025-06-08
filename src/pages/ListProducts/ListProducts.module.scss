@@ -35,10 +35,33 @@
     padding: 10px;
 }
 
-@media (max-width: 1000px) {
-    .prodCol {
-        flex: 0 0 50%;
-        max-width: 50%;
-        padding: 10px;
-    }
+@media (min-width: 601px) and (max-width: 1000px) {
+  .prodCol {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
 }
+
+@media (max-width: 600px) {
+  .prodCol {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+/* Responsive cho filter + category */
+// .filterWrapperMobile {
+//     display: none;
+
+//     @media (max-width: 768px) {
+//         display: flex;
+//         flex-direction: row;
+//         gap: 10px;
+//         flex-wrap: wrap;
+//     }
+// }
+
+// .filterBox {
+//     flex: 1;
+//     min-width: 0; // để tránh tràn
+// }

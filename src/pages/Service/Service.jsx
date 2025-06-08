@@ -113,12 +113,14 @@ const Service = () => {
     return (
         <Box sx={{ marginTop: "150px" }}>
             <Box sx={{ display: 'flex', justifyContent: "center" }}>
-                <Typography variant="h4" sx={{ fontWeight: "bold", textTransform: "uppercase" }}>Dịch vụ {service?.name}</Typography>
+                <Typography variant="h4" sx={{ fontWeight: "bold", textTransform: "uppercase" , pl: {xs: "16px"}}}>Dịch vụ {service?.name}</Typography>
 
             </Box>
             <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center", gap: 1 }}>
-                <Typography variant='h6'>Nếu bạn đã rõ về dịch vụ và lưu ý, bạn có thể đặt lịch nhanh</Typography>
-                <a style={{ fontSize: '1rem', fontWeight: "bold" }} href='#datlich'>Tại đây</a>
+                <Typography variant='h6' sx={{pl: {xs: "16px"}}}>Nếu bạn đã rõ về dịch vụ và lưu ý, bạn có thể đặt lịch nhanh 
+                    <a style={{ fontSize: '1rem', fontWeight: "bold" , ml: "4px"}} href='#datlich'>Tại đây</a>
+                </Typography>
+                
             </Box>
             {/* List descriptions */}
             <Box sx={{ marginTop: "40px", display: 'flex', flexDirection: "column", gap: 2 }}>
