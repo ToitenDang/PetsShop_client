@@ -61,7 +61,7 @@ function Contact() {
           transform: 'TranslateX(-50%)',
         }}
       >
-        <Typography variant='h3' sx={{ padding: '16px 0' }}>
+        <Typography variant='h3' sx={{ padding: '32px 0' }}>
           Liên hệ
         </Typography>
 

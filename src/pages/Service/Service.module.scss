@@ -55,3 +55,17 @@ html {
         max-width: 100%;
     }
 }
+
+@media (max-width: 950px) {
+    .commitCol {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+@media (max-width: 600px) {
+    .commitCol {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}

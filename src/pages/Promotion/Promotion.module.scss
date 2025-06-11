@@ -4,3 +4,23 @@
     flex: 0 0 20%;
     max-width: 20%;
 }
+
+@media (max-width: 950px) {
+    .colProds {
+        padding-left: 4px;
+        padding-right: 4px;
+        flex: 0 0 50%;
+        max-width: 50%;
+        margin-bottom: 8px;
+    }
+}
+
+@media (max-width: 600px) {
+    .colProds {
+        padding-left: 4px;
+        padding-right: 4px;
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-bottom: 16px;
+    }
+}

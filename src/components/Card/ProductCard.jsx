@@ -8,7 +8,10 @@ const ProductCard = ({ title, description, price, image, ratingValue }) => {
   return (
     <Card
       sx={{
-        maxWidth: 345,
+        maxWidth: {
+          xs: 200,  // mobile (xs breakpoint)
+          md: 345,  // từ md trở lên là PC
+        },
         position: 'relative',
         '&:hover': {
           boxShadow: 3, // Thêm hiệu ứng shadow khi hover
@@ -70,21 +73,21 @@ const ProductCard = ({ title, description, price, image, ratingValue }) => {
 
       {/* Thông tin sản phẩm: tên, mô tả, giá */}
       <CardContent>
-        <Typography sx={{ fontSize: '16px'}}>{title}</Typography>
+        <Typography sx={{ fontSize: '16px' }}>{title}</Typography>
 
         <Typography color="text.secondary" sx={{ height: '60px', overflow: 'hidden', fontSize: '14px' }}>
           {description}
         </Typography>
-        <Typography sx={{ marginTop: 2, fontWeight: 'bold', fontSize: '18px', color: '#e84118'}}>{price}</Typography>
+        <Typography sx={{ marginTop: 2, fontWeight: 'bold', fontSize: '18px', color: '#e84118' }}>{price}</Typography>
         {/* Hiển thị Rating trong CardContent, bên dưới tên và mô tả */}
-        <Box sx={{ display: 'flex', justifyContent:'space-between', alignItems: 'center', marginTop: 1 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 1 }}>
           <Typography>Đánh giá</Typography>
-            <Rating
-              name="read-only"
-              value={ratingValue}
-              readOnly
-              precision={0.5}
-            />
+          <Rating
+            name="read-only"
+            value={ratingValue}
+            readOnly
+            precision={0.5}
+          />
         </Box>
       </CardContent>
     </Card>

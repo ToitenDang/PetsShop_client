@@ -94,7 +94,7 @@ const ShoppingCart = () => {
     };
 
     const DrawerList = (
-        <Box sx={{ display: 'flex', flexDirection: 'column', width: 450, overflow: 'hidden' }} role="presentation">
+        <Box sx={{ display: 'flex', flexDirection: 'column', width: { xs: '100vw', sm: 450 }, overflow: 'hidden' }} role="presentation">
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 10px' }}>
                 <Typography sx={{ fontSize: '1.3rem', fontWeight: 'bold' }}>Giỏ hàng của bạn</Typography>
                 <Tooltip title="Đóng giỏ hàng">
@@ -117,7 +117,7 @@ const ShoppingCart = () => {
                         />
                     ))
                 ) : (
-                    <Typography variant="body1" sx={{ padding: 2, fontWeight:"bold", fontSize:"1.2rem" }}>Chưa có đồ trong giỏ, thú cưng của bạn sẽ buồn, mua sắm nhanh nào😒</Typography>
+                    <Typography variant="body1" sx={{ padding: 2, fontWeight:"bold", fontSize:"1.2rem" }}>Chưa có đồ trong giỏ hàng 😒</Typography>
                 )}
             </Box>
             <Divider />
