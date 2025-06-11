@@ -16,6 +16,7 @@ const ChatBox = () => {
     const { createChat, notifications, updateCurrentChat, sendTextMessage, currentChat, messages, isMessagesLoading,
         updateNotifications, unReadNotifications, updateUnreadNotifications
     } = useContext(ChatContext);
+    const textareaRef = useRef(null);
     const [textMessage, setTexMessage] = useState("");
     const [chatCount, setChatCount] = useState(0);
     const auth = useAuth();
@@ -40,7 +41,7 @@ const ChatBox = () => {
     useEffect(() => {
         const unreadNotifications = unReadNotifications.length;
         setChatCount(unreadNotifications);
-    }, [notifications,unReadNotifications])
+    }, [notifications, unReadNotifications])
     useEffect(() => {
         scroll.current?.scrollIntoView({ behavior: "smooth" })
     }, [messages])
@@ -70,6 +71,15 @@ const ChatBox = () => {
             updateCurrentChat(null);
         }
     }
+    const handleResize = (size) => {
+        const textarea = document?.querySelector(".react-input-emoji--input");
+        if (textarea) {
+            const newHeight = size.height || textarea.scrollHeight; // Lấy chiều cao từ size hoặc scrollHeight
+            textarea.style.height = `${newHeight}px`; // Cập nhật chiều cao
+            textarea.style.top = `-${newHeight - 40}px`; // Di chuyển lên trên (40px là chiều cao ban đầu)
+            textarea.style.maxWidth = "188px";
+        }
+    };
     return (
         <Box className={isOpen ? myStyle.boxContainer : `${myStyle.boxContainer} ${myStyle.off}`} >
             <Box sx={{ display: "flex", gap: 2 }}>
@@ -98,7 +108,7 @@ const ChatBox = () => {
                 }
 
             </Box>
-                <Divider sx={{width: "100%"}}/>
+            <Divider sx={{ width: "100%" }} />
             {
                 isOpen && (
                     isMessagesLoading ? "Đang tải tin nhắn..." :
@@ -128,8 +138,20 @@ const ChatBox = () => {
                                     })
                                 }
                             </Box>
-                            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                                <InputEmoji value={textMessage} onChange={setTexMessage} style={{ width: "100%", maxWidth: "100%" }} />
+                            <Box sx={{
+                                display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%"
+                            }}>
+                                <InputEmoji value={textMessage} onChange={setTexMessage}
+                                    ref={textareaRef}
+                                    onResize={handleResize}
+                                // style={{
+
+                                //     whiteSpace: "pre-wrap", // Allows text to wrap to the next line
+                                //     wordWrap: "break-word", // Breaks long words to fit within the width
+                                //     resize: "vertical", // Allows vertical resizing (optional, for textarea-like behavior)
+                                //     minHeight: "100px", // Optional: Set a minimum height for better visibility
+                                // }} 
+                                />
                                 <Tooltip title="Gửi tin nhắn">
                                     <button onClick={() => sendTextMessage(textMessage, auth.user, currentChat._id, setTexMessage)} style={{ border: "none", backgroundColor: "transparent", cursor: "pointer" }}><SendIcon sx={{ color: "#397ede" }} /></button>
                                 </Tooltip>
