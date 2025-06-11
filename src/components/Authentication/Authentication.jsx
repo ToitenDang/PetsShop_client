@@ -6,11 +6,18 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
 
 
-    console.log("re-render-authen")
+    // console.log("re-render-authen")
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    }
     useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        const token = params.get('token');
-        if(token) {
+        // const params = new URLSearchParams(window.location.search);
+        // const token = params.get('token');
+        const token = getCookie('access_token');
+        if (token) {
             localStorage.setItem("access_token", token);
         }
         if (user == null) {
