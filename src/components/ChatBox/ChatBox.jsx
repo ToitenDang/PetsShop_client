@@ -1,4 +1,4 @@
-import { Box, Typography, Tooltip, Button, Divider } from "@mui/material";
+import { Box, Typography, Tooltip } from "@mui/material";
 import myStyle from "./Chatbox.module.scss";
 import { useState, useContext, useRef, useEffect } from "react";
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
@@ -13,133 +13,154 @@ import { ChatFetch, NotifyFetch } from "~/REST-API-client";
 
 const ChatBox = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const { createChat, notifications, updateCurrentChat, sendTextMessage, currentChat, messages, isMessagesLoading,
-        updateNotifications, unReadNotifications, updateUnreadNotifications
+    const {
+        createChat,
+        notifications,
+        updateCurrentChat,
+        sendTextMessage,
+        currentChat,
+        messages,
+        isMessagesLoading,
+        updateNotifications,
+        unReadNotifications,
+        updateUnreadNotifications
     } = useContext(ChatContext);
     const [textMessage, setTexMessage] = useState("");
     const [chatCount, setChatCount] = useState(0);
     const auth = useAuth();
     const scroll = useRef();
-    useEffect(() => {
-        const fetchUnreadMessage = () => {
-            NotifyFetch.getNotify({ receiverId: auth.user._id, isReading: false, type: "message" })
-                .then(data => {
-                    // console.log("unread message: ", data)
-                    if (data.data.length > 0) {
-                        setChatCount(data.data.length);
-                        updateUnreadNotifications([...unReadNotifications, ...data.data])
-                    }
 
-                })
-                .catch(err => {
-                    console.log("err get unread message: ", err);
-                })
-        }
-        fetchUnreadMessage();
-    }, [])
+    useEffect(() => {
+        NotifyFetch.getNotify({ receiverId: auth.user._id, isReading: false, type: "message" })
+            .then(data => {
+                if (data.data.length > 0) {
+                    setChatCount(data.data.length);
+                    updateUnreadNotifications([...unReadNotifications, ...data.data])
+                }
+            }).catch(err => {
+                console.log("err get unread message: ", err);
+            })
+    }, []);
+
     useEffect(() => {
         const unreadNotifications = unReadNotifications.length;
         setChatCount(unreadNotifications);
-    }, [notifications,unReadNotifications])
+    }, [notifications, unReadNotifications]);
+
     useEffect(() => {
-        scroll.current?.scrollIntoView({ behavior: "smooth" })
-    }, [messages])
+        scroll.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
+
     const handleSwitchBox = async () => {
         setIsOpen(!isOpen);
         if (!isOpen) {
             try {
                 await createChat(auth.user._id, ADMIN_ID);
                 const getChat = await ChatFetch.findChat(auth?.user._id, ADMIN_ID);
-                console.log("get new current chat: ", getChat.data);
                 updateCurrentChat(getChat.data[0]);
+
                 if (unReadNotifications.length > 0) {
                     NotifyFetch.updateManyNotify(ADMIN_ID, auth.user._id, "message", "updated")
-                        .then(data => {
+                        .then(() => {
                             updateUnreadNotifications([]);
-                            console.log("Đã xóa nội dun tin nhắn")
                         })
-                        .catch(err => {
-                            console.log("Lỗi xóa tin nhắn: ", err)
-                        })
+                        .catch(err => console.log("Lỗi xóa tin nhắn: ", err));
                 }
-
             } catch (err) {
                 console.log("Lỗi lấy tin nhắn: ", err);
             }
         } else {
             updateCurrentChat(null);
         }
-    }
-    return (
-        <Box className={isOpen ? myStyle.boxContainer : `${myStyle.boxContainer} ${myStyle.off}`} >
-            <Box sx={{ display: "flex", gap: 2 }}>
-                <button onClick={handleSwitchBox} className={myStyle.expandButton}>
-                    {
-                        isOpen ? <KeyboardDoubleArrowDownIcon /> : <KeyboardDoubleArrowUpIcon />
-                    }
+    };
 
+    return (
+        <Box className={isOpen ? myStyle.boxContainer : `${myStyle.boxContainer} ${myStyle.off}`}
+            sx={{ width: { xs: "300px", sm: "320px" }, height: "100%", display: "flex", flexDirection: "column", position: "relative" }}
+        >
+            {/* HEADER */}
+            <Box sx={{
+                position: "sticky", top: 0, zIndex: 10, backgroundColor: "#fff", p: 1,
+                display: "flex", alignItems: "center", gap: 2, borderBottom: "1px solid #ccc"
+            }}>
+                <button onClick={handleSwitchBox} className={myStyle.expandButton}>
+                    {isOpen ? <KeyboardDoubleArrowDownIcon /> : <KeyboardDoubleArrowUpIcon />}
                 </button>
                 <Typography>Chat với chúng tôi</Typography>
-                {
-                    chatCount !== 0 ?
-                        (
-                            <Box sx={{ width: "20px", height: "20px", display: "flex", justifyContent: "center", alignItems: "center", backgroundColor: "#dc3546", borderRadius: "50%" }}>
-                                <p style={{
-                                    fontSize: "0.7rem",
-                                    display: "inline-block",     // Hoặc "block" nếu cần canh chỉnh theo layout
-                                    whiteSpace: "nowrap",        // Hiển thị nội dung trên một hàng duy nhất
-                                    overflow: "hidden",          // Ẩn phần văn bản bị tràn
-                                    textOverflow: "ellipsis",
-                                    margin: 0,
-                                    color: "#fff"
-                                }} >{chatCount}</p>
-                            </Box>
-                        ) : null
-                }
-
+                {chatCount !== 0 && (
+                    <Box sx={{
+                        width: 20, height: 20, backgroundColor: "#dc3546", borderRadius: "50%",
+                        display: "flex", justifyContent: "center", alignItems: "center"
+                    }}>
+                        <Typography sx={{ fontSize: "0.7rem", color: "#fff" }}>{chatCount}</Typography>
+                    </Box>
+                )}
             </Box>
-                <Divider sx={{width: "100%"}}/>
-            {
-                isOpen && (
-                    isMessagesLoading ? "Đang tải tin nhắn..." :
-                        <>
 
-                            <Box sx={{ display: "flex", flexDirection: "column", gap: 2, flex: 1, minHeight: `calc( 100% - 70px)`, maxHeight: `calc( 100% - 70px)`, overflowY: 'auto' }}>
-                                {
-                                    messages && messages.map((message, index) => {
-                                        return (
-                                            <Box
-                                                ref={scroll}
-                                                sx={{
-                                                    backgroundColor: message.senderId === auth.user._id ? "#397ede" : "#6f706f",
-                                                    maxWidth: "60%",
-                                                    display: "inline-block",
-                                                    wordBreak: "break-word",
-                                                    wordWrap: "break-word",
-                                                    padding: "10px",
-                                                    borderRadius: "4px",
-                                                    alignSelf: message.senderId === auth.user._id ? "flex-end" : "flex-start"
-                                                }}
-                                                key={index}>
-                                                <Typography sx={{ color: "#fff" }} >{message.text}</Typography>
-                                                <Typography sx={{ color: "#fff", fontSize: "0.7rem" }}>{dayjs(message.createdAt).format("DD/MM/YYYY HH:mm")}</Typography>
-                                            </Box>
-                                        )
-                                    })
-                                }
+            {/* BODY */}
+            {isOpen && (
+                isMessagesLoading ? "Đang tải tin nhắn..." : (
+                    <>
+                        <Box sx={{
+                            flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 2,
+                            padding: "12px", backgroundColor: "#f7f7f7"
+                        }}>
+                            {messages && messages.map((message, index) => (
+                                <Box
+                                    key={index}
+                                    ref={scroll}
+                                    sx={{
+                                        backgroundColor: message.senderId === auth.user._id ? "#397ede" : "#6f706f",
+                                        color: "#fff",
+                                        maxWidth: "60%",
+                                        alignSelf: message.senderId === auth.user._id ? "flex-end" : "flex-start",
+                                        wordBreak: "break-word",
+                                        padding: "10px",
+                                        borderRadius: "4px"
+                                    }}
+                                >
+                                    <Typography>{message.text}</Typography>
+                                    <Typography sx={{ fontSize: "0.7rem" }}>
+                                        {dayjs(message.createdAt).format("DD/MM/YYYY HH:mm")}
+                                    </Typography>
+                                </Box>
+                            ))}
+                        </Box>
+
+                        {/* INPUT AREA */}
+                        <Box sx={{
+                            display: "flex", alignItems: "flex-end", p: 1,
+                            borderTop: "1px solid #ccc", gap: 1, backgroundColor: "#fff"
+                        }}>
+                            <Box sx={{ flexGrow: 1 }}>
+                                <InputEmoji
+                                    value={textMessage}
+                                    onChange={setTexMessage}
+                                    cleanOnEnter={false}
+                                    style={{
+                                        width: "100%",
+                                        maxHeight: "100px",
+                                        overflowY: "auto",
+                                        whiteSpace: "pre-wrap",
+                                        wordBreak: "break-word",
+                                        overflowWrap: "anywhere"
+                                    }}
+                                />
                             </Box>
-                            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                                <InputEmoji value={textMessage} onChange={setTexMessage} style={{ width: "100%", maxWidth: "100%" }} />
-                                <Tooltip title="Gửi tin nhắn">
-                                    <button onClick={() => sendTextMessage(textMessage, auth.user, currentChat._id, setTexMessage)} style={{ border: "none", backgroundColor: "transparent", cursor: "pointer" }}><SendIcon sx={{ color: "#397ede" }} /></button>
-                                </Tooltip>
-                            </Box>
-                        </>
+                            <Tooltip title="Gửi tin nhắn">
+                                <button
+                                    onClick={() => sendTextMessage(textMessage, auth.user, currentChat._id, setTexMessage)}
+                                    style={{ border: "none", backgroundColor: "transparent", cursor: "pointer", marginBottom: "10px" }}
+                                >
+                                    <SendIcon sx={{ color: "#397ede" }} />
+                                </button>
+                            </Tooltip>
+                        </Box>
+                    </>
                 )
-            }
-
+            )}
         </Box>
-    )
-}
+    );
+};
 
 export default ChatBox;
