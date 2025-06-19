@@ -13,9 +13,13 @@ const Payment = () => {
 
     const [products, setProducts] = useState([]); // Danh sách sản phẩm
     const [addressShippings, setAddressShippings] = useState([]); // Địa chỉ giao hàng
-    const [note, setNote] = useState(''); // Ghi chú
-    const [phone, setPhone] = useState(''); // Ghi chú
+    const [note, setNote] = useState(''); 
+    const [phone, setPhone] = useState(''); 
     const [address, setAddress] = useState(''); // Địa chỉ giao hàng hiện tại
+    const [province, setProvince] = useState(''); // Địa chỉ giao hàng hiện tại
+    const [district, setDistrict] = useState(''); // Địa chỉ giao hàng hiện tại
+    const [ward, setWard] = useState(''); // Địa chỉ giao hàng hiện tại
+
     const [paymentMethod, setPaymentMethod] = useState('cod'); // Phương thức thanh toán (mặc định là COD)
 
     useEffect(() => {
@@ -35,11 +39,11 @@ const Payment = () => {
             // Kiểm tra và cập nhật địa chỉ giao hàng
             if (location.state.shippingAddress) {
 
-                setAddress(location.state.shippingAddress);
+                //setAddress(location.state.shippingAddress);
             } else if (user?.shippingAddress) {
 
                 setAddressShippings(user.shippingAddress);
-                setAddress(user.shippingAddress[0]?.address || ''); // Lấy địa chỉ đầu tiên nếu có
+                //setAddress(user.shippingAddress[0]?.address || ''); // Lấy địa chỉ đầu tiên nếu có
                 setPhone(user?.shippingAddress[0].recipientPhone)
             }
         } else {
@@ -67,20 +71,25 @@ const Payment = () => {
     };
 
     // Cập nhật địa chỉ khi chọn từ danh sách địa chỉ
-    const handleAddressChange = (event) => {
-        const selectedAddress = event.target.value;
+    // const handleAddressChange = (event) => {
+    //     const selectedAddress = event.target.value;
 
-        // Tìm object shipping tương ứng
-        const selectedShipping = addressShippings.find(
-            (shipping) => shipping.address === selectedAddress
-        );
+    //     // Tìm object shipping tương ứng
+    //     const selectedShipping = addressShippings.find(
+    //         (shipping) => shipping.address === selectedAddress
+    //     );
 
-        // Cập nhật state
-        setAddress(selectedAddress);
-        setPhone(selectedShipping?.recipientPhone || '');
+    //     // Cập nhật state
+    //     setAddress(selectedAddress);
+    //     setPhone(selectedShipping?.recipientPhone || '');
 
 
-    };
+    // };
+
+    console.log("Ten tinh ne: ", province);
+    console.log("Ten huyen ne: ", district);
+    console.log("Ten xa ne: ", ward);
+    
 
 
     const handleSubmit = async () => {
@@ -90,7 +99,7 @@ const Payment = () => {
         const orderData = {
             customerId: user._id,
             name: user.name,
-            phone: selectedShipping?.recipientPhone || '',
+            phone,
             products: products.map(product => ({
                 productId: product.productId,
                 quantity: product.quantity,
@@ -100,7 +109,7 @@ const Payment = () => {
             shippingFee,
             note,
             paymentMethod,
-            address,
+            address: address + ", " + ward + ", " + district + ", " + province,
         };
 
 
@@ -185,8 +194,8 @@ const Payment = () => {
                             overflowY: products.length > 3 ? 'auto' : 'visible', // Hiển thị thanh cuộn khi có > 3 sản phẩm
                         }}>
                             <List sx={{ height: '500px' }}>
-                                {products?.map(product => (
-                                    <ListItem key={product._id}>
+                                {products?.map((product, index) => (
+                                    <ListItem key={index}>
                                         <Card sx={{
                                             display: 'flex', width: '100%', alignItems: 'center',
                                             bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#062c4f' : '#fff'),
@@ -237,7 +246,11 @@ const Payment = () => {
                                     console.log("Phí vận chuyển: ", fee);
                                     setShippingFee(fee);//hoặc cập nhật state khác
                                 }}
-                                products={products}
+
+                               setProvince = {setProvince}
+                               setDistrict = {setDistrict}
+                                setWard = {setWard}
+                                
                             />
 
                             <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
@@ -261,7 +274,7 @@ const Payment = () => {
                                         width: '100%',
                                         mt: 1
                                     }}
-                                    label='Địa chỉ cụ thể'
+                                    label='Số nhà, tên đường'
                                     value={address}
                                     onChange={(e) => setAddress(e.target.value)}
                                 />

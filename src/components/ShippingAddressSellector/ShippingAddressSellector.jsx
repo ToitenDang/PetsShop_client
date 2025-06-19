@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const token = "74461aaa-4bf1-11f0-9b81-222185cb68c8";
 
-const ShippingAddressSelector = ({ onShippingFeeCalculated, products }) => {
+const ShippingAddressSelector = ({ onShippingFeeCalculated, setProvince, setDistrict, setWard }) => {
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
@@ -78,7 +78,7 @@ const ShippingAddressSelector = ({ onShippingFeeCalculated, products }) => {
           label="Tỉnh / Thành phố"
         >
           {provinces.map((p) => (
-            <MenuItem key={p.ProvinceID} value={p.ProvinceID}>{p.ProvinceName}</MenuItem>
+            <MenuItem key={p.ProvinceID} value={p.ProvinceID} onClick={() => {setProvince(p.ProvinceName)}}>{p.ProvinceName}</MenuItem>
           ))}
         </Select>
       </FormControl>
@@ -97,7 +97,7 @@ const ShippingAddressSelector = ({ onShippingFeeCalculated, products }) => {
           label="Quận / Huyện"
         >
           {districts.map((d) => (
-            <MenuItem key={d.DistrictID} value={d.DistrictID}>{d.DistrictName}</MenuItem>
+            <MenuItem key={d.DistrictID} value={d.DistrictID} onClick={() => {setDistrict(d.DistrictName)}}>{d.DistrictName}</MenuItem>
           ))}
         </Select>
       </FormControl>
@@ -113,7 +113,7 @@ const ShippingAddressSelector = ({ onShippingFeeCalculated, products }) => {
           label="Phường / Xã"
         >
           {wards.map((w) => (
-            <MenuItem key={w.WardCode} value={w.WardCode}>{w.WardName}</MenuItem>
+            <MenuItem key={w.WardCode} value={w.WardCode} onClick={() => {setWard(w.WardName)}}>{w.WardName}</MenuItem>
           ))}
         </Select>
       </FormControl>
