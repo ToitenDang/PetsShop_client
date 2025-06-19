@@ -47,8 +47,8 @@ const Payment = () => {
 
             setProducts(user?.cart || []); // Đảm bảo user.cart là mảng
             if (user?.shippingAddress) {
-                setAddressShippings(user.shippingAddress);
-                setAddress(user.shippingAddress[0]?.address || ''); // Lấy địa chỉ đầu tiên nếu có
+                // setAddressShippings(user.shippingAddress);
+                // setAddress(user.shippingAddress[0]?.address || ''); // Lấy địa chỉ đầu tiên nếu có
                 setPhone(user?.shippingAddress[0].recipientPhone)
             }
         }
@@ -237,12 +237,12 @@ const Payment = () => {
                                     console.log("Phí vận chuyển: ", fee);
                                     setShippingFee(fee);//hoặc cập nhật state khác
                                 }}
-                                products = {products}
+                                products={products}
                             />
 
                             <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-                                <Typography variant='body1' sx={{ width: '200px' }}>Địa chỉ giao hàng: </Typography>
-                                <FormControl fullWidth sx={{ mt: 1 }}>
+                                {/* <Typography variant='body1' sx={{ width: '200px' }}>Địa chỉ giao hàng: </Typography> */}
+                                {/* <FormControl fullWidth sx={{ mt: 1 }}>
                                     <InputLabel>Chọn địa chỉ giao hàng</InputLabel>
                                     <Select
                                         value={address}
@@ -255,10 +255,19 @@ const Payment = () => {
                                             </MenuItem>
                                         ))}
                                     </Select>
-                                </FormControl>
+                                </FormControl> */}
+                                <TextField
+                                    sx={{
+                                        width: '100%',
+                                        mt: 1
+                                    }}
+                                    label='Địa chỉ cụ thể'
+                                    value={address}
+                                    onChange={(e) => setAddress(e.target.value)}
+                                />
                             </Box>
 
-                            
+
 
                             <TextField
                                 sx={{
