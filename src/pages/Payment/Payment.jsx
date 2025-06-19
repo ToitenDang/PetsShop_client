@@ -3,6 +3,8 @@ import { useAuth } from "~/components/Authentication/Authentication";
 import { Box, Typography, TextField, Button, Card, CardContent, CardMedia, List, ListItem, Radio, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { OrderFetch, UserFetch } from '~/REST-API-client';
 import { useNavigate, useLocation } from 'react-router-dom';
+import ShippingAddressSelector from '~/components/ShippingAddressSellector/ShippingAddressSellector';
+
 
 const Payment = () => {
     const { user, updateCart } = useAuth();
@@ -45,8 +47,8 @@ const Payment = () => {
 
             setProducts(user?.cart || []); // Đảm bảo user.cart là mảng
             if (user?.shippingAddress) {
-                setAddressShippings(user.shippingAddress);
-                setAddress(user.shippingAddress[0]?.address || ''); // Lấy địa chỉ đầu tiên nếu có
+                // setAddressShippings(user.shippingAddress);
+                // setAddress(user.shippingAddress[0]?.address || ''); // Lấy địa chỉ đầu tiên nếu có
                 setPhone(user?.shippingAddress[0].recipientPhone)
             }
         }
@@ -56,7 +58,8 @@ const Payment = () => {
 
 
     const totalAmount = products.reduce((total, item) => total + item.price * item.quantity, 0);
-    const shippingFee = 20000; // Phí ship giả định
+    //const shippingFee = 20000;
+    const [shippingFee, setShippingFee] = useState(0);
     const grandTotal = totalAmount + shippingFee;
 
     const handlePaymentChange = (event) => {
@@ -182,7 +185,7 @@ const Payment = () => {
                             overflowY: products.length > 3 ? 'auto' : 'visible', // Hiển thị thanh cuộn khi có > 3 sản phẩm
                         }}>
                             <List sx={{ height: '500px' }}>
-                                {products.map(product => (
+                                {products?.map(product => (
                                     <ListItem key={product._id}>
                                         <Card sx={{
                                             display: 'flex', width: '100%', alignItems: 'center',
@@ -229,9 +232,17 @@ const Payment = () => {
                                 <Typography variant='body1'>Số điện thoại: </Typography>
                                 <Typography sx={{ ml: 2 }}>{phone}</Typography>
                             </Box>
+                            <ShippingAddressSelector
+                                onShippingFeeCalculated={(fee) => {
+                                    console.log("Phí vận chuyển: ", fee);
+                                    setShippingFee(fee);//hoặc cập nhật state khác
+                                }}
+                                products={products}
+                            />
+
                             <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-                                <Typography variant='body1' sx={{ width: '200px' }}>Địa chỉ giao hàng: </Typography>
-                                <FormControl fullWidth sx={{ mt: 1 }}>
+                                {/* <Typography variant='body1' sx={{ width: '200px' }}>Địa chỉ giao hàng: </Typography> */}
+                                {/* <FormControl fullWidth sx={{ mt: 1 }}>
                                     <InputLabel>Chọn địa chỉ giao hàng</InputLabel>
                                     <Select
                                         value={address}
@@ -244,8 +255,19 @@ const Payment = () => {
                                             </MenuItem>
                                         ))}
                                     </Select>
-                                </FormControl>
+                                </FormControl> */}
+                                <TextField
+                                    sx={{
+                                        width: '100%',
+                                        mt: 1
+                                    }}
+                                    label='Địa chỉ cụ thể'
+                                    value={address}
+                                    onChange={(e) => setAddress(e.target.value)}
+                                />
                             </Box>
+
+
 
                             <TextField
                                 sx={{

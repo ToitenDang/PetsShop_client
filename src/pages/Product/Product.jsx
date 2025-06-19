@@ -255,7 +255,7 @@ export default function Product() {
                             )}
                         </Box>
 
-                        <Typography variant="body1">Kích thước:</Typography>
+                        <Typography variant="body1">Số lượng:</Typography>
                         {/* <RadioGroup row value={size} sx={{ gap: 1.5 }} onChange={(e) => setSize(e.target.value)}>
                             {product?.size?.map((s) => (
                                 <FormControlLabel

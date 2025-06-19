@@ -4,6 +4,7 @@ import Footer from "~/components/Footer/Footer";
 import { useAuth } from "~/components/Authentication/Authentication";
 import ChatBox from "~/components/ChatBox/ChatBox";
 import { Box } from "@mui/material";
+import ChatBot from "~/components/ChatBot/ChatBot";
 
 function HeaderLayout() {
     const auth = useAuth();
@@ -18,6 +19,7 @@ function HeaderLayout() {
                 )
             }
             <Outlet /> {/* Nơi chứa các component con */}
+            <ChatBot />
             <Footer />
         </>
     );

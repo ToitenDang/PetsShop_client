@@ -25,6 +25,7 @@ const ChatBox = () => {
         unReadNotifications,
         updateUnreadNotifications
     } = useContext(ChatContext);
+    const textareaRef = useRef(null);
     const [textMessage, setTexMessage] = useState("");
     const [chatCount, setChatCount] = useState(0);
     const auth = useAuth();
@@ -45,7 +46,7 @@ const ChatBox = () => {
     useEffect(() => {
         const unreadNotifications = unReadNotifications.length;
         setChatCount(unreadNotifications);
-    }, [notifications, unReadNotifications]);
+    }, [notifications, unReadNotifications])
 
     useEffect(() => {
         scroll.current?.scrollIntoView({ behavior: "smooth" });
@@ -147,6 +148,7 @@ const ChatBox = () => {
                                     }}
                                 />
                             </Box>
+
                             <Tooltip title="Gửi tin nhắn">
                                 <button
                                     onClick={() => sendTextMessage(textMessage, auth.user, currentChat._id, setTexMessage)}
