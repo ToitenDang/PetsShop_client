@@ -38,11 +38,11 @@ const Account = () => {
                                             <Typography sx={{ display: 'flex', alignItems: 'center', gap: 2 }}><AccountBoxIcon /> Hồ sơ</Typography>
                                         </NavLink>
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         <NavLink style={navlinkStyle} to='dia-chi' className={myStyle.linkNav}>
                                             <Typography sx={{ display: 'flex', alignItems: 'center', gap: 2 }}><FmdGoodIcon />Địa chỉ</Typography>
                                         </NavLink>
-                                    </li>
+                                    </li> */}
                                     {
                                         !auth.user?.googleId && <li>
                                             <NavLink style={navlinkStyle} to='mat-khau' className={myStyle.linkNav}>

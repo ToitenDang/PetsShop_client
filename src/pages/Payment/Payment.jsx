@@ -4,7 +4,8 @@ import { Box, Typography, TextField, Button, Card, CardContent, CardMedia, List,
 import { OrderFetch, UserFetch } from '~/REST-API-client';
 import { useNavigate, useLocation } from 'react-router-dom';
 import ShippingAddressSelector from '~/components/ShippingAddressSellector/ShippingAddressSellector';
-
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const Payment = () => {
     const { user, updateCart } = useAuth();
@@ -95,7 +96,10 @@ const Payment = () => {
     const handleSubmit = async () => {
         const selectedShipping = addressShippings.find(sh => sh.address === address);
         console.log("new phone: ", selectedShipping?.recipientPhone);
-
+        if(address.trim() === "" || ward.trim() === "" || district.trim() === "" || province.trim() === "" || shippingFee === 0) {
+            toast.error("Vui lòng cung cấp địa chỉ nhận hàng");
+            return;
+        }
         const orderData = {
             customerId: user._id,
             name: user.name,
@@ -325,6 +329,7 @@ const Payment = () => {
 
                 </Box>
             </Box>
+            <ToastContainer />
         </Box>
     );
 };
